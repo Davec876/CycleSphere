@@ -1,8 +1,7 @@
 import AppBar from '@/components/AppBar';
-import Card from '@/components/Card';
 import Box from '@mui/material/Box';
 
-export default function Home() {
+export default function LoginPage() {
 	return (
 		<>
 			<AppBar />
@@ -14,9 +13,7 @@ export default function Home() {
 						alignItems: 'center',
 					}}
 				>
-					<Box marginTop={1}>
-						<Card />
-					</Box>
+					<div>Login!</div>
 				</Box>
 			</main>
 		</>
