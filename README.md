@@ -56,6 +56,8 @@ Visit [Next.js' deployment page](https://nextjs.org/docs/pages/building-your-app
 
 * [Next.js](https://nextjs.org/) - The web framework used
 * [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) - Used to bootstrap the project
+* [`next font`](https://nextjs.org/docs/basic-features/font-optimization) - Used to optimize and load font
+* [Material UI](https://mui.com/) - Frontend design library
 
 
 <!-- Uncomment this section (parts of it or the entire thing) if we need to cite anything
