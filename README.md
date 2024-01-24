@@ -14,7 +14,7 @@ TODO: One paragraph project description
 ## Authors
 
 * [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Team member)*
-* [Name](email@dal.ca) - *(Role)*
+* [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Team member)*
 * [Name](email@dal.ca) - *(Role)*
 * [Name](email@dal.ca) - *(Role)*
 * [Name](email@dal.ca) - *(Role)*
