@@ -1,6 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,13 +16,15 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Link from 'next/link';
-import {AuthContext} from './context/AuthProvider';
 
 const pages = ['Mission', 'Our Team'];
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
+	const { data: session, status: sessionStatus } = useSession();
+
+	const router = useRouter();
+
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
@@ -38,15 +43,23 @@ function ResponsiveAppBar() {
 		setAnchorElNav(null);
 	};
 
-	const handleCloseUserMenu = () => {
+	const handleCloseUserMenu = (setting: string) => {
+		switch (setting) {
+			case 'Logout':
+				router.push('/api/auth/signout?callbackUrl=/');
+				break;
+			case 'Profile':
+				router.push('/profile');
+				break;
+			default:
+				break;
+		}
 		setAnchorElUser(null);
 	};
 
 	function parsePageNameToLink(pageName: string) {
 		return pageName.replace(' ', '-').toLowerCase();
 	}
-
-	const { user } = React.useContext(AuthContext);
 
 	return (
 		<AppBar position="static">
@@ -55,8 +68,7 @@ function ResponsiveAppBar() {
 					<Typography
 						variant="h6"
 						noWrap
-						component="a"
-						href="/"
+						component="div"
 						sx={{
 							mr: 2,
 							display: { xs: 'none', md: 'flex' },
@@ -67,9 +79,10 @@ function ResponsiveAppBar() {
 							textDecoration: 'none',
 						}}
 					>
-						CSCI 4177
+						<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+							CSCI 4177
+						</Link>
 					</Typography>
-
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
@@ -120,8 +133,7 @@ function ResponsiveAppBar() {
 					<Typography
 						variant="h5"
 						noWrap
-						component="a"
-						href="/"
+						component="div"
 						sx={{
 							mr: 2,
 							display: { xs: 'flex', md: 'none' },
@@ -133,7 +145,9 @@ function ResponsiveAppBar() {
 							textDecoration: 'none',
 						}}
 					>
-						CSCI 4177
+						<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+							CSCI 4177
+						</Link>
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((pageName) => (
@@ -158,14 +172,17 @@ function ResponsiveAppBar() {
 					</Box>
 
 					<Box sx={{ flexGrow: 0 }}>
-						{user?.userName ? (
+						{/* Display nothing if the session is loading, otherwise display menu items for logged in user, or login button for unauthenticated user */}
+						{sessionStatus === 'loading' ? null : session?.user ? (
 							<Tooltip title="Open settings">
 								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 									<Avatar alt="Current user" />
 								</IconButton>
 							</Tooltip>
 						) : (
-							<Button color="inherit">Login</Button>
+							<Button href="/api/auth/signin" color="inherit">
+								Login
+							</Button>
 						)}
 						<Menu
 							sx={{ mt: '45px' }}
@@ -185,13 +202,19 @@ function ResponsiveAppBar() {
 						>
 							{settings.map((setting) =>
 								setting === 'Logout' ? (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+									<MenuItem
+										key={setting}
+										onClick={() => handleCloseUserMenu(setting)}
+									>
 										<Typography color="red" textAlign="center">
 											{setting}
 										</Typography>
 									</MenuItem>
 								) : (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+									<MenuItem
+										key={setting}
+										onClick={() => handleCloseUserMenu(setting)}
+									>
 										<Typography textAlign="center">{setting}</Typography>
 									</MenuItem>
 								)

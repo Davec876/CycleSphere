@@ -1,7 +1,10 @@
 import AppBar from '@/components/AppBar';
 import Box from '@mui/material/Box';
+import { auth } from '@/components/auth/auth';
 
-export default function LoginPage() {
+export default async function OurTeamPage() {
+	const session = await auth();
+
 	return (
 		<>
 			<AppBar />
@@ -13,8 +16,9 @@ export default function LoginPage() {
 						alignItems: 'center',
 					}}
 				>
-					<div>Login!</div>
+					<div>Your profile page!</div>
 				</Box>
+				{session && <p>Welcome {session?.user?.name}!</p>}
 			</main>
 		</>
 	);

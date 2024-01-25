@@ -1,8 +1,15 @@
-async function getDate() {
+import { auth } from '@/components/auth/auth';
+
+function getDate(): number {
 	const currentDate = Date.now();
 	return currentDate;
 }
 
-export async function GET() {
-	return new Response(JSON.stringify({ date: await getDate() }));
-}
+export const GET = auth((req) => {
+	if (!req.auth) {
+		return Response.json({ error: 'Not authorized' });
+	}
+
+	return Response.json({ date: getDate() });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+}) as any;
