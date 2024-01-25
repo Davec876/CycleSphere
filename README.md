@@ -1,7 +1,7 @@
 <!--- The following README.md sample file was adapted from https://gist.github.com/PurpleBooth/109311bb0361f32d87a2#file-readme-template-md by Gabriella Mosquera for academic use ---> 
 
 
-# CSCI 4177 - Project
+# CSCI 4177 - Project: TEAM 18
 
 TODO: One paragraph project description
 
@@ -15,7 +15,7 @@ TODO: One paragraph project description
 
 * [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Team member)*
 * [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Team member)*
-* [Name](email@dal.ca) - *(Role)*
+* [Dave Chuck](dchuck@dal.ca) - *(Team Member)*
 * [Name](email@dal.ca) - *(Role)*
 * [Name](email@dal.ca) - *(Role)*
 * [Name](email@dal.ca) - *(Role)*
