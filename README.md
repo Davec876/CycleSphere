@@ -16,7 +16,7 @@ TODO: One paragraph project description
 * [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Team member)*
 * [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Team member)*
 * [Dave Chuck](dchuck@dal.ca) - *(Team Member)*
-* [Name](email@dal.ca) - *(Role)*
+* [Kevin Orenday](kevin.orenday@dal.ca) - *(Team Member)*
 * [Name](email@dal.ca) - *(Role)*
 * [Name](email@dal.ca) - *(Role)*
 
