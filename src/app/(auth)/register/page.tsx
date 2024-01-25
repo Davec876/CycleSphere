@@ -59,7 +59,10 @@ export default function RegisterPage() {
 					height: '100vh', // Full viewport height
 				}}
 			>
-				<Card sx={{ width: '33%', borderRadius: 4 }} elevation={3}>
+				<Card
+					sx={{ width: ['75%', '50%', '33%'], borderRadius: 4 }}
+					elevation={3}
+				>
 					<CardContent>
 						<FormControl
 							component="form"
