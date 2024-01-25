@@ -2,7 +2,7 @@ import AppBar from '@/components/AppBar';
 import Box from '@mui/material/Box';
 import { auth } from '@/components/auth/auth';
 
-export default async function OurTeamPage() {
+export default async function ProfilePage() {
 	const session = await auth();
 
 	return (
