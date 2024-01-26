@@ -1,10 +1,9 @@
 import AppBar from '@/components/AppBar';
 import Box from '@mui/material/Box';
 import { auth } from '@/components/auth/auth';
+import { Suspense } from 'react';
 
-export default async function ProfilePage() {
-	const session = await auth();
-
+export default function ProfilePage() {
 	return (
 		<>
 			<AppBar />
@@ -13,13 +12,29 @@ export default async function ProfilePage() {
 					sx={{
 						display: 'flex',
 						justifyContent: 'center',
-						alignItems: 'center',
 					}}
 				>
 					<div>Your profile page!</div>
 				</Box>
-				{session && <p>Welcome {session?.user?.name}!</p>}
+				<Suspense>
+					<DisplayUser />
+				</Suspense>
 			</main>
 		</>
+	);
+}
+
+async function DisplayUser() {
+	const session = await auth();
+
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+			}}
+		>
+			{session && <p>Welcome {session?.user?.name}!</p>}
+		</Box>
 	);
 }
