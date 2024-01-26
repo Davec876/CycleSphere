@@ -18,7 +18,7 @@ TODO: One paragraph project description
 * [Dave Chuck](dchuck@dal.ca) - *(Team Member)*
 * [Kevin Orenday](kevin.orenday@dal.ca) - *(Team Member)*
 * [Maximo Guk](maximo@dal.ca) - *(Team Member)*
-* [Name](email@dal.ca) - *(Role)*
+* [Ahmed Galal](a.galal@dal.ca) - *(Team Member)*
 
 
 
