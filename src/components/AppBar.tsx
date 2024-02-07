@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import {AuthContext} from './context/AuthProvider';
 
-const pages = ['Mission', 'Our Team'];
+const pages = ['Mission', 'Our Team', 'Map'];
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
