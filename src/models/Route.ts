@@ -1,0 +1,59 @@
+import mongoose, { type FlattenMaps, Schema, type Types } from 'mongoose';
+
+mongoose.connect(process.env.MONGODB_URI!);
+mongoose.Promise = global.Promise;
+
+interface IRoute {
+	id: string;
+	authorId: string;
+	title: string;
+	body: string;
+	imagePath: string;
+	difficulty: number;
+	likedByUserIds: string[];
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export type IRouteFlat = FlattenMaps<IRoute> & {
+	_id: Types.ObjectId;
+};
+
+const routeSchema = new Schema<IRoute>(
+	{
+		id: {
+			type: String,
+			required: true,
+		},
+		authorId: {
+			type: String,
+			required: true,
+		},
+		title: {
+			type: String,
+			required: true,
+		},
+		body: {
+			type: String,
+			required: true,
+		},
+		imagePath: {
+			type: String,
+			required: true,
+		},
+		difficulty: {
+			type: Number,
+			required: true,
+		},
+		likedByUserIds: {
+			type: [String],
+			required: true,
+		},
+	},
+	{ timestamps: true }
+);
+
+const Route: mongoose.Model<IRoute> =
+	mongoose.models.Route || mongoose.model<IRoute>('Route', routeSchema);
+
+export default Route;

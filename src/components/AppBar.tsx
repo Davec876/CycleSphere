@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { type MouseEvent, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-const pages = ['Mission', 'Our Team'];
+const pages = ['Contact', 'FAQ'];
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -25,17 +25,13 @@ function ResponsiveAppBar() {
 
 	const router = useRouter();
 
-	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-		null
-	);
-	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-		null
-	);
+	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+	const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+	const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElUser(event.currentTarget);
 	};
 

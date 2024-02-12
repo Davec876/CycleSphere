@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,19 +12,21 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
-import { useSession } from 'next-auth/react';
 import { likeRoute, unlikeRoute } from '@/service/Route';
+import { useSession } from 'next-auth/react';
 
-export default function RouteCard({ route }: { route: IRouteFlat }) {
+export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
-	const [isLiked, setIsLiked] = useState(false);
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
 
-	useEffect(() => {
-		setIsLiked(route.likedByUserIds.includes(session?.user?.id as string));
-	}, [route.likedByUserIds, session?.user?.id]);
+	const handleGoBack = () => {
+		router.replace(`/?${route.id}=${isLiked ? 'liked' : 'disliked'}`);
+	};
 
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
@@ -44,20 +46,21 @@ export default function RouteCard({ route }: { route: IRouteFlat }) {
 				title={route.title}
 				subheader={formatDate(route.createdAt)}
 			/>
-			{route.imagePath !== '/' && (
-				<CardMedia
-					component="img"
-					image={route.imagePath}
-					alt={`Image of ${route.title}`}
-					sx={{ padding: 1 }}
-				/>
-			)}
+			<CardMedia
+				component="img"
+				image={route.imagePath}
+				alt={`Image of ${route.title}`}
+				sx={{ padding: 1 }}
+			/>
 			<CardContent>
 				<Typography variant="body2" color="text.secondary">
 					{route.body}
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
+				<IconButton aria-label="go back to home" onClick={handleGoBack}>
+					<ArrowBackIcon />
+				</IconButton>
 				<IconButton
 					aria-label="add to favorites"
 					onClick={handleFavoriteClick}
@@ -65,11 +68,6 @@ export default function RouteCard({ route }: { route: IRouteFlat }) {
 				>
 					<FavoriteIcon />
 				</IconButton>
-				<Link href={`/routes/${route.id}?liked=${isLiked}`} passHref>
-					<IconButton aria-label="go to route">
-						<ArrowForwardIcon />
-					</IconButton>
-				</Link>
 			</CardActions>
 		</Card>
 	);
