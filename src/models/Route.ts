@@ -11,6 +11,10 @@ interface IRoute {
 	imagePath: string;
 	difficulty: number;
 	likedByUserIds: string[];
+	location: {
+		lat: number;
+		lng: number;
+	};
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -48,6 +52,16 @@ const routeSchema = new Schema<IRoute>(
 		likedByUserIds: {
 			type: [String],
 			required: true,
+		},
+		location: {
+			lat: {
+				type: Number,
+				required: true,
+			},
+			lng: {
+				type: Number,
+				required: true,
+			},
 		},
 	},
 	{ timestamps: true }

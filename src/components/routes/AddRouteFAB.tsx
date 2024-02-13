@@ -12,6 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 
@@ -21,6 +22,8 @@ export default function AddRouteFAB({
 	setRoutes: Dispatch<SetStateAction<IRouteFlat[]>>;
 }) {
 	const [open, setOpen] = useState(false);
+	const [selectedPlace, setSelectedPlace] =
+		useState<google.maps.places.PlaceResult | null>(null);
 	const [difficulty, setDifficulty] = useState(2.5);
 
 	const handleClickOpen = () => {
@@ -46,6 +49,7 @@ export default function AddRouteFAB({
 			title: formJson.trailTitle,
 			body: formJson.trailBody,
 			difficulty,
+			location: selectedPlace?.geometry?.location?.toJSON(),
 		});
 		// fetch updated routes via server action and update state
 		const routes = await getRoutes();
@@ -113,6 +117,10 @@ export default function AddRouteFAB({
 						marks
 						min={0}
 						max={5}
+					/>
+					<AutoCompleteMap
+						selectedPlace={selectedPlace}
+						setSelectedPlace={setSelectedPlace}
 					/>
 				</DialogContent>
 				<DialogActions>
