@@ -38,3 +38,6 @@ export default function Home() {
 		</>
 	);
 }
+
+// TODO: Rather than forcing this route to be dynamic, it would be nice if we only revalidated on new data
+export const dynamic = 'force-dynamic';
