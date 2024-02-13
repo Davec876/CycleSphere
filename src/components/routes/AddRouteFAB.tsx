@@ -21,7 +21,7 @@ export default function AddRouteFAB({
 	setRoutes: Dispatch<SetStateAction<IRouteFlat[]>>;
 }) {
 	const [open, setOpen] = useState(false);
-	const [difficulty, setDifficulty] = useState(5);
+	const [difficulty, setDifficulty] = useState(2.5);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -109,10 +109,10 @@ export default function AddRouteFAB({
 						value={difficulty}
 						onChange={handleSliderChange}
 						valueLabelDisplay="auto"
-						step={1}
+						step={0.5}
 						marks
-						min={1}
-						max={10}
+						min={0}
+						max={5}
 					/>
 				</DialogContent>
 				<DialogActions>

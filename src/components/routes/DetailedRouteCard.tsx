@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -13,10 +14,11 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
 import { likeRoute, unlikeRoute } from '@/service/Route';
-import { useSession } from 'next-auth/react';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
@@ -56,6 +58,17 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				<Typography variant="body2" color="text.secondary">
 					{route.body}
 				</Typography>
+				<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+					<Typography variant="subtitle2" sx={{ mr: 1 }}>
+						Difficulty:
+					</Typography>
+					<Rating
+						name="difficulty-rating"
+						value={route.difficulty}
+						precision={0.5}
+						readOnly
+					/>
+				</Box>
 			</CardContent>
 			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
 				<IconButton aria-label="go back to home" onClick={handleGoBack}>
