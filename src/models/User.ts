@@ -4,6 +4,7 @@ mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
 
 interface IUser {
+	id: string;
 	name: string;
 	email: string;
 	password?: string;
@@ -11,9 +12,22 @@ interface IUser {
 
 const userSchema = new Schema<IUser>(
 	{
-		name: String,
-		email: String,
-		password: String,
+		id: {
+			type: String,
+			required: true,
+		},
+		name: {
+			type: String,
+			required: true,
+		},
+		email: {
+			type: String,
+			required: true,
+		},
+		password: {
+			type: String,
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );

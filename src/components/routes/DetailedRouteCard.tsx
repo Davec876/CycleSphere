@@ -1,0 +1,74 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import type { IRouteFlat } from '@/models/Route';
+import { formatDate } from '@/util/formatDate';
+import { likeRoute, unlikeRoute } from '@/service/Route';
+import { useSession } from 'next-auth/react';
+
+export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
+	const { data: session } = useSession();
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
+
+	const handleGoBack = () => {
+		router.replace(`/?${route.id}=${isLiked ? 'liked' : 'disliked'}`);
+	};
+
+	const handleFavoriteClick = async () => {
+		if (session && session.user) {
+			setIsLiked((prev) => !prev);
+			if (isLiked) {
+				await unlikeRoute(route.id);
+				return;
+			}
+			await likeRoute(route.id);
+		}
+	};
+
+	return (
+		<Card sx={{ width: [350, 425, 500] }}>
+			<CardHeader
+				avatar={<Avatar sx={{ bgcolor: red[500], color: 'white' }} />}
+				title={route.title}
+				subheader={formatDate(route.createdAt)}
+			/>
+			<CardMedia
+				component="img"
+				image={route.imagePath}
+				alt={`Image of ${route.title}`}
+				sx={{ padding: 1 }}
+			/>
+			<CardContent>
+				<Typography variant="body2" color="text.secondary">
+					{route.body}
+				</Typography>
+			</CardContent>
+			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
+				<IconButton aria-label="go back to home" onClick={handleGoBack}>
+					<ArrowBackIcon />
+				</IconButton>
+				<IconButton
+					aria-label="add to favorites"
+					onClick={handleFavoriteClick}
+					sx={{ color: isLiked ? red[500] : 'inherit' }}
+				>
+					<FavoriteIcon />
+				</IconButton>
+			</CardActions>
+		</Card>
+	);
+}

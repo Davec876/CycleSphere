@@ -43,4 +43,16 @@ export const {
 			},
 		}),
 	],
+	callbacks: {
+		async session({ session, token }) {
+			session.user.id = token.sub as string;
+			return session;
+		},
+		async jwt({ token, user }) {
+			if (user?.id) {
+				token.sub = user.id;
+			}
+			return token;
+		},
+	},
 });

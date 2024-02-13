@@ -1,7 +1,7 @@
 import AppBar from '@/components/AppBar';
 import Box from '@mui/material/Box';
 
-export default function OurTeamPage() {
+export default function FAQPage() {
 	return (
 		<>
 			<AppBar />
@@ -13,7 +13,7 @@ export default function OurTeamPage() {
 						alignItems: 'center',
 					}}
 				>
-					<div>Our team!</div>
+					<div>FAQ!</div>
 				</Box>
 			</main>
 		</>
