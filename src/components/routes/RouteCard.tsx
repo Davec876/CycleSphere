@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { type Dispatch, type SetStateAction, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -13,27 +14,34 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
-import { useSession } from 'next-auth/react';
-import { likeRoute, unlikeRoute } from '@/service/Route';
+import { getRoutes, likeRoute, unlikeRoute } from '@/service/Route';
 
-export default function RouteCard({ route }: { route: IRouteFlat }) {
+export default function RouteCard({
+	route,
+	setRoutes,
+}: {
+	route: IRouteFlat;
+	setRoutes: Dispatch<SetStateAction<IRouteFlat[]>>;
+}) {
 	const { data: session } = useSession();
-	const [isLiked, setIsLiked] = useState(false);
 
-	useEffect(() => {
-		setIsLiked(route.likedByUserIds.includes(session?.user?.id as string));
+	const isLiked = useMemo(() => {
+		return route.likedByUserIds.includes(session?.user?.id as string);
 	}, [route.likedByUserIds, session?.user?.id]);
 
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
-			setIsLiked((prev) => !prev);
 			if (isLiked) {
 				await unlikeRoute(route.id);
+				setRoutes(await getRoutes());
 				return;
 			}
 			await likeRoute(route.id);
+			setRoutes(await getRoutes());
 		}
 	};
 
@@ -56,6 +64,17 @@ export default function RouteCard({ route }: { route: IRouteFlat }) {
 				<Typography variant="body2" color="text.secondary">
 					{route.body}
 				</Typography>
+				<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+					<Typography variant="subtitle2" sx={{ mr: 1 }}>
+						Difficulty:
+					</Typography>
+					<Rating
+						name="difficulty-rating"
+						value={route.difficulty}
+						precision={0.5}
+						readOnly
+					/>
+				</Box>
 			</CardContent>
 			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
 				<IconButton

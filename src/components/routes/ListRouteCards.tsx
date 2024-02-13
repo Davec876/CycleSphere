@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import SortButton from './SortButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,13 +20,33 @@ export default function ListRouteCards({
 }) {
 	const { data: session } = useSession();
 	const [routes, setRoutes] = useState(ssrRoutes);
+	const [checked, setChecked] = useState('oldest');
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const filteredRoutes = useMemo(() => {
-		return routes.filter((route) =>
+	const filteredAndSortedRoutes = useMemo(() => {
+		// filter the routes based on the search query
+		const filtered = routes.filter((route) =>
 			route.title.toLowerCase().includes(searchQuery.toLowerCase())
 		);
-	}, [routes, searchQuery]);
+
+		// sort filtered routes based on checked sort option
+		const sorted = filtered.sort((a, b) => {
+			switch (checked) {
+				case 'oldest':
+					return a.createdAt.getTime() - b.createdAt.getTime();
+				case 'recentlyAdded':
+					return b.createdAt.getTime() - a.createdAt.getTime();
+				case 'difficulty':
+					return b.difficulty - a.difficulty;
+				case 'liked':
+					return b.likedByUserIds.length - a.likedByUserIds.length;
+				default:
+					return 0;
+			}
+		});
+
+		return sorted;
+	}, [routes, searchQuery, checked]);
 
 	// Filter routes based on search input as the user types
 	function handleInputChange(
@@ -65,13 +85,11 @@ export default function ListRouteCards({
 						onInputChange={handleInputChange}
 						sx={{ width: '93%', marginRight: 1 }}
 					/>
-					<IconButton color="primary" sx={{ width: '7%' }}>
-						<FilterListIcon />
-					</IconButton>
+					<SortButton checked={checked} setChecked={setChecked} />
 				</Box>
 			</Card>
-			{filteredRoutes.map((route) => {
-				return <RouteCard key={route.id} route={route} />;
+			{filteredAndSortedRoutes.map((route) => {
+				return <RouteCard key={route.id} route={route} setRoutes={setRoutes} />;
 			})}
 			{session?.user && <AddRouteFAB setRoutes={setRoutes} />}
 		</>
