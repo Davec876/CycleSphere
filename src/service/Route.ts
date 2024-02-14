@@ -15,14 +15,19 @@ export async function addRoute({
 	title,
 	body,
 	difficulty,
+	location,
 }: {
 	title: string;
 	body: string;
 	difficulty: number;
+	location?: { lat: number; lng: number };
 }) {
 	const session = await auth();
 	if (!session || session.user == null) {
 		throw new Error('User is not logged in!');
+	}
+	if (!location || !location.lat || !location.lng) {
+		throw new Error('No location found!');
 	}
 	await Route.create({
 		id: randomUUID(),
@@ -32,6 +37,10 @@ export async function addRoute({
 		imagePath: '/',
 		difficulty,
 		likedByUserIds: [],
+		location: {
+			lat: location.lat,
+			lng: location.lng,
+		},
 	});
 }
 

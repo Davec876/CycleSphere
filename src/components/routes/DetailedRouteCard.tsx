@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
 import { likeRoute, unlikeRoute } from '@/service/Route';
+import Map from './map/Map';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
@@ -48,16 +49,19 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				title={route.title}
 				subheader={formatDate(route.createdAt)}
 			/>
-			<CardMedia
-				component="img"
-				image={route.imagePath}
-				alt={`Image of ${route.title}`}
-				sx={{ padding: 1 }}
-			/>
+			{route.imagePath !== '/' && (
+				<CardMedia
+					component="img"
+					image={route.imagePath}
+					alt={`Image of ${route.title}`}
+					sx={{ padding: 1 }}
+				/>
+			)}
 			<CardContent>
 				<Typography variant="body2" color="text.secondary">
 					{route.body}
 				</Typography>
+				<Map location={route.location} />
 				<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
 					<Typography variant="subtitle2" sx={{ mr: 1 }}>
 						Difficulty:
