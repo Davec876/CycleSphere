@@ -2,6 +2,7 @@ import User from '@/models/User';
 import { type NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
+import { randomUUID } from 'crypto';
 
 export async function POST(req: NextRequest) {
 	try {
@@ -39,7 +40,8 @@ export async function POST(req: NextRequest) {
 		const hashPassword = await bcrypt.hash(userData.password, 10);
 		userData.password = hashPassword;
 
-		await User.create(userData);
+		const newUser = { ...userData, id: randomUUID() };
+		await User.create(newUser);
 		return NextResponse.json({ message: 'User Created.' }, { status: 201 });
 	} catch (err) {
 		console.log(err);
