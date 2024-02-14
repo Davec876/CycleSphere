@@ -8,7 +8,7 @@ interface IRoute {
 	authorId: string;
 	title: string;
 	body: string;
-	imagePath: string;
+	imageId: string;
 	difficulty: number;
 	likedByUserIds: string[];
 	location: {
@@ -41,9 +41,8 @@ const routeSchema = new Schema<IRoute>(
 			type: String,
 			required: true,
 		},
-		imagePath: {
+		imageId: {
 			type: String,
-			required: true,
 		},
 		difficulty: {
 			type: Number,

@@ -4,6 +4,8 @@ import { type Dispatch, type SetStateAction, useState } from 'react';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,16 +17,20 @@ import Button from '@mui/material/Button';
 import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
+import FileUploadButton from './FileUploadButton';
 
 export default function AddRouteFAB({
 	setRoutes,
 }: {
 	setRoutes: Dispatch<SetStateAction<IRouteFlat[]>>;
 }) {
+	const [alertOpen, setAlertOpen] = useState(false);
+	const [alertMessage, setAlertMessage] = useState('');
 	const [open, setOpen] = useState(false);
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.places.PlaceResult | null>(null);
 	const [difficulty, setDifficulty] = useState(2.5);
+	const [uploadedImageId, setUploadedImageId] = useState('');
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -45,11 +51,18 @@ export default function AddRouteFAB({
 		const formData = new FormData(event.currentTarget);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const formJson = Object.fromEntries((formData as any).entries());
+		if (!selectedPlace) {
+			setAlertMessage('Please select a place before submitting.');
+			setAlertOpen(true);
+			return;
+		}
+
 		await addRoute({
 			title: formJson.trailTitle,
 			body: formJson.trailBody,
+			imageId: uploadedImageId,
 			difficulty,
-			location: selectedPlace?.geometry?.location?.toJSON(),
+			location: selectedPlace.geometry?.location?.toJSON(),
 		});
 		// fetch updated routes via server action and update state
 		const routes = await getRoutes();
@@ -88,7 +101,6 @@ export default function AddRouteFAB({
 					<TextField
 						autoFocus
 						required
-						margin="dense"
 						name="trailTitle"
 						label="Trail title"
 						type="text"
@@ -98,14 +110,13 @@ export default function AddRouteFAB({
 					<TextField
 						autoFocus
 						required
-						margin="dense"
 						name="trailBody"
 						label="Trail description"
 						type="text"
 						fullWidth
 						variant="standard"
 					/>
-					<Typography id="difficulty-slider" marginY={1}>
+					<Typography id="difficulty-slider" marginY={2}>
 						Difficulty Level
 					</Typography>
 					<Slider
@@ -118,6 +129,10 @@ export default function AddRouteFAB({
 						min={0}
 						max={5}
 					/>
+					<FileUploadButton
+						imageId={uploadedImageId}
+						setImageId={setUploadedImageId}
+					/>
 					<AutoCompleteMap
 						selectedPlace={selectedPlace}
 						setSelectedPlace={setSelectedPlace}
@@ -128,6 +143,19 @@ export default function AddRouteFAB({
 					<Button type="submit">Submit</Button>
 				</DialogActions>
 			</Dialog>
+			<Snackbar
+				open={alertOpen}
+				autoHideDuration={6000}
+				onClose={() => setAlertOpen(false)}
+			>
+				<Alert
+					onClose={() => setAlertOpen(false)}
+					severity="error"
+					sx={{ width: '100%' }}
+				>
+					{alertMessage}
+				</Alert>
+			</Snackbar>
 		</>
 	);
 }
