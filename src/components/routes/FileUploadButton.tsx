@@ -1,11 +1,13 @@
-import { type Dispatch, type SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Box from '@mui/material/Box';
 import { getPresignedRouteImageUploadUrl } from '@/util/routeImage';
+import { FetchAPIError } from '@/util/errors/FetchAPIError';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -26,6 +28,8 @@ export default function FileUploadButton({
 	imageId: string;
 	setImageId: Dispatch<SetStateAction<string>>;
 }) {
+	const [uploadError, setUploadError] = useState(false);
+
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -33,6 +37,7 @@ export default function FileUploadButton({
 		const file = event.target.files[0];
 		try {
 			setImageId('');
+			setUploadError(false);
 			const { imageId, uploadUrl } = await getPresignedRouteImageUploadUrl();
 
 			// upload to presigned upload url
@@ -45,7 +50,12 @@ export default function FileUploadButton({
 				setImageId(imageId);
 			}
 		} catch (e) {
-			console.error('Error uploading file:', e);
+			if (e instanceof FetchAPIError) {
+				setUploadError(true);
+				console.error(e.message);
+				return;
+			}
+			throw e;
 		}
 	};
 
@@ -70,8 +80,12 @@ export default function FileUploadButton({
 					accept="image/*"
 				/>
 			</Button>
-			{imageId && (
-				<Chip icon={<CheckCircleIcon />} label="Uploaded" color="success" />
+			{uploadError ? (
+				<Chip icon={<CancelIcon />} label="Upload failed" color="error" />
+			) : (
+				imageId && (
+					<Chip icon={<CheckCircleIcon />} label="Uploaded" color="success" />
+				)
 			)}
 		</Box>
 	);
