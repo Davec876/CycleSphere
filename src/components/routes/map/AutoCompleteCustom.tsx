@@ -103,9 +103,22 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 	);
 
 	return (
-		<Card variant="outlined" sx={{ maxWidth: 230 }}>
-			<CardContent>
+		<Card
+			variant="outlined"
+			sx={{
+				maxWidth: 230,
+				// Black background, 50% opacity
+				bgcolor: 'rgba(0, 0, 0, 0.5)',
+			}}
+		>
+			<CardContent
+				sx={{
+					maxHeight: predictionResults.length === 0 ? 56 : 'none',
+					padding: predictionResults.length === 0 ? 0 : 1,
+				}}
+			>
 				<TextField
+					sx={{ maxHeight: predictionResults.length === 0 ? 'none' : 56 }}
 					placeholder="Halifax, NS, Canada"
 					value={inputValue}
 					onChange={onInputChange}
@@ -114,6 +127,7 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 					<List>
 						{predictionResults.map(({ place_id, description }) => (
 							<ListItemButton
+								sx={{ px: 0 }}
 								key={place_id}
 								onClick={() => handleSuggestionClick(place_id)}
 							>

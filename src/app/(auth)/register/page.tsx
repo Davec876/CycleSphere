@@ -42,7 +42,7 @@ export default function RegisterPage() {
 			setErrorMessage(response.message);
 			return;
 		}
-		signIn('credentials', {
+		await signIn('credentials', {
 			email: formData.email,
 			password: formData.password,
 			callbackUrl: '/',

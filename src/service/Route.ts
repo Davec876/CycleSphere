@@ -14,11 +14,13 @@ export async function getRoutes() {
 export async function addRoute({
 	title,
 	body,
+	imageId,
 	difficulty,
 	location,
 }: {
 	title: string;
 	body: string;
+	imageId: string;
 	difficulty: number;
 	location?: { lat: number; lng: number };
 }) {
@@ -34,7 +36,7 @@ export async function addRoute({
 		authorId: session.user.id,
 		title,
 		body,
-		imagePath: '/',
+		imageId,
 		difficulty,
 		likedByUserIds: [],
 		location: {
