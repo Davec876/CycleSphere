@@ -24,25 +24,65 @@ TODO: One paragraph project description
 
 ## Getting Started
 
-First, install node packages:
-
-```bash
-npm install
-```
-
-Then run the development server:
-
-```bash
-npm run dev
-```
-
-And finally, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
 To have a local copy of this project up and running on your local machine, you will first need to install the following software
 
 * [Node.js](https://nodejs.org/en)
+
+You will also need the following strings
+
+* The connection string to a [MongoDB](https://www.mongodb.com/) instance
+* An activated [google maps API key](https://developers.google.com/maps/get-started) (requires credit card information)
+
+
+### Installing 
+
+Launch a command line terminal at the root of the project `/`
+
+Install node packages
+
+```bash
+npm install
+```
+
+Generate an openssl key
+
+```bash
+openssl rand -base64 32
+```
+
+Save the generated key. This will be needed shortly
+
+Create a new file called `.env.local`
+
+Add this line into the newly created file, but replace &lt;openssl-key&gt; with the generated key from earlier
+
+```
+AUTH_SECRET=<openssl-key>
+```
+
+Add this line into the file, but replace &lt;mongo-url&gt; with your MongoDB connection string
+
+```
+MONGODB_URI=<mongo-url>
+```
+
+Add this line into the file, but replace &lt;gmaps-api-key&gt; with your Google Maps API key
+
+```
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<gmaps-api-key>
+```
+
+Then, from the terminal, run the development server
+
+```bash
+npm run dev
+```
+
+And finally, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
 
