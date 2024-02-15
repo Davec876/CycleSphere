@@ -2,7 +2,10 @@ import { auth } from '@/components/auth/auth';
 import { APIError } from '@/util/errors/APIError';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { addCORSHeaders } from '@/util/addCorsHeader';
 import { randomUUID } from 'crypto';
+import { validateProdAccessTokenFromReq } from '@/util/prodAccessToken';
+import type { NextRequest } from 'next/server';
 
 async function getPresignedUploadUrl() {
 	const S3 = new S3Client({
@@ -26,22 +29,33 @@ async function getPresignedUploadUrl() {
 		}
 	);
 
-	return Response.json({ imageId, uploadUrl });
+	return addCORSHeaders(Response.json({ imageId, uploadUrl }));
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
 	try {
 		const session = await auth();
-		if (!session || session.user == null) {
-			throw new APIError('User is not logged in!', 401);
+		if (session && session.user) {
+			return await getPresignedUploadUrl();
 		}
-		return await getPresignedUploadUrl();
+		if (!session || session.user == null) {
+			// Validate cross origin requests
+			await validateProdAccessTokenFromReq(req);
+			return await getPresignedUploadUrl();
+		}
 	} catch (e) {
 		if (e instanceof APIError) {
-			return Response.json({ error: e.message }, { status: e.status });
+			return addCORSHeaders(
+				Response.json({ error: e.message }, { status: e.status })
+			);
 		}
 		throw e;
 	}
+}
+
+// Respond with CORS to OPTIONS
+export async function OPTIONS() {
+	return addCORSHeaders(new Response(null, { status: 204 }));
 }
 
 export const dynamic = 'force-dynamic';

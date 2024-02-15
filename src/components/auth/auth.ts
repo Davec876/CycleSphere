@@ -45,7 +45,9 @@ export const {
 	],
 	callbacks: {
 		async session({ session, token }) {
-			session.user.id = token.sub as string;
+			if (token.sub) {
+				session.user.id = token.sub;
+			}
 			return session;
 		},
 		async jwt({ token, user }) {

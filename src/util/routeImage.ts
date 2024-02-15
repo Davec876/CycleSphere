@@ -1,6 +1,7 @@
 'use client';
 
 import { FetchAPIError } from './errors/FetchAPIError';
+import { fetchWithAuth } from './fetchWithAuth';
 
 export function getRouteImageUrl(id: string) {
 	if (process.env.NEXT_PUBLIC_IMAGE_HOST) {
@@ -22,7 +23,7 @@ export async function getPresignedRouteImageUploadUrl(): Promise<PresignedRouteI
 			);
 			return await res.json();
 		}
-		const res = await fetch(
+		const res = await fetchWithAuth(
 			`https://4177-group-project.vercel.app/api/routes/image`
 		);
 		return await res.json();
