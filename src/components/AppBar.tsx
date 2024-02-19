@@ -42,7 +42,7 @@ function ResponsiveAppBar() {
 	const handleCloseUserMenu = (setting: string) => {
 		switch (setting) {
 			case 'Logout':
-				router.push('/api/auth/signout?callbackUrl=/');
+				router.push('/logout');
 				break;
 			case 'Profile':
 				router.push('/profile');
@@ -176,7 +176,7 @@ function ResponsiveAppBar() {
 								</IconButton>
 							</Tooltip>
 						) : (
-							<Button href="/api/auth/signin" color="inherit">
+							<Button href="/login" color="inherit">
 								Login
 							</Button>
 						)}

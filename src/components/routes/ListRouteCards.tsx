@@ -1,5 +1,6 @@
 'use client';
-import { type SyntheticEvent, useState, useMemo } from 'react';
+import { type SyntheticEvent, useState, useMemo, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import RouteCard from './RouteCard';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -9,9 +10,9 @@ import SortButton from './SortButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import type { IRouteFlat } from '@/models/Route';
 import AddRouteFAB from './AddRouteFAB';
-import { useSession } from 'next-auth/react';
+import { getRoutes } from '@/service/Route';
+import type { IRouteFlat } from '@/models/Route';
 
 export default function ListRouteCards({
 	routes: ssrRoutes,
@@ -22,6 +23,13 @@ export default function ListRouteCards({
 	const [routes, setRoutes] = useState(ssrRoutes);
 	const [checked, setChecked] = useState('oldest');
 	const [searchQuery, setSearchQuery] = useState('');
+
+	useEffect(() => {
+		async function refreshRoutes() {
+			setRoutes(await getRoutes());
+		}
+		refreshRoutes();
+	}, []);
 
 	const filteredAndSortedRoutes = useMemo(() => {
 		// filter the routes based on the search query

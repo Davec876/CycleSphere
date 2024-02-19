@@ -28,10 +28,6 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const searchParams = useSearchParams();
 	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
 
-	const handleGoBack = () => {
-		router.replace(`/?${route.id}=${isLiked ? 'liked' : 'disliked'}`);
-	};
-
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
 			setIsLiked((prev) => !prev);
@@ -76,7 +72,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				</Box>
 			</CardContent>
 			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
-				<IconButton aria-label="go back to home" onClick={handleGoBack}>
+				<IconButton aria-label="go back to home" onClick={() => router.back()}>
 					<ArrowBackIcon />
 				</IconButton>
 				<IconButton

@@ -57,4 +57,8 @@ export const {
 			return token;
 		},
 	},
+	pages: {
+		signIn: '/login',
+		signOut: '/logout',
+	},
 });

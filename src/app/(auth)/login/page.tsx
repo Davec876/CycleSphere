@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -11,17 +11,41 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function RegisterPage() {
-	interface RegistrationForm {
-		name: string;
+function ErrorMessage() {
+	const searchParams = useSearchParams();
+	const errorMessage = useMemo(() => {
+		const error = searchParams.get('error');
+		if (!error) return null;
+
+		switch (error) {
+			case 'CredentialsSignin':
+				return 'Sign in failed. Check that the details you provided are correct.';
+			default:
+				return 'error';
+		}
+	}, [searchParams]);
+
+	return (
+		<>
+			{errorMessage && (
+				<Alert variant="filled" severity="error" sx={{ mb: 1 }}>
+					{errorMessage}
+				</Alert>
+			)}
+		</>
+	);
+}
+
+export default function LoginPage() {
+	interface LoginForm {
 		email: string;
 		password: string;
 	}
 
-	const [formData, setFormData] = useState({} as RegistrationForm);
-	const [errorMessage, setErrorMessage] = useState('');
+	const [formData, setFormData] = useState({} as LoginForm);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -33,17 +57,6 @@ export default function RegisterPage() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setErrorMessage('');
-		const res = await fetch('/api/auth/register', {
-			method: 'POST',
-			body: JSON.stringify({ formData }),
-		});
-
-		if (!res.ok) {
-			const response = await res.json();
-			setErrorMessage(response.message);
-			return;
-		}
 		await signIn('credentials', {
 			email: formData.email,
 			password: formData.password,
@@ -66,18 +79,16 @@ export default function RegisterPage() {
 					elevation={3}
 				>
 					<CardContent>
-						{errorMessage && (
-							<Alert variant="filled" severity="error" sx={{ mb: 1 }}>
-								{errorMessage}
-							</Alert>
-						)}
+						<Suspense>
+							<ErrorMessage />
+						</Suspense>
 						<FormControl
 							component="form"
 							onSubmit={handleSubmit}
 							sx={{ width: '100%' }}
 						>
 							<Typography variant="h4" component="h1" align="center" mb={1}>
-								Create New User
+								Login
 							</Typography>
 							<Box
 								sx={{
@@ -88,15 +99,6 @@ export default function RegisterPage() {
 								}}
 								mb={1}
 							>
-								<TextField
-									name="name"
-									label="Name"
-									type="text"
-									onChange={handleChange}
-									required
-									value={formData.name}
-									sx={{ borderRadius: 4 }}
-								/>
 								<TextField
 									name="email"
 									label="Email"
@@ -130,7 +132,7 @@ export default function RegisterPage() {
 										mb: 1,
 									}}
 								>
-									Create User
+									Sign in
 								</Button>
 							</CardActions>
 						</FormControl>
@@ -140,8 +142,8 @@ export default function RegisterPage() {
 							}}
 						>
 							<Typography variant="subtitle2">
-								<Link href="/login" style={{ color: 'inherit' }}>
-									Already have an account? Go login
+								<Link href="/register" style={{ color: 'inherit' }}>
+									New user? Go register
 								</Link>
 							</Typography>
 						</Box>
