@@ -13,6 +13,8 @@
     "@auth/mongodb-adapter": "^2.4.0",
     "@aws-sdk/client-s3": "^3.515.0",
     "@aws-sdk/s3-request-presigner": "^3.515.0",
+    "@deck.gl/google-maps": "^8.9.34",
+    "@deck.gl/layers": "^8.9.34",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",

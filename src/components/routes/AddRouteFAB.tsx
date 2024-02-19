@@ -19,6 +19,17 @@ import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
 
+export type MapDetails = {
+	selectedLocation?: {
+		lat: number;
+		lng: number;
+	};
+	selectedPoints: {
+		lat: number;
+		lng: number;
+	}[];
+} | null;
+
 export default function AddRouteFAB({
 	setRoutes,
 }: {
@@ -27,8 +38,7 @@ export default function AddRouteFAB({
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [alertMessage, setAlertMessage] = useState('');
 	const [open, setOpen] = useState(false);
-	const [selectedPlace, setSelectedPlace] =
-		useState<google.maps.places.PlaceResult | null>(null);
+	const [mapDetails, setMapDetails] = useState<MapDetails>(null);
 	const [difficulty, setDifficulty] = useState(2.5);
 	const [uploadedImageId, setUploadedImageId] = useState('');
 
@@ -51,7 +61,7 @@ export default function AddRouteFAB({
 		const formData = new FormData(event.currentTarget);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const formJson = Object.fromEntries((formData as any).entries());
-		if (!selectedPlace) {
+		if (!mapDetails?.selectedLocation) {
 			setAlertMessage('Please select a place before submitting.');
 			setAlertOpen(true);
 			return;
@@ -62,7 +72,8 @@ export default function AddRouteFAB({
 			body: formJson.trailBody,
 			imageId: uploadedImageId,
 			difficulty,
-			location: selectedPlace.geometry?.location?.toJSON(),
+			location: mapDetails.selectedLocation,
+			selectedPoints: mapDetails.selectedPoints,
 		});
 		// fetch updated routes via server action and update state
 		const routes = await getRoutes();
@@ -133,10 +144,7 @@ export default function AddRouteFAB({
 						imageId={uploadedImageId}
 						setImageId={setUploadedImageId}
 					/>
-					<AutoCompleteMap
-						selectedPlace={selectedPlace}
-						setSelectedPlace={setSelectedPlace}
-					/>
+					<AutoCompleteMap setMapDetails={setMapDetails} />
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

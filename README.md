@@ -48,20 +48,26 @@ Install node packages
 npm install
 ```
 
-Generate an openssl key
+Generate an openssl random string
 
 ```bash
 openssl rand -base64 32
 ```
 
-Save the generated key. This will be needed shortly
+Save the generated string. This will be needed shortly
 
 Create a new file called `.env.local`
 
-Add this line into the newly created file, but replace &lt;openssl-key&gt; with the generated key from earlier
+Add this line into the newly created file, but replace &lt;openssl-str&gt; with the generated string from earlier
 
 ```
-AUTH_SECRET=<openssl-key>
+AUTH_SECRET=<openssl-str>
+```
+
+Obtain our `PROD_JWT_SECRET` in order for cross-origin uploads to work, and replace &lt;prod-jwt-secret&gt; with it
+
+```
+PROD_JWT_SECRET=<prod-jwt-secret>
 ```
 
 Add this line into the file, but replace &lt;mongo-url&gt; with your MongoDB connection string

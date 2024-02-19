@@ -15,6 +15,10 @@ interface IRoute {
 		lat: number;
 		lng: number;
 	};
+	selectedPoints: {
+		lat: number;
+		lng: number;
+	}[];
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -62,6 +66,21 @@ const routeSchema = new Schema<IRoute>(
 				required: true,
 			},
 		},
+		selectedPoints: [
+			new Schema(
+				{
+					lat: {
+						type: Number,
+						required: true,
+					},
+					lng: {
+						type: Number,
+						required: true,
+					},
+				},
+				{ _id: false }
+			),
+		],
 	},
 	{ timestamps: true }
 );

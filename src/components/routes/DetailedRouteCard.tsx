@@ -58,7 +58,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				<Typography variant="body2" color="text.secondary">
 					{route.body}
 				</Typography>
-				<Map location={route.location} />
+				<Map location={route.location} selectedPoints={route.selectedPoints} />
 				<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
 					<Typography variant="subtitle2" sx={{ mr: 1 }}>
 						Difficulty:
