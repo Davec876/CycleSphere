@@ -1,5 +1,5 @@
 import AppBar from '@/components/AppBar';
-import FAQCard from '@/components/faq/FAQCard';
+import ListFAQCards from '@/components/faq/ListFAQCards';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -82,9 +82,7 @@ export default function FAQPage() {
 								mt: 1,
 							}}
 						>
-							{FAQS.map((faq, index) => (
-								<FAQCard key={index} title={faq.title} body={faq.body} />
-							))}
+							<ListFAQCards FAQS={FAQS} />
 						</Box>
 					</CardContent>
 				</Card>
