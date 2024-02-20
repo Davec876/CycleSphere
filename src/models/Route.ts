@@ -19,6 +19,7 @@ interface IRoute {
 		lat: number;
 		lng: number;
 	}[];
+	distance?: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -81,6 +82,7 @@ const routeSchema = new Schema<IRoute>(
 				{ _id: false }
 			),
 		],
+		distance: Number,
 	},
 	{ timestamps: true }
 );

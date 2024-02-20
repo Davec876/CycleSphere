@@ -18,6 +18,7 @@ export async function addRoute({
 	difficulty,
 	location,
 	selectedPoints,
+	distance,
 }: {
 	title: string;
 	body: string;
@@ -25,6 +26,7 @@ export async function addRoute({
 	difficulty: number;
 	location: { lat: number; lng: number };
 	selectedPoints: { lat: number; lng: number }[];
+	distance?: number;
 }) {
 	const session = await auth();
 	if (!session || session.user == null) {
@@ -43,6 +45,7 @@ export async function addRoute({
 		likedByUserIds: [],
 		location,
 		selectedPoints,
+		distance,
 	});
 }
 

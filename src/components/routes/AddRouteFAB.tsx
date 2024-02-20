@@ -28,6 +28,7 @@ export type MapDetails = {
 		lat: number;
 		lng: number;
 	}[];
+	totalDistance?: number;
 } | null;
 
 export default function AddRouteFAB({
@@ -74,6 +75,7 @@ export default function AddRouteFAB({
 			difficulty,
 			location: mapDetails.selectedLocation,
 			selectedPoints: mapDetails.selectedPoints,
+			distance: mapDetails.totalDistance,
 		});
 		// fetch updated routes via server action and update state
 		const routes = await getRoutes();
@@ -144,7 +146,10 @@ export default function AddRouteFAB({
 						imageId={uploadedImageId}
 						setImageId={setUploadedImageId}
 					/>
-					<AutoCompleteMap setMapDetails={setMapDetails} />
+					<AutoCompleteMap
+						setMapDetails={setMapDetails}
+						distance={mapDetails?.totalDistance}
+					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

@@ -8,11 +8,14 @@ import type { IRouteFlat } from '@/models/Route';
 import type { FeatureCollection } from 'geojson';
 import { getDeckGlLayers } from '@/util/getDeckGlLayers';
 import { convertToFeatureCollection } from '@/util/convertToFeatureCollection';
+import DistanceOverlay from './DistanceOverlay';
 
 export default function MapComponent({
+	distance,
 	location,
 	selectedPoints,
 }: {
+	distance: IRouteFlat['distance'];
 	location: IRouteFlat['location'];
 	selectedPoints: IRouteFlat['selectedPoints'];
 }) {
@@ -37,6 +40,7 @@ export default function MapComponent({
 					disableDefaultUI={true}
 				>
 					<DeckGlOverlay layers={getDeckGlLayers(geoData)} />
+					<DistanceOverlay distance={distance} />
 				</Map>
 			</APIProvider>
 		</Box>
