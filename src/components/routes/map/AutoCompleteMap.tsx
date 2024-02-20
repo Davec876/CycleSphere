@@ -1,4 +1,3 @@
-// Adapted from https://github.com/visgl/react-google-maps/blob/main/examples/autocomplete/src/app.tsx
 'use client';
 
 import { useState, type Dispatch, type SetStateAction, useEffect } from 'react';

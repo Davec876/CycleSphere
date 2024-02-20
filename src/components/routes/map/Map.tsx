@@ -1,4 +1,3 @@
-// Adapted from https://github.com/visgl/react-google-maps/blob/main/examples/basic-map/src/app.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
