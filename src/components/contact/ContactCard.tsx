@@ -6,14 +6,14 @@ import IconButton from '@mui/material/IconButton';
 import EmailIcon from '@mui/icons-material/Email';
 import Link from 'next/link';
 
-interface ContactProps {
-    contact: {
-        name: string;
-        email: string;
-    };
-}
-
-export default function ContactCard({ contact }: ContactProps) {
+export default function ContactCard({
+     contact 
+    }: {
+        contact: {
+            name: string;
+            email: string;
+        };
+    }) {
     const getInitials = (name: string) => {
         return name.split(' ').map((n) => n[0]).join('');
     };
