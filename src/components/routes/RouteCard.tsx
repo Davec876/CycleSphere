@@ -85,11 +85,13 @@ export default function RouteCard({
 				>
 					<FavoriteIcon />
 				</IconButton>
-				<Link href={`/routes/${route.id}?liked=${isLiked}`} passHref>
-					<IconButton aria-label="go to route">
-						<ArrowForwardIcon />
-					</IconButton>
-				</Link>
+				<IconButton
+					href={`/routes/${route.id}?liked=${isLiked}`}
+					LinkComponent={Link}
+					aria-label="go to route"
+				>
+					<ArrowForwardIcon />
+				</IconButton>
 			</CardActions>
 		</Card>
 	);

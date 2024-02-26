@@ -147,23 +147,20 @@ function ResponsiveAppBar() {
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((pageName) => (
-							<Link
+							<Button
 								key={pageName}
+								onClick={handleCloseNavMenu}
 								href={`/${parsePageNameToLink(pageName)}`}
-								style={{ textDecoration: 'none' }}
+								LinkComponent={Link}
+								sx={{
+									my: 2,
+									color: 'white',
+									display: 'block',
+									textAlign: 'center',
+								}}
 							>
-								<Button
-									key={pageName}
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									{pageName}
-								</Button>
-							</Link>
+								{pageName}
+							</Button>
 						))}
 					</Box>
 
@@ -176,7 +173,7 @@ function ResponsiveAppBar() {
 								</IconButton>
 							</Tooltip>
 						) : (
-							<Button href="/login" color="inherit">
+							<Button href="/login" LinkComponent={Link} color="inherit">
 								Login
 							</Button>
 						)}
