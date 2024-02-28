@@ -1,9 +1,9 @@
 <!--- The following README.md sample file was adapted from https://gist.github.com/PurpleBooth/109311bb0361f32d87a2#file-readme-template-md by Gabriella Mosquera for academic use ---> 
 
 
-# CSCI 4177 - Project: TEAM 18
+# CSCI 4177 - Project: CycleSphere
 
-TODO: One paragraph project description
+CycleSphere is a social media platform for cyclists in Halifax built as part of an academic project for CSCI 4177 (Advanced Web Services) at Dalhousie University. It is an effortless way for cycling enthusiasts to find new cycling trails or routes to ride along. With this app, users can find cycling trails, be it established trails in the city or community-made custom routes. Users can also see what other members of the community have to say about these trails and what their experiences on them were like through our social component, where people can drop comments under trails, “like” trails, share pictures they took, and more. Additionally, as our app learns more about a particular user, it can recommend new routes or trails this user may like.
 
 * *Date Created*: 19 Jan 2024
 * *Project URL*: <https://4177-group-project.vercel.app/>
@@ -13,6 +13,7 @@ TODO: One paragraph project description
 
 ## Authors
 
+TEAM 18
 * [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Team member)*
 * [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Team member)*
 * [Dave Chuck](dchuck@dal.ca) - *(Team Member)*
