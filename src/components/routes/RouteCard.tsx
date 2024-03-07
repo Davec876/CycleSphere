@@ -19,7 +19,7 @@ import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
 import { getRoutes, likeRoute, unlikeRoute } from '@/service/Route';
-import { getRouteImageUrl } from '@/util/routeImage';
+import { getImageUrl } from '@/util/routeImage';
 
 export default function RouteCard({
 	route,
@@ -56,7 +56,7 @@ export default function RouteCard({
 			{route.imageId && (
 				<CardMedia
 					component="img"
-					image={getRouteImageUrl(route.imageId)}
+					image={getImageUrl(route.imageId)}
 					alt={`Image of ${route.title}`}
 					sx={{ padding: 1 }}
 				/>

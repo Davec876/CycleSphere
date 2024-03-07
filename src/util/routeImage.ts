@@ -3,11 +3,11 @@
 import { FetchAPIError } from './errors/FetchAPIError';
 import { fetchWithAuth } from './fetchWithAuth';
 
-export function getRouteImageUrl(id: string) {
+export function getImageUrl(id: string) {
 	if (process.env.NEXT_PUBLIC_IMAGE_HOST) {
-		return `${process.env.NEXT_PUBLIC_IMAGE_HOST}/4177-group-project/routes/images/${id}`;
+		return `${process.env.NEXT_PUBLIC_IMAGE_HOST}/4177-group-project/images/${id}`;
 	}
-	return `https://images.maximoguk.com/4177-group-project/routes/images/${id}`;
+	return `https://images.maximoguk.com/4177-group-project/images/${id}`;
 }
 
 interface PresignedRouteImageUploadUrlRes {

@@ -1,11 +1,14 @@
 import mongoose, { type FlattenMaps, Schema, type Types } from 'mongoose';
+import commentSchema, { type IComment } from './schemas/Comment';
+import type { IAuthor } from './schemas/Author';
+import authorSchema from './schemas/Author';
 
 mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
 
 interface IRoute {
 	id: string;
-	authorId: string;
+	author: IAuthor;
 	title: string;
 	body: string;
 	imageId: string;
@@ -19,6 +22,7 @@ interface IRoute {
 		lat: number;
 		lng: number;
 	}[];
+	comments: IComment[];
 	distance?: number;
 	createdAt: Date;
 	updatedAt: Date;
@@ -34,8 +38,8 @@ const routeSchema = new Schema<IRoute>(
 			type: String,
 			required: true,
 		},
-		authorId: {
-			type: String,
+		author: {
+			type: authorSchema,
 			required: true,
 		},
 		title: {
@@ -82,6 +86,7 @@ const routeSchema = new Schema<IRoute>(
 				{ _id: false }
 			),
 		],
+		comments: [commentSchema],
 		distance: Number,
 	},
 	{ timestamps: true }
