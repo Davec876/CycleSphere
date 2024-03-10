@@ -143,6 +143,8 @@ export default function AddRouteFAB({
 						max={5}
 					/>
 					<FileUploadButton
+						sx={{ my: 1 }}
+						label="Upload route photo"
 						imageId={uploadedImageId}
 						setImageId={setUploadedImageId}
 					/>

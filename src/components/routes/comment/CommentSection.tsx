@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import { red } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import type { ICommentFlat } from '@/models/schemas/Comment';
-import { formatDate } from '@/util/formatDate';
-import { getImageUrl } from '@/util/routeImage';
+import FileUploadButton from '../FileUploadButton';
+import CommentCard from './CommentCard';
+import PinDropIcon from '@mui/icons-material/PinDrop';
 
 export default function CommentSection({
 	comments,
@@ -52,6 +49,7 @@ export default function CommentSection({
 	}
 
 	const [formData, setFormData] = useState({} as CommentForm);
+	const [uploadedImageId, setUploadedImageId] = useState('');
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -83,7 +81,7 @@ export default function CommentSection({
 								sx={{
 									display: 'flex',
 									flexDirection: 'column',
-									gap: 1,
+									gap: 2,
 								}}
 							>
 								<TextField
@@ -99,9 +97,34 @@ export default function CommentSection({
 									value={formData.body}
 								/>
 								<CardActions>
-									<Button fullWidth variant="contained" type="submit">
-										Submit
-									</Button>
+									<Box
+										sx={{
+											width: 1,
+											display: 'flex',
+											flexDirection: 'column',
+											gap: 2,
+										}}
+									>
+										<FileUploadButton
+											label="Upload photo"
+											imageId={uploadedImageId}
+											setImageId={setUploadedImageId}
+										/>
+										<Box
+											sx={{
+												padding: 0,
+												display: 'flex',
+												justifyContent: 'space-between',
+											}}
+										>
+											<Button variant="contained" startIcon={<PinDropIcon />}>
+												Attach pin
+											</Button>
+											<Button variant="contained" type="submit">
+												Submit
+											</Button>
+										</Box>
+									</Box>
 								</CardActions>
 							</Box>
 						</FormControl>
@@ -110,27 +133,7 @@ export default function CommentSection({
 				{mockComments?.length > 0 && (
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 						{mockComments.map((comment) => {
-							return (
-								<Card key={comment.id}>
-									<CardHeader
-										avatar={
-											<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
-										}
-										title={`${comment.author.name} commented`}
-										subheader={formatDate(comment.createdAt)}
-									/>
-									<CardContent>
-										{comment.imageId && (
-											<CardMedia
-												component="img"
-												image={getImageUrl(comment.imageId)}
-												alt={`Image of ${comment.author.name}'s comment`}
-											/>
-										)}
-										<Typography variant="body1">{comment.body}</Typography>
-									</CardContent>
-								</Card>
-							);
+							return <CommentCard key={comment.id} comment={comment} />;
 						})}
 					</Box>
 				)}

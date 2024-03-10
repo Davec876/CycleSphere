@@ -8,6 +8,8 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Box from '@mui/material/Box';
 import { getPresignedRouteImageUploadUrl } from '@/util/routeImage';
 import { FetchAPIError } from '@/util/errors/FetchAPIError';
+import type { Theme } from '@emotion/react';
+import type { SxProps } from '@mui/system';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -22,11 +24,15 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function FileUploadButton({
+	label,
 	imageId,
 	setImageId,
+	sx,
 }: {
+	label: string;
 	imageId: string;
 	setImageId: Dispatch<SetStateAction<string>>;
+	sx?: SxProps<Theme> | undefined;
 }) {
 	const [uploadError, setUploadError] = useState(false);
 
@@ -68,12 +74,12 @@ export default function FileUploadButton({
 			}}
 		>
 			<Button
-				sx={{ my: 1 }}
+				sx={sx}
 				component="label"
 				variant="contained"
 				startIcon={<AddPhotoAlternateIcon />}
 			>
-				Upload route photo
+				{label}
 				<VisuallyHiddenInput
 					type="file"
 					onChange={handleFileChange}

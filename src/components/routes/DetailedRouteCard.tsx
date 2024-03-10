@@ -21,7 +21,7 @@ import { formatDate } from '@/util/formatDate';
 import { likeRoute, unlikeRoute } from '@/service/Route';
 import { getImageUrl } from '@/util/routeImage';
 import Map from './map/Map';
-import CommentSection from './CommentSection';
+import CommentSection from './comment/CommentSection';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
