@@ -75,13 +75,20 @@ export default function CommentCard({
 						disableSpacing
 						sx={{ width: '7%', justifyContent: 'flex-end', p: 0 }}
 					>
-						<IconButton
-							aria-label="add to favourited replies"
-							onClick={handleFavoriteClick}
-							sx={{ color: isLiked ? red[500] : 'inherit' }}
-						>
-							<FavoriteIcon />
-						</IconButton>
+						<Box sx={{ display: 'flex', alignItems: 'center' }}>
+							{commentReply.likedByUserIds.length > 0 && (
+								<Typography variant="body1">
+									{commentReply.likedByUserIds.length}
+								</Typography>
+							)}
+							<IconButton
+								aria-label="add to favourited replies"
+								onClick={handleFavoriteClick}
+								sx={{ color: isLiked ? red[500] : 'inherit' }}
+							>
+								<FavoriteIcon />
+							</IconButton>
+						</Box>
 					</CardActions>
 				</Box>
 			</CardContent>

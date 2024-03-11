@@ -67,18 +67,20 @@ export default function CommentCreationBox({
 			{sessionStatus === 'loading' ? null : !session?.user ? (
 				<Card sx={{ mb: 1 }}>
 					<CardContent>
-						<Typography sx={{ mb: 1 }} variant="body1">
+						<Typography sx={{ mb: 1, fontWeight: 'bold' }} variant="body1">
 							You need to login to post a comment!
 						</Typography>
-						<Button
-							fullWidth
-							href="/login"
-							LinkComponent={Link}
-							color="primary"
-							variant="outlined"
-						>
-							Login
-						</Button>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<Button
+								href="/login"
+								LinkComponent={Link}
+								color="primary"
+								variant="outlined"
+								sx={{ width: '20%' }}
+							>
+								Login
+							</Button>
+						</Box>
 					</CardContent>
 				</Card>
 			) : (

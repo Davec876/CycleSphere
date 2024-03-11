@@ -90,13 +90,20 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 					>
 						<ArrowBackIcon />
 					</IconButton>
-					<IconButton
-						aria-label="add to favorites"
-						onClick={handleFavoriteClick}
-						sx={{ color: isLiked ? red[500] : 'inherit' }}
-					>
-						<FavoriteIcon />
-					</IconButton>
+					<Box sx={{ display: 'flex', alignItems: 'center' }}>
+						{route.likedByUserIds.length > 0 && (
+							<Typography variant="body1">
+								{route.likedByUserIds.length}
+							</Typography>
+						)}
+						<IconButton
+							aria-label="add to favorites"
+							onClick={handleFavoriteClick}
+							sx={{ color: isLiked ? red[500] : 'inherit' }}
+						>
+							<FavoriteIcon />
+						</IconButton>
+					</Box>
 				</CardActions>
 			</Card>
 			<CommentSection routeId={route.id} initialComments={route.comments} />
