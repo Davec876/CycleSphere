@@ -26,7 +26,14 @@ export default function CommentSection({
 				{comments?.length > 0 && (
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 						{comments.map((comment) => {
-							return <CommentCard key={comment.id} comment={comment} />;
+							return (
+								<CommentCard
+									key={comment.id}
+									routeId={routeId}
+									comment={comment}
+									setComments={setComments}
+								/>
+							);
 						})}
 					</Box>
 				)}

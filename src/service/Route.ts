@@ -121,3 +121,27 @@ export async function addCommentToRoute({
 
 	await Route.updateOne({ id }, { $push: { comments: newComment } });
 }
+
+export async function likeComment(routeId: string, commentId: string) {
+	const session = await auth();
+	if (!session || !session.user) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	await Route.updateOne(
+		{ id: routeId, 'comments.id': commentId },
+		{ $addToSet: { 'comments.$.likedByUserIds': session.user.id } }
+	);
+}
+
+export async function unlikeComment(routeId: string, commentId: string) {
+	const session = await auth();
+	if (!session || !session.user) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	await Route.updateOne(
+		{ id: routeId, 'comments.id': commentId },
+		{ $pull: { 'comments.$.likedByUserIds': session.user.id } }
+	);
+}

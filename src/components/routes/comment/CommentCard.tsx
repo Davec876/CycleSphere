@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { type Dispatch, type SetStateAction, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -13,8 +13,23 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import type { ICommentFlat } from '@/models/schemas/Comment';
 import { formatDate } from '@/util/formatDate';
 import { getImageUrl } from '@/util/imageUploadUrl';
+import type { FlattenMaps } from 'mongoose';
+import type { IComment } from '@/models/schemas/Comment';
+import {
+	getCommentsForRoute,
+	likeComment,
+	unlikeComment,
+} from '@/service/Route';
 
-export default function CommentCard({ comment }: { comment: ICommentFlat }) {
+export default function CommentCard({
+	routeId,
+	comment,
+	setComments,
+}: {
+	routeId: string;
+	comment: ICommentFlat;
+	setComments: Dispatch<SetStateAction<FlattenMaps<IComment>[]>>;
+}) {
 	const { data: session } = useSession();
 	const isLiked = useMemo(() => {
 		return comment.likedByUserIds.includes(session?.user?.id as string);
@@ -22,13 +37,13 @@ export default function CommentCard({ comment }: { comment: ICommentFlat }) {
 
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
-			// if (isLiked) {
-			// 	await unlikeComment(route.id);
-			// 	setRoutes(await getRoutes());
-			// 	return;
-			// }
-			// await likeComment(route.id);
-			// setRoutes(await getRoutes());
+			if (isLiked) {
+				await unlikeComment(routeId, comment.id);
+				setComments(await getCommentsForRoute(routeId));
+				return;
+			}
+			await likeComment(routeId, comment.id);
+			setComments(await getCommentsForRoute(routeId));
 		}
 	};
 

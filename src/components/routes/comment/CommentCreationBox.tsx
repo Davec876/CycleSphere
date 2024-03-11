@@ -24,10 +24,6 @@ export default function CommentCreationBox({
 }) {
 	interface CommentForm {
 		body: string;
-		selectedPinLocation?: {
-			lat: number;
-			lng: number;
-		};
 	}
 
 	const { data: session } = useSession();
@@ -54,7 +50,8 @@ export default function CommentCreationBox({
 			id: routeId,
 			body: formData.body,
 			imageId: uploadedImageId,
-			selectedPinLocation: formData.selectedPinLocation,
+			// TODO: Pipe in the selectedPinLocation from a dropped pin on detailed route map
+			// selectedPinLocation: selectedPinLocation,
 		});
 		await refreshComments();
 	};
