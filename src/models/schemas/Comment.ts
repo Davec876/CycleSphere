@@ -1,16 +1,13 @@
 import { type FlattenMaps, Schema } from 'mongoose';
-import type { IAuthor } from './Author';
-import authorSchema from './Author';
+import authorSchema, { type IAuthor } from './Author';
+import commentReplySchema, { type ICommentReply } from './CommentReply';
 
 export interface IComment {
 	id: string;
 	author: IAuthor;
 	body: string;
 	likedByUserIds: string[];
-	replies: {
-		author: IAuthor;
-		body: string;
-	}[];
+	replies: ICommentReply[];
 	imageId?: string;
 	pin?: {
 		location: {
@@ -45,21 +42,10 @@ const commentSchema = new Schema<IComment>(
 			type: [String],
 			required: true,
 		},
-		replies: [
-			new Schema(
-				{
-					author: {
-						type: authorSchema,
-						required: true,
-					},
-					body: {
-						type: String,
-						required: true,
-					},
-				},
-				{ _id: false }
-			),
-		],
+		replies: {
+			type: [commentReplySchema],
+			required: true,
+		},
 		imageId: {
 			type: String,
 		},

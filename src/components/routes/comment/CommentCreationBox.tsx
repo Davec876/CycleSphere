@@ -31,7 +31,7 @@ export default function CommentCreationBox({
 	const [uploadedImageId, setUploadedImageId] = useState('');
 
 	const refreshComments = async () => {
-		// fetch updated routes via server action and update state
+		// fetch updated comments via server action and update state
 		const comments = await getCommentsForRoute(routeId);
 		setComments(comments);
 	};

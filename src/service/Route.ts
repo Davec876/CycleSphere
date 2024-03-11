@@ -4,6 +4,7 @@ import Route, { type IRouteCreation } from '@/models/Route';
 import { randomUUID } from 'crypto';
 import { APIError } from '@/util/errors/APIError';
 import type { ICommentCreation } from '@/models/schemas/Comment';
+import type { ICommentReplyCreation } from '@/models/schemas/CommentReply';
 
 export async function getRoute(id: string) {
 	return await Route.findOne({ id }, { _id: 0, __v: 0 }).lean().exec();
@@ -143,5 +144,56 @@ export async function unlikeComment(routeId: string, commentId: string) {
 	await Route.updateOne(
 		{ id: routeId, 'comments.id': commentId },
 		{ $pull: { 'comments.$.likedByUserIds': session.user.id } }
+	);
+}
+
+// Comment replies
+export async function getCommentReplies(routeId: string, commentId: string) {
+	const session = await auth();
+	if (!session || !session.user) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	const results = await Route.aggregate([
+		{ $match: { id: routeId } }, // match route by ID
+		{ $unwind: '$comments' }, // unwind the comments array for processing each comment
+		{ $match: { 'comments.id': commentId } }, // match comment by ID
+		{ $project: { _id: 0, replies: '$comments.replies' } }, // project only the replies for match
+	]);
+
+	if (results.length > 0) {
+		// aggregate returns an array, however in our case we should only have one match as routeId's are unique
+		// therefore we can safely return the first match
+		return results[0].replies;
+	}
+}
+
+export async function addReplyToComment({
+	routeId,
+	commentId,
+	body,
+}: {
+	routeId: string;
+	commentId: string;
+	body: string;
+}) {
+	const session = await auth();
+	if (!session || !session.user || !session.user?.id || !session.user?.name) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	const newReply = {
+		id: randomUUID(),
+		author: {
+			id: session.user.id,
+			name: session.user.name,
+		},
+		body,
+		likedByUserIds: [], // init as empty
+	} satisfies ICommentReplyCreation;
+
+	await Route.updateOne(
+		{ id: routeId, 'comments.id': commentId },
+		{ $push: { 'comments.$.replies': newReply } }
 	);
 }
