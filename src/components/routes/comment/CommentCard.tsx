@@ -101,19 +101,23 @@ export default function CommentCard({
 			</CardContent>
 			{viewReplies ? (
 				<>
-					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-						{commentReplies.map((commentReply) => {
-							return (
-								<CommentReply
-									key={commentReply.id}
-									routeId={routeId}
-									comment={comment}
-									commentReply={commentReply}
-									setCommentReplies={setCommentReplies}
-								/>
-							);
-						})}
-					</Box>
+					<Card>
+						<CardContent>
+							<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+								{commentReplies.map((commentReply) => {
+									return (
+										<CommentReply
+											key={commentReply.id}
+											routeId={routeId}
+											comment={comment}
+											commentReply={commentReply}
+											setCommentReplies={setCommentReplies}
+										/>
+									);
+								})}
+							</Box>
+						</CardContent>
+					</Card>
 
 					{session?.user && (
 						<CommentReplyCreationBox

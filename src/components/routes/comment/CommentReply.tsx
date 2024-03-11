@@ -17,7 +17,11 @@ import type {
 import { formatDate } from '@/util/formatDate';
 import type { FlattenMaps } from 'mongoose';
 import type { ICommentFlat } from '@/models/schemas/Comment';
-import { getCommentsForRoute } from '@/service/Route';
+import {
+	getCommentReplies,
+	likeCommentReply,
+	unlikeCommentReply,
+} from '@/service/Route';
 
 export default function CommentCard({
 	routeId,
@@ -36,15 +40,15 @@ export default function CommentCard({
 	}, [commentReply.likedByUserIds, session?.user?.id]);
 
 	const handleFavoriteClick = async () => {
-		// if (session && session.user) {
-		// 	if (isLiked) {
-		// 		await unlikeCommentReply(routeId, comment.id, commentReply.id);
-		// 		setCommentReplies(await getCommentsForRoute(routeId));
-		// 		return;
-		// 	}
-		// 	await likeCommentReply(routeId, comment.id, commentReply.id);
-		// 	setCommentReplies(await getCommentsForRoute(routeId));
-		// }
+		if (session && session.user) {
+			if (isLiked) {
+				await unlikeCommentReply(routeId, comment.id, commentReply.id);
+				setCommentReplies(await getCommentReplies(routeId, comment.id));
+				return;
+			}
+			await likeCommentReply(routeId, comment.id, commentReply.id);
+			setCommentReplies(await getCommentReplies(routeId, comment.id));
+		}
 	};
 
 	return (

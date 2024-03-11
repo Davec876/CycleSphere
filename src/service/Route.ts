@@ -197,3 +197,98 @@ export async function addReplyToComment({
 		{ $push: { 'comments.$.replies': newReply } }
 	);
 }
+
+export async function likeCommentReply(
+	routeId: string,
+	commentId: string,
+	commentReplyId: string
+) {
+	const session = await auth();
+	if (!session || !session.user || !session.user.id) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	// find route by id and return specific comment containing the reply to be liked
+	const route = await Route.findOne(
+		{ id: routeId, 'comments.id': commentId },
+		{ 'comments.$': 1 }
+	)
+		.lean()
+		.exec();
+	if (!route) {
+		throw new APIError('Route or comment not found!', 404);
+	}
+
+	// find and update the specific reply within the comments array
+	const commentIndex = route.comments.findIndex((c) => c.id === commentId);
+	const replyIndex = route.comments[commentIndex].replies.findIndex(
+		(r) => r.id === commentReplyId
+	);
+	if (replyIndex === -1) {
+		throw new APIError('Comment reply not found!', 404);
+	}
+
+	// check if the user has already liked the reply to avoid duplicates
+	if (
+		route.comments[commentIndex].replies[replyIndex].likedByUserIds.includes(
+			session.user.id
+		)
+	) {
+		return;
+	}
+
+	const updatePath = `comments.$.replies.${replyIndex}.likedByUserIds`;
+	// add the userId to the likedByUserIds of the specified reply
+	await Route.updateOne(
+		{ id: routeId, 'comments.id': commentId },
+		{ $addToSet: { [updatePath]: session.user.id } }
+	);
+}
+
+export async function unlikeCommentReply(
+	routeId: string,
+	commentId: string,
+	commentReplyId: string
+) {
+	const session = await auth();
+	if (!session || !session.user || !session.user.id) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	// find route by id
+	const route = await Route.findOne({ id: routeId }).exec();
+	if (!route) {
+		throw new APIError('Route not found!', 404);
+	}
+
+	// find and update the specific reply within the comments array
+	let updated = false;
+	const comments = route.comments.map((comment) => {
+		if (comment.id === commentId) {
+			const replies = comment.replies.map((reply) => {
+				if (reply.id === commentReplyId) {
+					// check if user has liked the reply
+					const index = reply.likedByUserIds.indexOf(session.user!.id!);
+					if (index > -1) {
+						// userId found, remove the like
+						reply.likedByUserIds.splice(index, 1);
+						updated = true;
+					}
+				}
+				return reply;
+			});
+			comment.replies = replies;
+		}
+		return comment;
+	});
+
+	if (!updated) {
+		return;
+	}
+
+	// if like was removed, update the document
+	await Route.updateOne(
+		{ id: routeId },
+		{ $set: { comments: comments } }
+	).exec();
+}

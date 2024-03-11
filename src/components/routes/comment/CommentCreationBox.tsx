@@ -26,7 +26,7 @@ export default function CommentCreationBox({
 		body: string;
 	}
 
-	const { data: session } = useSession();
+	const { data: session, status: sessionStatus } = useSession();
 	const [formData, setFormData] = useState({} as CommentForm);
 	const [uploadedImageId, setUploadedImageId] = useState('');
 
@@ -44,6 +44,11 @@ export default function CommentCreationBox({
 		}));
 	};
 
+	const clearFormData = () => {
+		formData.body = '';
+		setUploadedImageId('');
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		await addCommentToRoute({
@@ -54,11 +59,12 @@ export default function CommentCreationBox({
 			// selectedPinLocation: selectedPinLocation,
 		});
 		await refreshComments();
+		clearFormData();
 	};
 
 	return (
 		<>
-			{!session?.user ? (
+			{sessionStatus === 'loading' ? null : !session?.user ? (
 				<Card sx={{ mb: 1 }}>
 					<CardContent>
 						<Typography sx={{ mb: 1 }} variant="body1">

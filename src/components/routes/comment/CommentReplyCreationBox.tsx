@@ -19,11 +19,11 @@ export default function CommentReplyCreationBox({
 	commentId: string;
 	setCommentReplies: Dispatch<SetStateAction<FlattenMaps<ICommentReply>[]>>;
 }) {
-	interface CommentForm {
+	interface CommentReplyForm {
 		body: string;
 	}
 
-	const [formData, setFormData] = useState({} as CommentForm);
+	const [formData, setFormData] = useState({} as CommentReplyForm);
 
 	const refreshReplies = async () => {
 		// fetch updated replies via server action and update state
@@ -39,6 +39,10 @@ export default function CommentReplyCreationBox({
 		}));
 	};
 
+	const clearFormData = () => {
+		formData.body = '';
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		await addReplyToComment({
@@ -47,6 +51,7 @@ export default function CommentReplyCreationBox({
 			body: formData.body,
 		});
 		await refreshReplies();
+		clearFormData();
 	};
 
 	return (
