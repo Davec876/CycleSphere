@@ -19,7 +19,7 @@ import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
 import { getRoutes, likeRoute, unlikeRoute } from '@/service/Route';
-import { getImageUrl } from '@/util/routeImage';
+import { getImageUrl } from '@/util/imageUploadUrl';
 
 export default function RouteCard({
 	route,

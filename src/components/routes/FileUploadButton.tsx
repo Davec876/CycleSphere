@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Box from '@mui/material/Box';
-import { getPresignedRouteImageUploadUrl } from '@/util/routeImage';
+import { getPresignedImageUploadUrl } from '@/util/imageUploadUrl';
 import { FetchAPIError } from '@/util/errors/FetchAPIError';
 import type { Theme } from '@emotion/react';
 import type { SxProps } from '@mui/system';
@@ -44,7 +44,7 @@ export default function FileUploadButton({
 		try {
 			setImageId('');
 			setUploadError(false);
-			const { imageId, uploadUrl } = await getPresignedRouteImageUploadUrl();
+			const { imageId, uploadUrl } = await getPresignedImageUploadUrl();
 
 			// upload to presigned upload url
 			const response = await fetch(uploadUrl, {

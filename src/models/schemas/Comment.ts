@@ -23,6 +23,9 @@ export interface IComment {
 }
 
 export type ICommentFlat = FlattenMaps<IComment>;
+// Seperate interface for creation due to timestamps being managed by MongoDB
+export interface ICommentCreation
+	extends Omit<IComment, 'createdAt' | 'updatedAt'> {}
 
 const commentSchema = new Schema<IComment>(
 	{
@@ -37,9 +40,6 @@ const commentSchema = new Schema<IComment>(
 		body: {
 			type: String,
 			required: true,
-		},
-		imageId: {
-			type: String,
 		},
 		likedByUserIds: {
 			type: [String],
@@ -60,6 +60,9 @@ const commentSchema = new Schema<IComment>(
 				{ _id: false }
 			),
 		],
+		imageId: {
+			type: String,
+		},
 		pin: {
 			location: {
 				lat: {

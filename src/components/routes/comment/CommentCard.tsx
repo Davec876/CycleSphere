@@ -12,7 +12,7 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import type { ICommentFlat } from '@/models/schemas/Comment';
 import { formatDate } from '@/util/formatDate';
-import { getImageUrl } from '@/util/routeImage';
+import { getImageUrl } from '@/util/imageUploadUrl';
 
 export default function CommentCard({ comment }: { comment: ICommentFlat }) {
 	const { data: session } = useSession();
@@ -42,6 +42,11 @@ export default function CommentCard({ comment }: { comment: ICommentFlat }) {
 			<CardContent>
 				{comment.imageId && (
 					<CardMedia
+						sx={{
+							maxHeight: 250,
+							objectFit: 'contain',
+							mb: 2,
+						}}
 						component="img"
 						image={getImageUrl(comment.imageId)}
 						alt={`Image of ${comment.author.name}'s comment`}

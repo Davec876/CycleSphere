@@ -31,6 +31,8 @@ interface IRoute {
 export type IRouteFlat = FlattenMaps<IRoute> & {
 	_id: Types.ObjectId;
 };
+export interface IRouteCreation
+	extends Omit<IRoute, 'createdAt' | 'updatedAt'> {}
 
 const routeSchema = new Schema<IRoute>(
 	{

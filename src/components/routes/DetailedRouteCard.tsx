@@ -19,7 +19,7 @@ import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
 import { likeRoute, unlikeRoute } from '@/service/Route';
-import { getImageUrl } from '@/util/routeImage';
+import { getImageUrl } from '@/util/imageUploadUrl';
 import Map from './map/Map';
 import CommentSection from './comment/CommentSection';
 
@@ -99,7 +99,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 					</IconButton>
 				</CardActions>
 			</Card>
-			<CommentSection comments={route.comments} />
+			<CommentSection routeId={route.id} initialComments={route.comments} />
 		</Box>
 	);
 }
