@@ -14,6 +14,12 @@ export async function getRoutes() {
 	return await Route.find({}, { _id: 0, __v: 0 }).lean().exec();
 }
 
+export async function getRoutesByAuthorId(authorId: string) {
+	return await Route.find({ 'author.id': authorId }, { _id: 0, __v: 0 })
+		.lean()
+		.exec();
+}
+
 export async function addRoute({
 	title,
 	body,

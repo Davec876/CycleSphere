@@ -45,7 +45,7 @@ function ResponsiveAppBar() {
 				router.push('/logout');
 				break;
 			case 'Profile':
-				router.push('/profile');
+				router.push(`/profile/${session?.user?.id}`);
 				break;
 			default:
 				break;

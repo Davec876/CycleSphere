@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -51,7 +52,15 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 		>
 			<Card>
 				<CardHeader
-					avatar={<Avatar sx={{ bgcolor: red[500], color: 'white' }} />}
+					avatar={
+						<IconButton
+							href={`/profile/${route.author.id}`}
+							LinkComponent={Link}
+							aria-label="go to author's profile"
+						>
+							<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
+						</IconButton>
+					}
 					title={route.title}
 					subheader={formatDate(route.createdAt)}
 				/>
