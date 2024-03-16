@@ -52,64 +52,62 @@ export default function AddRoutePage({ setRoutes }) {
 	return (
 		<>
 			<AppBar />
-			<Box sx={{ flexGrow: 1, mt: 1, mx: 4 }}>
-				<Grid container spacing={2}>
-					<Grid item xs={12} md={6}>
-						<Box component="form" onSubmit={handleSubmit} noValidate>
-							<TextField
-								autoFocus
-								required
-								name="trailTitle"
-								label="Trail title"
-								type="text"
-								fullWidth
-								margin="normal"
-								variant="outlined"
-							/>
-							<TextField
-								required
-								name="trailBody"
-								label="Trail description"
-								type="text"
-								fullWidth
-								margin="normal"
-								variant="outlined"
-							/>
-							<Typography id="difficulty-slider" gutterBottom>
-								Difficulty Level
-							</Typography>
-							<Slider
-								aria-labelledby="difficulty-slider"
-								value={difficulty}
-								onChange={handleSliderChange}
-								valueLabelDisplay="auto"
-								step={0.5}
-								marks
-								min={0}
-								max={5}
-							/>
-							<FileUploadButton
-								label="Upload route photo"
-								imageId={uploadedImageId}
-								setImageId={setUploadedImageId}
-							/>
-							<Button
-								type="submit"
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}
-							>
-								Submit
-							</Button>
-						</Box>
-					</Grid>
-					<Grid item xs={12} md={6}>
-						<AutoCompleteMap
-							setMapDetails={setMapDetails}
-							distance={mapDetails?.totalDistance}
+			<Box sx={{ display: 'flex', flexDirection: 'row', p: 3 }}>
+				<Box sx={{ flex: 1, mr: 2 }}>
+					<Box component="form" onSubmit={handleSubmit} noValidate>
+						<TextField
+							autoFocus
+							required
+							name="trailTitle"
+							label="Trail title"
+							type="text"
+							fullWidth
+							margin="normal"
+							variant="outlined"
 						/>
-					</Grid>
-				</Grid>
+						<TextField
+							required
+							name="trailBody"
+							label="Trail description"
+							type="text"
+							fullWidth
+							margin="normal"
+							variant="outlined"
+						/>
+						<Typography id="difficulty-slider" gutterBottom>
+							Difficulty Level
+						</Typography>
+						<Slider
+							aria-labelledby="difficulty-slider"
+							value={difficulty}
+							onChange={handleSliderChange}
+							valueLabelDisplay="auto"
+							step={0.5}
+							marks
+							min={0}
+							max={5}
+						/>
+						<FileUploadButton
+							label="Upload route photo"
+							imageId={uploadedImageId}
+							setImageId={setUploadedImageId}
+						/>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}
+						>
+							Submit
+						</Button>
+					</Box>
+				</Box>
+				<Box sx={{ flex: 3 }}>
+					<AutoCompleteMap
+						setMapDetails={setMapDetails}
+						distance={mapDetails?.totalDistance}
+					/>
+				</Box>
 			</Box>
 			<Snackbar
 				open={alertOpen}
@@ -127,113 +125,3 @@ export default function AddRoutePage({ setRoutes }) {
 		</>
 	);
 }
-// export default function AddRoutePage({ setRoutes }) {
-// 	const [alertOpen, setAlertOpen] = useState(false);
-// 	const [alertMessage, setAlertMessage] = useState('');
-// 	const [mapDetails, setMapDetails] = useState(null);
-// 	const [difficulty, setDifficulty] = useState(2.5);
-// 	const [uploadedImageId, setUploadedImageId] = useState('');
-
-// 	const handleSliderChange = (event, newValue) => {
-// 		setDifficulty(newValue);
-// 	};
-
-// 	const handleSubmit = async (event) => {
-// 		event.preventDefault();
-// 		const formData = new FormData(event.currentTarget);
-// 		const formJson = Object.fromEntries(formData.entries());
-// 		if (!mapDetails?.selectedLocation) {
-// 			setAlertMessage('Please select a place before submitting.');
-// 			setAlertOpen(true);
-// 			return;
-// 		}
-
-// 		await addRoute({
-// 			title: formJson.trailTitle,
-// 			body: formJson.trailBody,
-// 			imageId: uploadedImageId,
-// 			difficulty,
-// 			location: mapDetails.selectedLocation,
-// 			selectedPoints: mapDetails.selectedPoints,
-// 			distance: mapDetails.totalDistance,
-// 		});
-
-// 		const routes = await getRoutes();
-// 		setRoutes(routes);
-// 	};
-
-// 	return (
-// 		<>
-// 			<AppBar />
-// 			<Box
-// 				component="form"
-// 				onSubmit={handleSubmit}
-// 				noValidate
-// 				sx={{ mt: 1, mx: 4 }}
-// 			>
-// 				<TextField
-// 					autoFocus
-// 					required
-// 					name="trailTitle"
-// 					label="Trail title"
-// 					type="text"
-// 					fullWidth
-// 					margin="normal"
-// 					variant="outlined"
-// 				/>
-// 				<TextField
-// 					required
-// 					name="trailBody"
-// 					label="Trail description"
-// 					type="text"
-// 					fullWidth
-// 					margin="normal"
-// 					variant="outlined"
-// 				/>
-// 				<Typography id="difficulty-slider" gutterBottom>
-// 					Difficulty Level
-// 				</Typography>
-// 				<Slider
-// 					aria-labelledby="difficulty-slider"
-// 					value={difficulty}
-// 					onChange={handleSliderChange}
-// 					valueLabelDisplay="auto"
-// 					step={0.5}
-// 					marks
-// 					min={0}
-// 					max={5}
-// 				/>
-// 				<FileUploadButton
-// 					label="Upload route photo"
-// 					imageId={uploadedImageId}
-// 					setImageId={setUploadedImageId}
-// 				/>
-// 				<AutoCompleteMap
-// 					setMapDetails={setMapDetails}
-// 					distance={mapDetails?.totalDistance}
-// 				/>
-// 				<Button
-// 					type="submit"
-// 					fullWidth
-// 					variant="contained"
-// 					sx={{ mt: 3, mb: 2 }}
-// 				>
-// 					Submit
-// 				</Button>
-// 			</Box>
-// 			<Snackbar
-// 				open={alertOpen}
-// 				autoHideDuration={6000}
-// 				onClose={() => setAlertOpen(false)}
-// 			>
-// 				<Alert
-// 					onClose={() => setAlertOpen(false)}
-// 					severity="error"
-// 					sx={{ width: '100%' }}
-// 				>
-// 					{alertMessage}
-// 				</Alert>
-// 			</Snackbar>
-// 		</>
-// 	);
-// }
