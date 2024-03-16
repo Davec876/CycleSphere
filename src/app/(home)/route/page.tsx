@@ -1,4 +1,3 @@
-// pages/add-route.js
 'use client';
 import React, { useState } from 'react';
 import AppBar from '@/components/AppBar';
@@ -10,6 +9,8 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import AutoCompleteMap from '@/components/routes/map/AutoCompleteMap';
 import FileUploadButton from '@/components/routes/FileUploadButton';
 import { addRoute, getRoutes } from '@/service/Route';
@@ -52,62 +53,85 @@ export default function AddRoutePage({ setRoutes }) {
 	return (
 		<>
 			<AppBar />
-			<Box sx={{ display: 'flex', flexDirection: 'row', p: 3 }}>
-				<Box sx={{ flex: 1, mr: 2 }}>
-					<Box component="form" onSubmit={handleSubmit} noValidate>
-						<TextField
-							autoFocus
-							required
-							name="trailTitle"
-							label="Trail title"
-							type="text"
-							fullWidth
-							margin="normal"
-							variant="outlined"
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					minHeight: '100vh',
+					pt: 8,
+				}}
+			>
+				<Grid container spacing={2}>
+					<Grid item xs={12} md={4}>
+						<Card raised sx={{ p: 2, mx: 3 }}>
+							<CardContent>
+								<Typography variant="h6" gutterBottom>
+									Add a New Route
+								</Typography>
+								<Box component="form" onSubmit={handleSubmit} noValidate>
+									<TextField
+										autoFocus
+										required
+										name="trailTitle"
+										label="Trail title"
+										type="text"
+										fullWidth
+										margin="dense"
+										variant="outlined"
+									/>
+									<TextField
+										required
+										name="trailBody"
+										label="Trail description"
+										type="text"
+										fullWidth
+										margin="dense"
+										variant="outlined"
+										multiline
+										rows={4}
+									/>
+									<Typography id="difficulty-slider" gutterBottom>
+										Difficulty Level
+									</Typography>
+									<Slider
+										aria-labelledby="difficulty-slider"
+										value={difficulty}
+										onChange={handleSliderChange}
+										valueLabelDisplay="auto"
+										step={0.5}
+										marks
+										min={0}
+										max={5}
+										component="span"
+									/>
+									<FileUploadButton
+										label="Upload route photo"
+										imageId={uploadedImageId}
+										setImageId={setUploadedImageId}
+										fullWidth
+										sx={{ width: '100%', mt: 2 }}
+									/>
+									<Button
+										type="submit"
+										fullWidth
+										variant="contained"
+										color="primary"
+										sx={{ mt: 3 }}
+									>
+										Submit
+									</Button>
+								</Box>
+							</CardContent>
+						</Card>
+					</Grid>
+					<Grid item xs={12} md={8}>
+						<AutoCompleteMap
+							setMapDetails={setMapDetails}
+							distance={mapDetails?.totalDistance}
+							sx={{ height: 'calc(100vh - 64px)', width: '100%' }}
 						/>
-						<TextField
-							required
-							name="trailBody"
-							label="Trail description"
-							type="text"
-							fullWidth
-							margin="normal"
-							variant="outlined"
-						/>
-						<Typography id="difficulty-slider" gutterBottom>
-							Difficulty Level
-						</Typography>
-						<Slider
-							aria-labelledby="difficulty-slider"
-							value={difficulty}
-							onChange={handleSliderChange}
-							valueLabelDisplay="auto"
-							step={0.5}
-							marks
-							min={0}
-							max={5}
-						/>
-						<FileUploadButton
-							label="Upload route photo"
-							imageId={uploadedImageId}
-							setImageId={setUploadedImageId}
-						/>
-						<Button
-							type="submit"
-							fullWidth
-							variant="contained"
-							sx={{ mt: 3, mb: 2 }}
-						>
-							Submit
-						</Button>
-					</Box>
-				</Box>
-				<Box sx={{ flex: 3 }}>
-					<AutoCompleteMap
-						setMapDetails={setMapDetails}
-						distance={mapDetails?.totalDistance}
-					/>
-				</Box>
+					</Grid>
+				</Grid>
 			</Box>
 			<Snackbar
 				open={alertOpen}
