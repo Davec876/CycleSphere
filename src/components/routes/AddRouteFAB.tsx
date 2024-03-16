@@ -85,7 +85,7 @@ export default function AddRouteFAB({
 
 	return (
 		<>
-			<Fab
+			{/* <Fab
 				color="primary"
 				aria-label="add"
 				sx={{
@@ -96,7 +96,7 @@ export default function AddRouteFAB({
 				onClick={handleClickOpen}
 			>
 				<AddIcon />
-			</Fab>
+			</Fab> */}
 			<Dialog
 				open={open}
 				onClose={handleClose}
