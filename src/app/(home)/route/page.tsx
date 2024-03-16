@@ -9,9 +9,9 @@ import Snackbar from '@mui/material/Snackbar';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import AutoCompleteMap from '@/components/routes/map/AutoCompleteMap'; // Adjust the import path as necessary
-import FileUploadButton from '@/components/routes/FileUploadButton'; // Adjust the import path as necessary
-import { addRoute, getRoutes } from '@/service/Route'; // Adjust the import path as necessary
+import AutoCompleteMap from '@/components/routes/map/AutoCompleteMap';
+import FileUploadButton from '@/components/routes/FileUploadButton';
+import { addRoute, getRoutes } from '@/service/Route';
 
 export default function AddRoutePage({ setRoutes }) {
 	const [alertOpen, setAlertOpen] = useState(false);
