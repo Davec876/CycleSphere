@@ -43,7 +43,6 @@ export default function AddRouteFAB({
 	const [mapDetails, setMapDetails] = useState<MapDetails>(null);
 	const [difficulty, setDifficulty] = useState(2.5);
 	const [uploadedImageId, setUploadedImageId] = useState('');
-	// const history = useNavigate();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -96,7 +95,7 @@ export default function AddRouteFAB({
 					bottom: 20,
 				}}
 				onClick={() => {
-					setOpen(true);
+					handleClickOpen();
 				}}
 			>
 				<AddIcon />
