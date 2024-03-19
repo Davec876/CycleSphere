@@ -17,11 +17,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-<<<<<<< HEAD
-const pages = ['Mission', 'Our Team', 'Map'];
-=======
 const pages = ['Contact', 'FAQ'];
->>>>>>> c38a9fc9b21fcabcd8cc16b5739a20f5338c3feb
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
