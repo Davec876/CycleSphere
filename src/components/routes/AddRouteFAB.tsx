@@ -18,7 +18,7 @@ import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
-import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 export type MapDetails = {
 	selectedLocation?: {
@@ -118,10 +118,17 @@ export default function AddRouteFAB({
 				}}
 				maxWidth="xl"
 			>
-				<DialogTitle>Add Route</DialogTitle>
-				<DialogContent>
-					<Grid container spacing={2}>
-						<Grid item xs={12} md={4}>
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						width: '100%',
+						overflow: 'hidden',
+					}}
+				>
+					<Box sx={{ flex: 1, mr: 2.5 }}>
+						<DialogTitle>Add Route</DialogTitle>
+						<DialogContent dividers>
 							<DialogContentText>
 								Please enter your route details below in order to add your route
 								to the website.
@@ -147,7 +154,7 @@ export default function AddRouteFAB({
 								multiline
 								rows={4}
 							/>
-							<Typography id="difficulty-slider" marginY={2}>
+							<Typography id="difficulty-slider" gutterBottom>
 								Difficulty Level
 							</Typography>
 							<Slider
@@ -161,21 +168,19 @@ export default function AddRouteFAB({
 								max={5}
 							/>
 							<FileUploadButton
-								sx={{ my: 2, width: '100%' }}
 								label="Upload route photo"
 								imageId={uploadedImageId}
 								setImageId={setUploadedImageId}
 							/>
-						</Grid>
-						<Grid item xs={12} md={8}>
-							<AutoCompleteMap
-								setMapDetails={setMapDetails}
-								distance={mapDetails?.totalDistance}
-							/>
-						</Grid>
-					</Grid>
-				</DialogContent>
-
+						</DialogContent>
+					</Box>
+					<Box sx={{ flex: 3, height: '100%', mr: 2 }}>
+						<AutoCompleteMap
+							setMapDetails={setMapDetails}
+							distance={mapDetails?.totalDistance}
+						/>
+					</Box>
+				</Box>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
 					<Button type="submit">Submit</Button>

@@ -3,9 +3,7 @@
 import { useState, type Dispatch, type SetStateAction, useEffect } from 'react';
 import {
 	APIProvider,
-	ControlPosition,
 	Map,
-	MapControl,
 	type MapMouseEvent,
 } from '@vis.gl/react-google-maps';
 import { AutocompleteCustom } from './AutoCompleteCustom';
