@@ -1,12 +1,7 @@
 // Adapted from https://github.com/visgl/react-google-maps/blob/main/examples/autocomplete/src/autocomplete-custom.tsx
 'use client';
 
-import React, {
-	useEffect,
-	useState,
-	useCallback,
-	type ChangeEvent,
-} from 'react';
+import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
 import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';

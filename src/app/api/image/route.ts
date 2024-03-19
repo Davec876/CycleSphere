@@ -22,7 +22,7 @@ async function getPresignedUploadUrl() {
 		S3,
 		new PutObjectCommand({
 			Bucket: 'public',
-			Key: `4177-group-project/routes/images/${imageId}`,
+			Key: `4177-group-project/images/${imageId}`,
 		}),
 		{
 			expiresIn: 3600,

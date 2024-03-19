@@ -18,15 +18,22 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
-import { getRoutes, likeRoute, unlikeRoute } from '@/service/Route';
-import { getRouteImageUrl } from '@/util/routeImage';
+import {
+	getRoutes,
+	getRoutesByAuthorId,
+	likeRoute,
+	unlikeRoute,
+} from '@/service/Route';
+import { getImageUrl } from '@/util/imageUploadUrl';
 
 export default function RouteCard({
 	route,
 	setRoutes,
+	userId,
 }: {
 	route: IRouteFlat;
 	setRoutes: Dispatch<SetStateAction<IRouteFlat[]>>;
+	userId?: string;
 }) {
 	const { data: session } = useSession();
 
@@ -34,29 +41,41 @@ export default function RouteCard({
 		return route.likedByUserIds.includes(session?.user?.id as string);
 	}, [route.likedByUserIds, session?.user?.id]);
 
+	const getAllRoutesOrGetRoutesByUserId = async () => {
+		return userId ? await getRoutesByAuthorId(userId) : await getRoutes();
+	};
+
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
 			if (isLiked) {
 				await unlikeRoute(route.id);
-				setRoutes(await getRoutes());
+				setRoutes(await getAllRoutesOrGetRoutesByUserId());
 				return;
 			}
 			await likeRoute(route.id);
-			setRoutes(await getRoutes());
+			setRoutes(await getAllRoutesOrGetRoutesByUserId());
 		}
 	};
 
 	return (
 		<Card sx={{ width: [350, 425, 500] }}>
 			<CardHeader
-				avatar={<Avatar sx={{ bgcolor: red[500], color: 'white' }} />}
+				avatar={
+					<IconButton
+						href={`/profile/${route.author.id}`}
+						LinkComponent={Link}
+						aria-label="go to author's profile"
+					>
+						<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
+					</IconButton>
+				}
 				title={route.title}
 				subheader={formatDate(route.createdAt)}
 			/>
 			{route.imageId && (
 				<CardMedia
 					component="img"
-					image={getRouteImageUrl(route.imageId)}
+					image={getImageUrl(route.imageId)}
 					alt={`Image of ${route.title}`}
 					sx={{ padding: 1 }}
 				/>
@@ -78,18 +97,27 @@ export default function RouteCard({
 				</Box>
 			</CardContent>
 			<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
-				<IconButton
-					aria-label="add to favorites"
-					onClick={handleFavoriteClick}
-					sx={{ color: isLiked ? red[500] : 'inherit' }}
-				>
-					<FavoriteIcon />
-				</IconButton>
-				<Link href={`/routes/${route.id}?liked=${isLiked}`} passHref>
-					<IconButton aria-label="go to route">
-						<ArrowForwardIcon />
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					{route.likedByUserIds.length > 0 && (
+						<Typography variant="body1">
+							{route.likedByUserIds.length}
+						</Typography>
+					)}
+					<IconButton
+						aria-label="add to favorites"
+						onClick={handleFavoriteClick}
+						sx={{ color: isLiked ? red[500] : 'inherit' }}
+					>
+						<FavoriteIcon />
 					</IconButton>
-				</Link>
+				</Box>
+				<IconButton
+					href={`/routes/${route.id}?liked=${isLiked}`}
+					LinkComponent={Link}
+					aria-label="go to route"
+				>
+					<ArrowForwardIcon />
+				</IconButton>
 			</CardActions>
 		</Card>
 	);

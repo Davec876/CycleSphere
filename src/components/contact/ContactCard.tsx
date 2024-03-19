@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Avatar from '@mui/material/Avatar';
@@ -25,16 +24,18 @@ export default function ContactCard({
 		<Card sx={{ width: 350 }}>
 			<CardHeader
 				avatar={
-					<Avatar sx={{ bgcolor: '#FFD400' }} aria-label="initials">
+					<Avatar sx={{ bgcolor: '#FFD400' }}>
 						{getInitials(contact.name)}
 					</Avatar>
 				}
 				action={
-					<Link href={`mailto:${contact.email}`}>
-						<IconButton aria-label="email">
-							<EmailIcon />
-						</IconButton>
-					</Link>
+					<IconButton
+						href={`mailto:${contact.email}`}
+						LinkComponent={Link}
+						aria-label="email them"
+					>
+						<EmailIcon />
+					</IconButton>
 				}
 				title={contact.name}
 				subheader={contact.email}

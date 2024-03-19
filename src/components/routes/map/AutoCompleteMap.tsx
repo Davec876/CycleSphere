@@ -15,11 +15,15 @@ import { DeckGlOverlay } from './DeckGlOverlay';
 import { getDeckGlLayers } from '@/util/getDeckGlLayers';
 import type { Feature, FeatureCollection } from 'geojson';
 import type { MapDetails } from '../AddRouteFAB';
+import DistanceOverlay from './DistanceOverlay';
+import { calculateTotalDistance } from '@/util/haversineDistance';
 
 export default function AutoCompleteMap({
 	setMapDetails,
+	distance,
 }: {
 	setMapDetails: Dispatch<SetStateAction<MapDetails>>;
+	distance?: number;
 }) {
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.places.PlaceResult | null>(null);
@@ -126,8 +130,16 @@ export default function AutoCompleteMap({
 					? [...prev.selectedPoints, { lat, lng }]
 					: [{ lat, lng }];
 
+				// calculate distance to add
+				const distanceToAdd = calculateTotalDistance(
+					prev?.selectedPoints || [],
+					{ lat, lng }
+				);
+				const newTotalDistance = (prev?.totalDistance || 0) + distanceToAdd;
+
 				return {
 					...prev,
+					...(distanceToAdd > 0 && { totalDistance: newTotalDistance }),
 					selectedPoints: newPoints,
 				};
 			});
@@ -146,6 +158,7 @@ export default function AutoCompleteMap({
 					disableDefaultUI={true}
 				>
 					<DeckGlOverlay layers={getDeckGlLayers(geoData)} />
+					<DistanceOverlay distance={distance} />
 				</Map>
 
 				<MapControl position={ControlPosition.TOP}>
