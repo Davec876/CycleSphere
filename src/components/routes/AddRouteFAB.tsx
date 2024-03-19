@@ -18,6 +18,7 @@ import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
+import Grid from '@mui/material/Grid';
 
 export type MapDetails = {
 	selectedLocation?: {
@@ -42,6 +43,7 @@ export default function AddRouteFAB({
 	const [mapDetails, setMapDetails] = useState<MapDetails>(null);
 	const [difficulty, setDifficulty] = useState(2.5);
 	const [uploadedImageId, setUploadedImageId] = useState('');
+	// const history = useNavigate();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -85,7 +87,7 @@ export default function AddRouteFAB({
 
 	return (
 		<>
-			{/* <Fab
+			<Fab
 				color="primary"
 				aria-label="add"
 				sx={{
@@ -93,66 +95,88 @@ export default function AddRouteFAB({
 					right: 20,
 					bottom: 20,
 				}}
-				onClick={handleClickOpen}
+				onClick={() => {
+					setOpen(true);
+				}}
 			>
 				<AddIcon />
-			</Fab> */}
+			</Fab>
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				PaperProps={{
 					component: 'form',
 					onSubmit: handleSubmit,
+					style: {
+						maxWidth: '90%',
+						width: '90%',
+						maxHeight: '95vh',
+						height: 'auto',
+						margin: 'auto',
+						display: 'flex',
+						flexDirection: 'column',
+					},
 				}}
+				maxWidth="xl"
 			>
 				<DialogTitle>Add Route</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
-						Please enter your route details below in order to add your route to
-						the website.
-					</DialogContentText>
-					<TextField
-						autoFocus
-						required
-						name="trailTitle"
-						label="Trail title"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<TextField
-						autoFocus
-						required
-						name="trailBody"
-						label="Trail description"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<Typography id="difficulty-slider" marginY={2}>
-						Difficulty Level
-					</Typography>
-					<Slider
-						aria-labelledby="difficulty-slider"
-						value={difficulty}
-						onChange={handleSliderChange}
-						valueLabelDisplay="auto"
-						step={0.5}
-						marks
-						min={0}
-						max={5}
-					/>
-					<FileUploadButton
-						sx={{ my: 1 }}
-						label="Upload route photo"
-						imageId={uploadedImageId}
-						setImageId={setUploadedImageId}
-					/>
-					<AutoCompleteMap
-						setMapDetails={setMapDetails}
-						distance={mapDetails?.totalDistance}
-					/>
+					<Grid container spacing={2}>
+						<Grid item xs={12} md={4}>
+							<DialogContentText>
+								Please enter your route details below in order to add your route
+								to the website.
+							</DialogContentText>
+							<TextField
+								autoFocus
+								required
+								name="trailTitle"
+								label="Trail title"
+								type="text"
+								fullWidth
+								margin="dense"
+								variant="outlined"
+							/>
+							<TextField
+								required
+								name="trailBody"
+								label="Trail description"
+								type="text"
+								fullWidth
+								margin="dense"
+								variant="outlined"
+								multiline
+								rows={4}
+							/>
+							<Typography id="difficulty-slider" marginY={2}>
+								Difficulty Level
+							</Typography>
+							<Slider
+								aria-labelledby="difficulty-slider"
+								value={difficulty}
+								onChange={handleSliderChange}
+								valueLabelDisplay="auto"
+								step={0.5}
+								marks
+								min={0}
+								max={5}
+							/>
+							<FileUploadButton
+								sx={{ my: 2, width: '100%' }}
+								label="Upload route photo"
+								imageId={uploadedImageId}
+								setImageId={setUploadedImageId}
+							/>
+						</Grid>
+						<Grid item xs={12} md={8}>
+							<AutoCompleteMap
+								setMapDetails={setMapDetails}
+								distance={mapDetails?.totalDistance}
+							/>
+						</Grid>
+					</Grid>
 				</DialogContent>
+
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
 					<Button type="submit">Submit</Button>
