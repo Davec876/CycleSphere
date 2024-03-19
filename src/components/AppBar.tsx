@@ -1,6 +1,9 @@
 'use client';
 
-import * as React from 'react';
+import { type MouseEvent, useState } from 'react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,24 +16,26 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Link from 'next/link';
-import {AuthContext} from './context/AuthProvider';
 
+<<<<<<< HEAD
 const pages = ['Mission', 'Our Team', 'Map'];
+=======
+const pages = ['Contact', 'FAQ'];
+>>>>>>> c38a9fc9b21fcabcd8cc16b5739a20f5338c3feb
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
-	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-		null
-	);
-	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-		null
-	);
+	const { data: session, status: sessionStatus } = useSession();
 
-	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+	const router = useRouter();
+
+	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+	const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+	const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElUser(event.currentTarget);
 	};
 
@@ -38,15 +43,23 @@ function ResponsiveAppBar() {
 		setAnchorElNav(null);
 	};
 
-	const handleCloseUserMenu = () => {
+	const handleCloseUserMenu = (setting: string) => {
+		switch (setting) {
+			case 'Logout':
+				router.push('/logout');
+				break;
+			case 'Profile':
+				router.push(`/profile/${session?.user?.id}`);
+				break;
+			default:
+				break;
+		}
 		setAnchorElUser(null);
 	};
 
 	function parsePageNameToLink(pageName: string) {
 		return pageName.replace(' ', '-').toLowerCase();
 	}
-
-	const { user } = React.useContext(AuthContext);
 
 	return (
 		<AppBar position="static">
@@ -55,8 +68,7 @@ function ResponsiveAppBar() {
 					<Typography
 						variant="h6"
 						noWrap
-						component="a"
-						href="/"
+						component="div"
 						sx={{
 							mr: 2,
 							display: { xs: 'none', md: 'flex' },
@@ -67,9 +79,10 @@ function ResponsiveAppBar() {
 							textDecoration: 'none',
 						}}
 					>
-						CSCI 4177
+						<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+							CSCI 4177
+						</Link>
 					</Typography>
-
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
@@ -120,8 +133,7 @@ function ResponsiveAppBar() {
 					<Typography
 						variant="h5"
 						noWrap
-						component="a"
-						href="/"
+						component="div"
 						sx={{
 							mr: 2,
 							display: { xs: 'flex', md: 'none' },
@@ -133,39 +145,41 @@ function ResponsiveAppBar() {
 							textDecoration: 'none',
 						}}
 					>
-						CSCI 4177
+						<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+							CSCI 4177
+						</Link>
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((pageName) => (
-							<Link
+							<Button
 								key={pageName}
+								onClick={handleCloseNavMenu}
 								href={`/${parsePageNameToLink(pageName)}`}
-								style={{ textDecoration: 'none' }}
+								LinkComponent={Link}
+								sx={{
+									my: 2,
+									color: 'white',
+									display: 'block',
+									textAlign: 'center',
+								}}
 							>
-								<Button
-									key={pageName}
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									{pageName}
-								</Button>
-							</Link>
+								{pageName}
+							</Button>
 						))}
 					</Box>
 
 					<Box sx={{ flexGrow: 0 }}>
-						{user?.userName ? (
+						{/* Display nothing if the session is loading, otherwise display menu items for logged in user, or login button for unauthenticated user */}
+						{sessionStatus === 'loading' ? null : session?.user ? (
 							<Tooltip title="Open settings">
 								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 									<Avatar alt="Current user" />
 								</IconButton>
 							</Tooltip>
 						) : (
-							<Button color="inherit">Login</Button>
+							<Button href="/login" LinkComponent={Link} color="inherit">
+								Login
+							</Button>
 						)}
 						<Menu
 							sx={{ mt: '45px' }}
@@ -185,13 +199,19 @@ function ResponsiveAppBar() {
 						>
 							{settings.map((setting) =>
 								setting === 'Logout' ? (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+									<MenuItem
+										key={setting}
+										onClick={() => handleCloseUserMenu(setting)}
+									>
 										<Typography color="red" textAlign="center">
 											{setting}
 										</Typography>
 									</MenuItem>
 								) : (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+									<MenuItem
+										key={setting}
+										onClick={() => handleCloseUserMenu(setting)}
+									>
 										<Typography textAlign="center">{setting}</Typography>
 									</MenuItem>
 								)
