@@ -1,0 +1,45 @@
+'use client';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { SyntheticEvent, useState } from 'react';
+import ProfileTab from './tabs/ProfileTab';
+import StatsTab from './tabs/StatsTab';
+import HistoryTab from './tabs/HistoryTab';
+
+export default function FitnessCard({
+    profile
+}: {
+    profile: {
+        id: string;
+        name: string;
+        picture: string;
+    }
+}) {
+    const [tab, setTab] = useState(0);
+
+    const changeTab = (event: SyntheticEvent, value: number) => {
+        setTab(value);
+    }
+
+    return(
+        <Card sx={{ width: '100%' }}>
+            {/* https://mui.com/material-ui/react-tabs/ */}
+            <Box>
+                <Tabs value={tab} onChange={changeTab}>
+                    <Tab label='Profile' id='tab-header-0' aria-controls='tabpanel-0' />
+                    <Tab label='Stats' id='tab-header-1' aria-controls='tabpanel-1' />
+                    <Tab label='History' id='tab-header-2' aria-controls='tabpanel-2' />
+                </Tabs>
+            </Box>
+            <CardContent>
+                <ProfileTab value={tab} index={0} />
+                <StatsTab value={tab} index={1} />
+                <HistoryTab value={tab} index={2} />
+            </CardContent>
+        </Card>
+    );
+}
