@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from '../components/context/AuthProvider';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme';
+import LocalizationProviderWrapper from '@/util/LocalizationProviderWrapper';
 
 export const metadata: Metadata = {
 	title: 'CSCI 4177 Next App',
@@ -22,7 +23,11 @@ export default function RootLayout({
 					<ThemeProvider theme={theme}>
 						{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 						<CssBaseline />
-						<AuthProvider>{children}</AuthProvider>
+						<AuthProvider>
+							<LocalizationProviderWrapper>
+								{children}
+							</LocalizationProviderWrapper>
+						</AuthProvider>
 					</ThemeProvider>
 				</AppRouterCacheProvider>
 			</body>
