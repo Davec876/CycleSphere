@@ -1,6 +1,6 @@
 import AppBar from '@/components/AppBar';
 
-export default function History() {
+export default function RouteHistory() {
 	return (
 		<>
 			<AppBar />

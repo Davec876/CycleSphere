@@ -48,7 +48,7 @@ function ResponsiveAppBar() {
 				router.push(`/profile/${session?.user?.id}`);
 				break;
 			case 'Route History':
-				router.push('/profile/history');
+				router.push('/route-history');
 				break;
 			default:
 				break;
