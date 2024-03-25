@@ -10,15 +10,13 @@ import ProfileTab from './tabs/ProfileTab';
 import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
 
-export default function FitnessCard({
-    profile
-}: {
-    profile: {
-        id: string;
-        name: string;
-        picture: string;
-    }
-}) {
+interface IProfile {
+    id: string;
+    name: string;
+    picture: string;
+}
+
+export default function FitnessCard(props: { profile: IProfile }) {
     const [tab, setTab] = useState(0);
 
     const changeTab = (event: SyntheticEvent, value: number) => {
@@ -36,7 +34,7 @@ export default function FitnessCard({
                 </Tabs>
             </Box>
             <CardContent>
-                <ProfileTab value={tab} index={0} />
+                <ProfileTab profile={props.profile} value={tab} index={0} />
                 <StatsTab value={tab} index={1} />
                 <HistoryTab value={tab} index={2} />
             </CardContent>
