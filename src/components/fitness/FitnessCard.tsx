@@ -9,17 +9,13 @@ import { SyntheticEvent, useState } from 'react';
 import ProfileTab from './tabs/ProfileTab';
 import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
-
-interface IProfile {
-    id: string;
-    name: string;
-    picture: string;
-}
+import { IProfile } from '@/models/Profile';
 
 export default function FitnessCard(props: { profile: IProfile }) {
     const [tab, setTab] = useState(0);
 
     const changeTab = (event: SyntheticEvent, value: number) => {
+        event.preventDefault();
         setTab(value);
     }
 
@@ -35,7 +31,7 @@ export default function FitnessCard(props: { profile: IProfile }) {
             </Box>
             <CardContent>
                 <ProfileTab profile={props.profile} value={tab} index={0} />
-                <StatsTab value={tab} index={1} />
+                <StatsTab profile={props.profile} value={tab} index={1} />
                 <HistoryTab value={tab} index={2} />
             </CardContent>
         </Card>

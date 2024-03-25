@@ -4,12 +4,7 @@ import Button from '@mui/material/Button';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import Typography from '@mui/material/Typography';
 import { SyntheticEvent, useState } from "react";
-
-interface IProfile {
-    id: string;
-    name: string;
-    picture: string;
-}
+import { IProfile } from "@/models/Profile";
 
 export default function ProfileTab(props : {
     index: number; 
