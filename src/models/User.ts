@@ -1,4 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
+import type { IRouteHistoryEntry } from './schemas/RouteHistoryEntry';
+import routeHistoryEntrySchema from './schemas/RouteHistoryEntry';
 
 mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
@@ -8,6 +10,7 @@ interface IUser {
 	name: string;
 	email: string;
 	password?: string;
+	routeHistory: IRouteHistoryEntry[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -26,6 +29,10 @@ const userSchema = new Schema<IUser>(
 		},
 		password: {
 			type: String,
+			required: true,
+		},
+		routeHistory: {
+			type: [routeHistoryEntrySchema],
 			required: true,
 		},
 	},
