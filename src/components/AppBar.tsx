@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 const pages = ['Contact', 'FAQ'];
-const settings = ['Profile', 'Logout'];
+const settings = ['Profile', 'Route History', 'Logout'];
 
 function ResponsiveAppBar() {
 	const { data: session, status: sessionStatus } = useSession();
@@ -46,6 +46,9 @@ function ResponsiveAppBar() {
 				break;
 			case 'Profile':
 				router.push(`/profile/${session?.user?.id}`);
+				break;
+			case 'Route History':
+				router.push('/profile/history');
 				break;
 			default:
 				break;
