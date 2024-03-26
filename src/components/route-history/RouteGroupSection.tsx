@@ -1,10 +1,10 @@
 import { Box, Card, Typography } from '@mui/material';
-import type { Route } from './RouteCard';
 import RouteCard from './RouteCard';
+import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 
 export interface RouteGroup {
 	week: string;
-	routes: Route[];
+	routes: (IRouteHistoryEntry & { name: string })[];
 }
 
 export default function RouteGroupSection({
