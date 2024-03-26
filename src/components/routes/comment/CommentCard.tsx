@@ -1,5 +1,6 @@
 import { type Dispatch, type SetStateAction, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { usePin } from '@/components/context/PinProvider';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -24,6 +25,10 @@ import {
 } from '@/service/Route';
 import CommentReply from './CommentReply';
 import CommentReplyCreationBox from './CommentReplyCreationBox';
+import PinDrop from '@mui/icons-material/PinDrop';
+import { useRouter } from 'next/navigation';
+
+const PIN_HIGHLIGHT_TIMEOUT = 1500; //ms
 
 export default function CommentCard({
 	routeId,
@@ -38,6 +43,9 @@ export default function CommentCard({
 	const isLiked = useMemo(() => {
 		return comment.likedByUserIds.includes(session?.user?.id as string);
 	}, [comment.likedByUserIds, session?.user?.id]);
+	const router = useRouter();
+	const { setHighlightedPinCommentId } = usePin();
+
 	const [viewReplies, setViewReplies] = useState(false);
 	const [commentReplies, setCommentReplies] = useState(comment.replies);
 
@@ -53,8 +61,17 @@ export default function CommentCard({
 		}
 	};
 
+	const handleGoToPin = () => {
+		setHighlightedPinCommentId(comment.id);
+		router.replace('#map');
+
+		setTimeout(() => {
+			setHighlightedPinCommentId('');
+		}, PIN_HIGHLIGHT_TIMEOUT);
+	};
+
 	return (
-		<Card>
+		<Card id={comment.id}>
 			<CardHeader
 				avatar={<Avatar sx={{ bgcolor: red[500], color: 'white' }} />}
 				title={`${comment.author.name} commented`}
@@ -106,6 +123,19 @@ export default function CommentCard({
 					</CardActions>
 				</Box>
 			</CardContent>
+
+			{comment.pin && (
+				<CardActions sx={{ mx: 1 }}>
+					<Button
+						variant="outlined"
+						startIcon={<PinDrop />}
+						onClick={handleGoToPin}
+					>
+						Go to pin
+					</Button>
+				</CardActions>
+			)}
+
 			{viewReplies ? (
 				<>
 					<Card>

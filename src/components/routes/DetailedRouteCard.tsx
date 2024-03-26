@@ -23,12 +23,15 @@ import { likeRoute, unlikeRoute } from '@/service/Route';
 import { getImageUrl } from '@/util/imageUploadUrl';
 import Map from './map/Map';
 import CommentSection from './comment/CommentSection';
+import type { ICommentFlat } from '@/models/schemas/Comment';
+import { PinProvider } from '../context/PinProvider';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
+	const [comments, setComments] = useState<ICommentFlat[]>(route.comments);
 
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
@@ -42,80 +45,90 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	};
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				width: ['100%', '75%', '50%'],
-				gap: 1,
-			}}
-		>
-			<Card>
-				<CardHeader
-					avatar={
-						<IconButton
-							href={`/profile/${route.author.id}`}
-							LinkComponent={Link}
-							aria-label="go to author's profile"
-						>
-							<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
-						</IconButton>
-					}
-					title={route.title}
-					subheader={formatDate(route.createdAt)}
-				/>
-				<CardContent>
-					<Typography sx={{ mb: 2 }} variant="body1">
-						{route.body}
-					</Typography>
-					{route.imageId && (
-						<CardMedia
-							component="img"
-							image={getImageUrl(route.imageId)}
-							alt={`Image of ${route.title}`}
-						/>
-					)}
-					<Map
-						location={route.location}
-						selectedPoints={route.selectedPoints}
-						distance={route.distance}
+		<PinProvider>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					width: ['100%', '75%', '50%'],
+					gap: 1,
+				}}
+			>
+				<Card>
+					<CardHeader
+						avatar={
+							<IconButton
+								href={`/profile/${route.author.id}`}
+								LinkComponent={Link}
+								aria-label="go to author's profile"
+							>
+								<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
+							</IconButton>
+						}
+						title={route.title}
+						subheader={formatDate(route.createdAt)}
 					/>
-					<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-						<Typography variant="subtitle2" sx={{ mr: 1 }}>
-							Difficulty:
+					<CardContent>
+						<Typography sx={{ mb: 2 }} variant="body1">
+							{route.body}
 						</Typography>
-						<Rating
-							name="difficulty-rating"
-							value={route.difficulty}
-							precision={0.5}
-							readOnly
-						/>
-					</Box>
-				</CardContent>
-				<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
-					<IconButton
-						aria-label="go back to home"
-						onClick={() => router.back()}
-					>
-						<ArrowBackIcon />
-					</IconButton>
-					<Box sx={{ display: 'flex', alignItems: 'center' }}>
-						{route.likedByUserIds.length > 0 && (
-							<Typography variant="body1">
-								{route.likedByUserIds.length}
-							</Typography>
+						{route.imageId && (
+							<CardMedia
+								component="img"
+								image={getImageUrl(route.imageId)}
+								alt={`Image of ${route.title}`}
+							/>
 						)}
-						<IconButton
-							aria-label="add to favorites"
-							onClick={handleFavoriteClick}
-							sx={{ color: isLiked ? red[500] : 'inherit' }}
+						<Map
+							routeLocation={route.location}
+							selectedPoints={route.selectedPoints}
+							distance={route.distance}
+							comments={comments}
+						/>
+						<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+							<Typography variant="subtitle2" sx={{ mr: 1 }}>
+								Difficulty:
+							</Typography>
+							<Rating
+								name="difficulty-rating"
+								value={route.difficulty}
+								precision={0.5}
+								readOnly
+							/>
+						</Box>
+						<CardActions
+							disableSpacing
+							sx={{ justifyContent: 'space-between' }}
 						>
-							<FavoriteIcon />
-						</IconButton>
-					</Box>
-				</CardActions>
-			</Card>
-			<CommentSection routeId={route.id} initialComments={route.comments} />
-		</Box>
+							<IconButton
+								aria-label="go back to home"
+								onClick={() => router.back()}
+							>
+								<ArrowBackIcon />
+							</IconButton>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								{route.likedByUserIds.length > 0 && (
+									<Typography variant="body1">
+										{route.likedByUserIds.length}
+									</Typography>
+								)}
+								<IconButton
+									aria-label="add to favorites"
+									onClick={handleFavoriteClick}
+									sx={{ color: isLiked ? red[500] : 'inherit' }}
+								>
+									<FavoriteIcon />
+								</IconButton>
+							</Box>
+						</CardActions>
+					</CardContent>
+				</Card>
+				<CommentSection
+					routeId={route.id}
+					comments={comments}
+					setComments={setComments}
+				/>
+			</Box>
+		</PinProvider>
 	);
 }
