@@ -26,16 +26,6 @@ export async function getRouteHistory() {
 	if (!user) {
 		throw new APIError('Could not find user', 500);
 	}
-
-	let routeHistory = user.routeHistory;
-
-	// Currently, not every user has a routeHistory field. Remove this once all databases have been migrated.
-	if (!routeHistory) {
-		user.routeHistory = [];
-		// not awaiting the result of this query because it can execute asynchronously
-		User.updateOne({ id: session.user.id }, { $set: { routeHistory: [] } });
-		routeHistory = [];
-	}
-
-	return routeHistory;
+	// Currently, not every user has a routeHistory field. Remove "?? []" once all databases have been migrated.
+	return user?.routeHistory ?? [];
 }
