@@ -3,7 +3,8 @@ import { Schema } from 'mongoose';
 export interface IRouteHistoryEntry {
 	id: string;
 	routeId: string;
-	datetimeISO: string;
+	routeTitle: string;
+	datetime: Date;
 }
 
 const routeHistoryEntrySchema = new Schema<IRouteHistoryEntry>({
@@ -15,8 +16,12 @@ const routeHistoryEntrySchema = new Schema<IRouteHistoryEntry>({
 		type: String,
 		required: true,
 	},
-	datetimeISO: {
+	routeTitle: {
 		type: String,
+		required: true,
+	},
+	datetime: {
+		type: Date,
 		required: true,
 	},
 });
