@@ -25,9 +25,9 @@ const ROUTE_HISTORY: RouteGroup[] = [
 		week: 'This week',
 		routes: [
 			{
-				id: 'mainland-n-trail',
+				routeId: 'mainland-n-trail',
 				name: 'Mainland N Trail',
-				datetime: DateTime.fromISO('2024-01-30T15:59'),
+				datetimeISO: '2024-01-30T15:59',
 			},
 		],
 	},
@@ -35,14 +35,14 @@ const ROUTE_HISTORY: RouteGroup[] = [
 		week: 'Last week',
 		routes: [
 			{
-				id: 'mainland-n-trail',
+				routeId: 'mainland-n-trail',
 				name: 'Mainland N Trail',
-				datetime: DateTime.fromISO('2024-01-26T16:26'),
+				datetimeISO: '2024-01-26T16:26',
 			},
 			{
-				id: 'mainland-n-trail',
+				routeId: 'mainland-n-trail',
 				name: 'Mainland N Trail',
-				datetime: DateTime.fromISO('2024-01-24T13:11'),
+				datetimeISO: '2024-01-24T13:11',
 			},
 		],
 	},
@@ -50,14 +50,14 @@ const ROUTE_HISTORY: RouteGroup[] = [
 		week: 'Week of 15 Jan',
 		routes: [
 			{
-				id: 'geyzer-hill-trail',
+				routeId: 'geyzer-hill-trail',
 				name: 'Geyzer Hill Trail',
-				datetime: DateTime.fromISO('2024-01-17T17:35'),
+				datetimeISO: '2024-01-17T17:35',
 			},
 			{
-				id: 'mainland-n-trail',
+				routeId: 'mainland-n-trail',
 				name: 'Mainland N Trail',
-				datetime: DateTime.fromISO('2024-01-16T11:18'),
+				datetimeISO: '2024-01-16T11:18',
 			},
 		],
 	},
@@ -109,12 +109,13 @@ export default function RouteHistoryArea({
 		newFilteredRouteHist.forEach((routeHistoryGroup) => {
 			routeHistoryGroup.routes = routeHistoryGroup.routes.filter(
 				(routeHistoryEntry) => {
+					const datetime = DateTime.fromISO(routeHistoryEntry.datetimeISO);
 					return (
 						routeHistoryEntry.name.includes(userInput.name) &&
 						userInput.start &&
 						userInput.end &&
-						routeHistoryEntry.datetime > userInput.start &&
-						routeHistoryEntry.datetime < userInput.end
+						datetime > userInput.start &&
+						datetime < userInput.end
 					);
 				}
 			);

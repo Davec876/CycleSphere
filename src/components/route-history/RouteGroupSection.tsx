@@ -19,7 +19,7 @@ export default function RouteGroupSection({
 			</Typography>
 			<Card elevation={0} sx={{ border: '1px solid white', borderRadius: 0 }}>
 				{routeGroup.routes.map((route) => (
-					<RouteCard key={route.datetime.valueOf()} route={route} />
+					<RouteCard key={route.datetimeISO.valueOf()} route={route} />
 				))}
 			</Card>
 		</Box>
