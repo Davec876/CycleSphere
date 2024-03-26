@@ -1,12 +1,8 @@
 import AppBar from '@/components/AppBar';
 import Container from '@mui/material/Container';
 import FitnessCard from '@/components/fitness/FitnessCard';
+import { IProfile } from '@/models/Profile';
 
-interface IProfile {
-	id: string;
-	name: string;
-	picture: string;
-}
 const profile : IProfile = {
 	id: '',
 	name: 'Kevin Orenday',

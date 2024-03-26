@@ -32,7 +32,7 @@ export default function FitnessCard(props: { profile: IProfile }) {
             <CardContent>
                 <ProfileTab profile={props.profile} value={tab} index={0} />
                 <StatsTab profile={props.profile} value={tab} index={1} />
-                <HistoryTab value={tab} index={2} />
+                <HistoryTab profile={props.profile} value={tab} index={2} />
             </CardContent>
         </Card>
     );

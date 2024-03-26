@@ -1,3 +1,5 @@
+'use client';
+
 import BaseTabPanel from "./BaseTabPanel";
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -17,6 +19,8 @@ export default function StatsTab(props: {
             <Grid container spacing={4} rowSpacing={2} sx={{ justifyContent: 'center', marginTop: '2.5em' }}>
                 <Grid lg={12} sx={{ textAlign: 'center' }}>
                     <Typography variant="h6">Weekly Distance Cycled</Typography>
+                    
+                    {/* https://mui.com/x/react-charts/bars/ */}
                     <BarChart 
                         height={350}
                         yAxis={[
