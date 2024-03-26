@@ -93,10 +93,12 @@ export default function AddRouteFAB({
 					position: 'fixed',
 					right: 20,
 					bottom: 20,
+					'@media screen and (max-width: 600px)': {
+						right: '10px',
+						bottom: '10px',
+					},
 				}}
-				onClick={() => {
-					handleClickOpen();
-				}}
+				onClick={handleClickOpen}
 			>
 				<AddIcon />
 			</Fab>
@@ -106,14 +108,19 @@ export default function AddRouteFAB({
 				PaperProps={{
 					component: 'form',
 					onSubmit: handleSubmit,
-					style: {
+					sx: {
 						maxWidth: '90%',
-						width: '90%',
+						width: 'auto',
 						maxHeight: '95vh',
 						height: 'auto',
 						margin: 'auto',
 						display: 'flex',
 						flexDirection: 'column',
+						'@media screen and (max-width: 600px)': {
+							width: '100%',
+							maxWidth: '100%',
+							margin: '10px',
+						},
 					},
 				}}
 				maxWidth="xl"
@@ -122,41 +129,41 @@ export default function AddRouteFAB({
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
-						width: '100%',
-						overflow: 'hidden',
+						'@media screen and (max-width: 600px)': {
+							flexDirection: 'column',
+						},
 					}}
 				>
-					<Box sx={{ flex: 1, mr: 2.5 }}>
+					<Box
+						sx={{
+							flex: 1,
+							mr: 2.5,
+							'@media screen and (max-width: 600px)': { mr: 0, mb: 2 },
+						}}
+					>
 						<DialogTitle>Add Route</DialogTitle>
 						<DialogContent dividers>
 							<DialogContentText>
-								Please enter your route details below in order to add your route
-								to the website.
+								Please enter your route details below.
 							</DialogContentText>
 							<TextField
 								autoFocus
 								required
 								name="trailTitle"
 								label="Trail title"
-								type="text"
 								fullWidth
 								margin="dense"
-								variant="outlined"
 							/>
 							<TextField
 								required
 								name="trailBody"
 								label="Trail description"
-								type="text"
 								fullWidth
-								margin="dense"
-								variant="outlined"
 								multiline
 								rows={4}
+								margin="dense"
 							/>
-							<Typography id="difficulty-slider" gutterBottom>
-								Difficulty Level
-							</Typography>
+							<Typography gutterBottom>Difficulty Level</Typography>
 							<Slider
 								aria-labelledby="difficulty-slider"
 								value={difficulty}
@@ -174,16 +181,56 @@ export default function AddRouteFAB({
 							/>
 						</DialogContent>
 					</Box>
-					<Box sx={{ flex: 3, height: '100%', mr: 2 }}>
+					<Box
+						sx={{
+							flex: 3,
+							height: '100%',
+							'@media screen and (max-width: 600px)': {
+								height: '300px',
+								mr: 0,
+							},
+						}}
+					>
 						<AutoCompleteMap
 							setMapDetails={setMapDetails}
 							distance={mapDetails?.totalDistance}
 						/>
 					</Box>
 				</Box>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button type="submit">Submit</Button>
+				<DialogActions
+					sx={{
+						flexShrink: 0,
+						padding: 2,
+						'@media screen and (max-width: 600px)': {
+							flexDirection: 'column',
+							alignItems: 'flex-start',
+						},
+					}}
+				>
+					<Button
+						onClick={handleClose}
+						variant="contained"
+						color="primary"
+						sx={{
+							width: '100%',
+							margin: '8px',
+							fontSize: '1rem',
+						}}
+					>
+						Cancel
+					</Button>
+					<Button
+						type="submit"
+						variant="contained"
+						color="primary"
+						sx={{
+							width: '100%',
+							margin: '8px',
+							fontSize: '1rem',
+						}}
+					>
+						Submit
+					</Button>
 				</DialogActions>
 			</Dialog>
 			<Snackbar

@@ -78,6 +78,7 @@ export default function FileUploadButton({
 				component="label"
 				variant="contained"
 				startIcon={<AddPhotoAlternateIcon />}
+				fullWidth
 			>
 				{label}
 				<VisuallyHiddenInput

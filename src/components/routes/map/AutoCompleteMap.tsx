@@ -145,12 +145,13 @@ export default function AutoCompleteMap({
 	};
 
 	return (
-		<Box sx={{ mt: 2, height: [350, 425, 500], width: '100%' }}>
+		<Box sx={{ mt: 2, height: [350, 425, 500] }}>
 			<APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
 				<AutocompleteCustom onPlaceSelect={setSelectedPlace} />
 				<Map
 					onClick={handleMapClick}
 					defaultZoom={12}
+					// Default to Halifax Coordinates
 					defaultCenter={{ lat: 44.64951641616885, lng: -63.58510266385201 }}
 					gestureHandling="greedy"
 					disableDefaultUI={true}

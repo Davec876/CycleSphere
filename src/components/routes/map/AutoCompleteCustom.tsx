@@ -41,7 +41,7 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 	>([]);
 
 	const [inputValue, setInputValue] = useState<string>('');
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!places || !map) return;
@@ -116,11 +116,19 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 				padding: 1,
 			}}
 		>
-			<Box sx={{ position: 'relative', width: 'fit-content' }}>
+			<Box
+				sx={{
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'flex-start',
+					padding: 1,
+					boxSizing: 'border-box',
+				}}
+			>
 				<TextField
 					fullWidth
 					variant="outlined"
-					placeholder="Search for places in Halifax!"
+					placeholder="Halifax, NS, Canada"
 					value={inputValue}
 					onChange={onInputChange}
 					InputProps={{
