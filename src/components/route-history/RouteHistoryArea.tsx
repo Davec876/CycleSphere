@@ -2,7 +2,7 @@
 
 import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	Box,
 	Button,
@@ -17,105 +17,75 @@ import Grid from '@mui/material/Unstable_Grid2';
 import type { RouteGroup } from './RouteGroupSection';
 import RouteGroupSection from './RouteGroupSection';
 import { DateTime } from 'luxon';
-import type { Route } from './RouteCard';
-
-// hardcoded data
-const ROUTE_HISTORY: RouteGroup[] = [
-	{
-		week: 'This week',
-		routes: [
-			{
-				routeId: 'mainland-n-trail',
-				name: 'Mainland N Trail',
-				datetimeISO: '2024-01-30T15:59',
-			},
-		],
-	},
-	{
-		week: 'Last week',
-		routes: [
-			{
-				routeId: 'mainland-n-trail',
-				name: 'Mainland N Trail',
-				datetimeISO: '2024-01-26T16:26',
-			},
-			{
-				routeId: 'mainland-n-trail',
-				name: 'Mainland N Trail',
-				datetimeISO: '2024-01-24T13:11',
-			},
-		],
-	},
-	{
-		week: 'Week of 15 Jan',
-		routes: [
-			{
-				routeId: 'geyzer-hill-trail',
-				name: 'Geyzer Hill Trail',
-				datetimeISO: '2024-01-17T17:35',
-			},
-			{
-				routeId: 'mainland-n-trail',
-				name: 'Mainland N Trail',
-				datetimeISO: '2024-01-16T11:18',
-			},
-		],
-	},
-];
+import { getRoute } from '@/service/Route';
 
 export default function RouteHistoryArea({
-	initialRouteHistory,
+	initialRouteHistoryWithoutNames,
 }: {
-	initialRouteHistory: IRouteHistoryEntry[];
+	initialRouteHistoryWithoutNames: IRouteHistoryEntry[];
 }) {
-	const [routeHistory, setRouteHistory] =
-		useState<IRouteHistoryEntry[]>(initialRouteHistory);
-	const [filteredRouteHistory, setFilteredRouteHistory] = useState(
-		copyInitialRouteHistory()
+	const initialRouteHistory = groupRHEsByWeek(
+		initialRouteHistoryWithoutNames.map((RHE) => ({
+			...RHE,
+			name: '',
+		}))
 	);
+	const [routeHistory, setRouteHistory] =
+		useState<RouteGroup[]>(initialRouteHistory);
+	const [filteredRouteHistory, setFilteredRouteHistory] =
+		useState(routeHistory);
 
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [filters, setFilters] = useState<{
 		name: string;
 		start: DateTime | null;
 		end: DateTime | null;
-	}>({ name: '', start: DateTime.fromISO('2024-01-01'), end: DateTime.now() });
+	}>({ name: '', start: null, end: null });
 	const [userInput, setUserInput] = useState<{
 		name: string;
 		start: DateTime | null;
 		end: DateTime | null;
-	}>({ name: '', start: DateTime.fromISO('2024-01-01'), end: DateTime.now() });
+	}>({ name: '', start: null, end: null });
 
-	function copyInitialRouteHistory(): RouteGroup[] {
-		const copy: RouteGroup[] = [];
-		ROUTE_HISTORY.forEach((routeHistGrp) => {
-			const routeHistGrpCopy: { week: string; routes: Route[] } = {
-				week: routeHistGrp.week,
-				routes: [],
-			};
-			routeHistGrp.routes.forEach((routeHistEntry) => {
-				routeHistGrpCopy.routes.push(routeHistEntry);
-			});
-			copy.push(routeHistGrpCopy);
-		});
-		return copy;
+	useEffect(() => {
+		const routeNamePromises = initialRouteHistoryWithoutNames.map(
+			async (routeHistoryEntry) => {
+				const route = await getRoute(routeHistoryEntry.routeId);
+				if (!route) {
+					throw new Error(
+						`Route with ID ${routeHistoryEntry.routeId} does not exist`
+					);
+				}
+				return route.title;
+			}
+		);
+		Promise.all(routeNamePromises).then((routeName) => {});
+	}, [initialRouteHistoryWithoutNames]);
+
+	function groupRHEsByWeek(RHEs: (IRouteHistoryEntry & { name: string })[]) {
+		// TODO
+		const groupedRoutes: RouteGroup[] = [
+			{
+				week: 'every week',
+				routes: RHEs,
+			},
+		];
+		return groupedRoutes;
 	}
 
 	function applyFilterChanges() {
 		setFilters(userInput);
 		setFilterOpen(false);
 
-		let newFilteredRouteHist = copyInitialRouteHistory();
+		let newFilteredRouteHist = initialRouteHistory;
 		newFilteredRouteHist.forEach((routeHistoryGroup) => {
 			routeHistoryGroup.routes = routeHistoryGroup.routes.filter(
-				(routeHistoryEntry) => {
+				(routeHistoryEntry: IRouteHistoryEntry & { name: string }) => {
 					const datetime = DateTime.fromISO(routeHistoryEntry.datetimeISO);
 					return (
 						routeHistoryEntry.name.includes(userInput.name) &&
-						userInput.start &&
-						userInput.end &&
-						datetime > userInput.start &&
-						datetime < userInput.end
+						(userInput.start ? datetime > userInput.start : true) &&
+						(userInput.end ? datetime < userInput.end : true)
 					);
 				}
 			);
