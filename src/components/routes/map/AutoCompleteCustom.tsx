@@ -41,7 +41,6 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 	>([]);
 
 	const [inputValue, setInputValue] = useState<string>('');
-	const [isLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!places || !map) return;
@@ -132,15 +131,11 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 					value={inputValue}
 					onChange={onInputChange}
 					InputProps={{
-						endAdornment: isLoading ? (
-							<CircularProgress color="inherit" size={20} />
-						) : (
-							inputValue && (
-								<IconButton onClick={clearInput} edge="end">
-									<ClearIcon />
-								</IconButton>
-							)
-						),
+						endAdornment: inputValue ? (
+							<IconButton onClick={clearInput} edge="end">
+								<ClearIcon />
+							</IconButton>
+						) : undefined,
 					}}
 					sx={{ width: 930 }}
 				/>
