@@ -18,7 +18,6 @@ import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 export type MapDetails = {
