@@ -125,7 +125,9 @@ export default function AddRouteFAB({
 				}}
 				maxWidth="xl"
 			>
-				<Box
+				<DialogTitle>Add Route</DialogTitle>
+				<DialogContent
+					dividers
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
@@ -141,45 +143,42 @@ export default function AddRouteFAB({
 							'@media screen and (max-width: 600px)': { mr: 0, mb: 2 },
 						}}
 					>
-						<DialogTitle>Add Route</DialogTitle>
-						<DialogContent dividers>
-							<DialogContentText>
-								Please enter your route details below.
-							</DialogContentText>
-							<TextField
-								autoFocus
-								required
-								name="trailTitle"
-								label="Trail title"
-								fullWidth
-								margin="dense"
-							/>
-							<TextField
-								required
-								name="trailBody"
-								label="Trail description"
-								fullWidth
-								multiline
-								rows={4}
-								margin="dense"
-							/>
-							<Typography gutterBottom>Difficulty Level</Typography>
-							<Slider
-								aria-labelledby="difficulty-slider"
-								value={difficulty}
-								onChange={handleSliderChange}
-								valueLabelDisplay="auto"
-								step={0.5}
-								marks
-								min={0}
-								max={5}
-							/>
-							<FileUploadButton
-								label="Upload route photo"
-								imageId={uploadedImageId}
-								setImageId={setUploadedImageId}
-							/>
-						</DialogContent>
+						<DialogContentText>
+							Please enter your route details below.
+						</DialogContentText>
+						<TextField
+							autoFocus
+							required
+							name="trailTitle"
+							label="Trail title"
+							fullWidth
+							margin="dense"
+						/>
+						<TextField
+							required
+							name="trailBody"
+							label="Trail description"
+							fullWidth
+							multiline
+							rows={4}
+							margin="dense"
+						/>
+						<Typography gutterBottom>Difficulty Level</Typography>
+						<Slider
+							aria-labelledby="difficulty-slider"
+							value={difficulty}
+							onChange={handleSliderChange}
+							valueLabelDisplay="auto"
+							step={0.5}
+							marks
+							min={0}
+							max={5}
+						/>
+						<FileUploadButton
+							label="Upload route photo"
+							imageId={uploadedImageId}
+							setImageId={setUploadedImageId}
+						/>
 					</Box>
 					<Box
 						sx={{
@@ -196,7 +195,7 @@ export default function AddRouteFAB({
 							distance={mapDetails?.totalDistance}
 						/>
 					</Box>
-				</Box>
+				</DialogContent>
 				<DialogActions
 					sx={{
 						flexShrink: 0,
@@ -232,20 +231,20 @@ export default function AddRouteFAB({
 						Submit
 					</Button>
 				</DialogActions>
-			</Dialog>
-			<Snackbar
-				open={alertOpen}
-				autoHideDuration={6000}
-				onClose={() => setAlertOpen(false)}
-			>
-				<Alert
+				<Snackbar
+					open={alertOpen}
+					autoHideDuration={6000}
 					onClose={() => setAlertOpen(false)}
-					severity="error"
-					sx={{ width: '100%' }}
 				>
-					{alertMessage}
-				</Alert>
-			</Snackbar>
+					<Alert
+						onClose={() => setAlertOpen(false)}
+						severity="error"
+						sx={{ width: '100%' }}
+					>
+						{alertMessage}
+					</Alert>
+				</Snackbar>
+			</Dialog>
 		</>
 	);
 }
