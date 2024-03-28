@@ -19,6 +19,7 @@ import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 export type MapDetails = {
 	selectedLocation?: {
@@ -126,75 +127,55 @@ export default function AddRouteFAB({
 				maxWidth="xl"
 			>
 				<DialogTitle>Add Route</DialogTitle>
-				<DialogContent
-					dividers
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						'@media screen and (max-width: 600px)': {
-							flexDirection: 'column',
-						},
-					}}
-				>
-					<Box
-						sx={{
-							flex: 1,
-							mr: 2.5,
-							'@media screen and (max-width: 600px)': { mr: 0, mb: 2 },
-						}}
-					>
-						<DialogContentText>
-							Please enter your route details below.
-						</DialogContentText>
-						<TextField
-							autoFocus
-							required
-							name="trailTitle"
-							label="Trail title"
-							fullWidth
-							margin="dense"
-						/>
-						<TextField
-							required
-							name="trailBody"
-							label="Trail description"
-							fullWidth
-							multiline
-							rows={4}
-							margin="dense"
-						/>
-						<Typography gutterBottom>Difficulty Level</Typography>
-						<Slider
-							aria-labelledby="difficulty-slider"
-							value={difficulty}
-							onChange={handleSliderChange}
-							valueLabelDisplay="auto"
-							step={0.5}
-							marks
-							min={0}
-							max={5}
-						/>
-						<FileUploadButton
-							label="Upload route photo"
-							imageId={uploadedImageId}
-							setImageId={setUploadedImageId}
-						/>
-					</Box>
-					<Box
-						sx={{
-							flex: 3,
-							height: '100%',
-							'@media screen and (max-width: 600px)': {
-								height: '300px',
-								mr: 0,
-							},
-						}}
-					>
-						<AutoCompleteMap
-							setMapDetails={setMapDetails}
-							distance={mapDetails?.totalDistance}
-						/>
-					</Box>
+				<DialogContent dividers>
+					<Grid container spacing={2}>
+						<Grid item xs={12} md={4}>
+							{' '}
+							<DialogContentText>
+								Please enter your route details below.
+							</DialogContentText>
+							<TextField
+								autoFocus
+								required
+								name="trailTitle"
+								label="Trail title"
+								fullWidth
+								margin="dense"
+							/>
+							<TextField
+								required
+								name="trailBody"
+								label="Trail description"
+								fullWidth
+								multiline
+								rows={4}
+								margin="dense"
+							/>
+							<Typography gutterBottom>Difficulty Level</Typography>
+							<Slider
+								aria-labelledby="difficulty-slider"
+								value={difficulty}
+								onChange={handleSliderChange}
+								valueLabelDisplay="auto"
+								step={0.5}
+								marks
+								min={0}
+								max={5}
+							/>
+							<FileUploadButton
+								label="Upload route photo"
+								imageId={uploadedImageId}
+								setImageId={setUploadedImageId}
+							/>
+						</Grid>
+						<Grid item xs={12} md={8}>
+							{' '}
+							<AutoCompleteMap
+								setMapDetails={setMapDetails}
+								distance={mapDetails?.totalDistance}
+							/>
+						</Grid>
+					</Grid>
 				</DialogContent>
 				<DialogActions
 					sx={{
