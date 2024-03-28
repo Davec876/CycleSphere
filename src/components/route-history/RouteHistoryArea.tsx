@@ -3,6 +3,7 @@
 import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useState } from 'react';
+import ListRouteHistory from './ListRouteHistory';
 
 export default function RouteHistoryArea({
 	initialRouteHistory,
@@ -22,7 +23,8 @@ export default function RouteHistoryArea({
 				</Typography>
 				<Button variant="contained">Filter</Button>
 			</Box>
-			{JSON.stringify(filteredRouteHistory)}
+
+			<ListRouteHistory routeHistory={filteredRouteHistory} />
 		</Container>
 	);
 }
