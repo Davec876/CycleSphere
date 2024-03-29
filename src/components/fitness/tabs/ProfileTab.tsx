@@ -13,7 +13,9 @@ export default function ProfileTab(props : {
     profile: IProfile;
     handler: any;
 }) {
-    const [ tracking, setTracking ] = useState(props.profile.fitness_tracking);
+    const [ tracking, setTracking ] = useState(props.profile.fitness_tracking || false);
+
+    console.dir(tracking);
 
     function changeTracking(e : SyntheticEvent) {
         e.preventDefault();
@@ -50,7 +52,7 @@ export default function ProfileTab(props : {
                     </Grid>
 
                     <Grid container sx={{ justifyContent: 'center' }}>
-                        <Button variant="contained" onClick={changeTracking}>{tracking ? 'Disable Fitness Tracking' : 'Enable Fitness Tracking'}</Button>
+                        <Button variant="contained" color={tracking ? 'error' : 'success'} onClick={changeTracking}>{tracking ? 'Disable Fitness Tracking' : 'Enable Fitness Tracking'}</Button>
                     </Grid>
                 </Grid>
             </Grid>

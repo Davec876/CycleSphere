@@ -47,6 +47,7 @@ export default function HistoryTab(props: {
                     />
                 </Grid>
             </Grid>
+            
             <List>
                 {
                     filtered_list.map((route : { title: string, updatedAt: Date }, index) => 
