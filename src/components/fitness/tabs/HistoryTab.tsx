@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import { IProfile } from "@/models/Profile";
 import { getRoutesByAuthorId } from "@/service/Route";
 import type { IRouteFlat } from "@/models/Route";
+import { formatDate } from "@/util/formatDate";
 
 export default function HistoryTab(props: { 
     index: number;
@@ -40,7 +41,7 @@ export default function HistoryTab(props: {
                             event.preventDefault();
                             const temp = routes.filter((route : { title: string }) => {
                                 const regex = new RegExp(`.*${value}.*`, 'ig');
-                                return route?.title?.match(regex)?.length
+                                return route?.title?.match(regex)?.length;
                             });
                             setList(temp);
                         }}
@@ -52,7 +53,7 @@ export default function HistoryTab(props: {
                 {
                     filtered_list.map((route : { title: string, updatedAt: Date }, index) => 
                         <ListItem key={`item-${index}`}>
-                            <ListItemText primary={route.title} secondary={route.updatedAt.toString()} />
+                            <ListItemText primary={route.title} secondary={formatDate(route.updatedAt)} />
                         </ListItem>
                     )
                 }
