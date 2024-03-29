@@ -5,12 +5,10 @@ import Container from '@mui/material/Container';
 import FitnessCard from '@/components/fitness/FitnessCard';
 import { IProfile } from '@/models/Profile';
 import { redirect } from 'next/navigation';
-import { auth } from '@/components/auth/auth';
 import { useSession } from 'next-auth/react';
 
 export default function FitnessPage() {
-	// https://next-auth.js.org/getting-started/client
-	const { data: session, status: sessionStatus } = useSession();
+	const { data: session } = useSession();
 	if (session === undefined || session === null) redirect('/login');
 
 	return(

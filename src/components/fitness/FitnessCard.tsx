@@ -10,9 +10,16 @@ import ProfileTab from './tabs/ProfileTab';
 import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
 import { IProfile } from '@/models/Profile';
+import { getUser } from '@/service/User';
 
 export default function FitnessCard(props: { profile: IProfile }) {
-    const [tab, setTab] = useState(0);
+    const [ tab, setTab ] = useState(0);
+    const [ tracking, setTracking ] = useState(false);
+
+    getUser(props.profile.id).then(user => { 
+        setTracking(user?.fitness_tracking || false); 
+        props.profile.fitness_tracking = user?.fitness_tracking || false; 
+    });
 
     const changeTab = (event: SyntheticEvent, value: number) => {
         event.preventDefault();
@@ -25,12 +32,12 @@ export default function FitnessCard(props: { profile: IProfile }) {
             <Box>
                 <Tabs value={tab} onChange={changeTab}>
                     <Tab label='Profile' id='tab-header-0' aria-controls='tabpanel-0' />
-                    <Tab label='Stats' id='tab-header-1' aria-controls='tabpanel-1' />
-                    <Tab label='History' id='tab-header-2' aria-controls='tabpanel-2' />
+                    <Tab label='Stats' id='tab-header-1' aria-controls='tabpanel-1' disabled={!tracking} />
+                    <Tab label='History' id='tab-header-2' aria-controls='tabpanel-2' disabled={!tracking} />
                 </Tabs>
             </Box>
             <CardContent>
-                <ProfileTab profile={props.profile} value={tab} index={0} />
+                <ProfileTab profile={props.profile} value={tab} index={0} handler={setTracking} />
                 <StatsTab profile={props.profile} value={tab} index={1} />
                 <HistoryTab profile={props.profile} value={tab} index={2} />
             </CardContent>

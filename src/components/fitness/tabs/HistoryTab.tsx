@@ -40,7 +40,7 @@ export default function HistoryTab(props: {
                             event.preventDefault();
                             const temp = routes.filter((route : { title: string }) => {
                                 const regex = new RegExp(`.*${value}.*`, 'ig');
-                                return route?.title?.match(regex)?.length ? true : false
+                                return route?.title?.match(regex)?.length
                             });
                             setList(temp);
                         }}
