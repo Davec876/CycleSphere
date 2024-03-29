@@ -1,5 +1,3 @@
-'use client';
-
 import BaseTabPanel from "./BaseTabPanel";
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -83,6 +81,7 @@ export default function StatsTab(props: {
 const chartOneFormatter = (value: number | null) => `${value} km cycled`;
 const chartTwoFormatter = (value: number | null) => `${value} kcal burned`;
 
+// Placeholder data
 const sample_data = [
     {
         day: 'Mon',
