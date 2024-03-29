@@ -15,8 +15,6 @@ export default function ProfileTab(props : {
 }) {
     const [ tracking, setTracking ] = useState(props.profile.fitness_tracking || false);
 
-    console.dir(tracking);
-
     function changeTracking(e : SyntheticEvent) {
         e.preventDefault();
         updateFitnessTracking(props.profile.id, !tracking);

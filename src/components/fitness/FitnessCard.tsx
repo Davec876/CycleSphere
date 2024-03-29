@@ -16,8 +16,6 @@ export default function FitnessCard(props: { profile: IProfile }) {
     const [ tab, setTab ] = useState(0);
     const [ tracking, setTracking ] = useState(false);
 
-    console.dir(tracking);
-
     getUser(props.profile.id).then(user => { 
         props.profile.fitness_tracking = user?.fitness_tracking || false; 
         setTracking(user?.fitness_tracking || false);
