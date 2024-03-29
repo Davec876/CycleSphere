@@ -93,7 +93,7 @@ export default function AddRouteFAB({
 					position: 'fixed',
 					right: 20,
 					bottom: 20,
-					'@media screen and (max-width: 600px)': {
+					sm: {
 						right: '10px',
 						bottom: '10px',
 					},
@@ -116,7 +116,7 @@ export default function AddRouteFAB({
 						margin: 'auto',
 						display: 'flex',
 						flexDirection: 'column',
-						'@media screen and (max-width: 600px)': {
+						sm: {
 							width: '100%',
 							maxWidth: '100%',
 							margin: '10px',
@@ -129,7 +129,6 @@ export default function AddRouteFAB({
 				<DialogContent dividers>
 					<Grid container spacing={2}>
 						<Grid item xs={12} md={4}>
-							{' '}
 							<DialogContentText>
 								Please enter your route details below.
 							</DialogContentText>
@@ -168,7 +167,6 @@ export default function AddRouteFAB({
 							/>
 						</Grid>
 						<Grid item xs={12} md={8}>
-							{' '}
 							<AutoCompleteMap
 								setMapDetails={setMapDetails}
 								distance={mapDetails?.totalDistance}
@@ -180,7 +178,7 @@ export default function AddRouteFAB({
 					sx={{
 						flexShrink: 0,
 						padding: 2,
-						'@media screen and (max-width: 600px)': {
+						sm: {
 							flexDirection: 'column',
 							alignItems: 'flex-start',
 						},

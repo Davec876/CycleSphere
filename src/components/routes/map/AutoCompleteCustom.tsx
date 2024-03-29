@@ -122,6 +122,7 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 					justifyContent: 'flex-start',
 					padding: 1,
 					boxSizing: 'border-box',
+					position: 'relative',
 				}}
 			>
 				<TextField
