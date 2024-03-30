@@ -1,17 +1,16 @@
 'use client';
 
 import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useState } from 'react';
 import ListRouteHistory from './ListRouteHistory';
+import FilterBtn from './FilterBtn';
 
 export default function RouteHistoryArea({
-	initialRouteHistory,
+	routeHistory,
 }: {
-	initialRouteHistory: IRouteHistoryEntry[];
+	routeHistory: IRouteHistoryEntry[];
 }) {
-	const [routeHistory, setRouteHistory] =
-		useState<IRouteHistoryEntry[]>(initialRouteHistory);
 	const [filteredRouteHistory, setFilteredRouteHistory] =
 		useState(routeHistory);
 
@@ -21,7 +20,10 @@ export default function RouteHistoryArea({
 				<Typography variant="h3" component="h2">
 					Route History
 				</Typography>
-				<Button variant="contained">Filter</Button>
+				<FilterBtn
+					routeHistory={routeHistory}
+					setFilteredRouteHistory={setFilteredRouteHistory}
+				/>
 			</Box>
 
 			<ListRouteHistory routeHistory={filteredRouteHistory} />

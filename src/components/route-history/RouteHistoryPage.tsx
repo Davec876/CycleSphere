@@ -14,5 +14,5 @@ export default async function RouteHistoryPage() {
 		}
 	);
 
-	return <RouteHistoryArea initialRouteHistory={routeHistory} />;
+	return <RouteHistoryArea routeHistory={routeHistory} />;
 }
