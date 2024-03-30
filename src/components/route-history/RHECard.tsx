@@ -1,3 +1,4 @@
+import type { SxProps, Theme } from '@mui/material';
 import { Box, Link, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import NextLink from 'next/link';
@@ -6,17 +7,14 @@ import type { CompleteRHE } from './RouteHistoryArea';
 export default function RHECard({ RHE }: { RHE: CompleteRHE }) {
 	const routeName = RHE.route?.title ?? 'Unknown Route';
 	const datetime = DateTime.fromISO(RHE.datetimeISO);
-	const invalidRoute = !RHE.route;
+	const invalidRoute = RHE.route === null;
 
+	const hoverStyles: SxProps<Theme> = {
+		':hover': { bgcolor: (theme) => theme.palette.action.hover },
+	};
 	const RHECardContent = (
 		<Box
-			sx={
-				invalidRoute
-					? {}
-					: {
-							':hover': { bgcolor: (theme) => theme.palette.action.hover },
-						}
-			}
+			sx={invalidRoute ? {} : hoverStyles}
 			border={(theme) => `1px solid ${theme.palette.text.primary}`}
 			p={1}
 			display="flex"
