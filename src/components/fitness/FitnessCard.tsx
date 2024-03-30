@@ -5,11 +5,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { SyntheticEvent, useEffect, useState } from 'react';
 import ProfileTab from './tabs/ProfileTab';
 import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
-import { IProfile } from '@/models/Profile';
+import type { SyntheticEvent } from 'react';
+import type { IProfile } from '@/models/Profile';
+import { useEffect, useState } from 'react';
 import { getUser } from '@/service/User';
 
 export default function FitnessCard(props: { profile: IProfile }) {

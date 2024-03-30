@@ -3,7 +3,7 @@
 import AppBar from '@/components/AppBar';
 import Container from '@mui/material/Container';
 import FitnessCard from '@/components/fitness/FitnessCard';
-import { IProfile } from '@/models/Profile';
+import type { IProfile } from '@/models/Profile';
 import { redirect } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 

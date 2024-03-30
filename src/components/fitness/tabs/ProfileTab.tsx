@@ -3,15 +3,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import Typography from '@mui/material/Typography';
-import { useState, SyntheticEvent } from 'react';
-import { IProfile } from '@/models/Profile';
+import { useState } from 'react';
+import type { Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import type { IProfile } from '@/models/Profile';
 import { updateFitnessTracking } from '@/service/User';
 
 export default function ProfileTab(props: {
 	index: number;
 	value: number;
 	profile: IProfile;
-	handler: any;
+	handler: Dispatch<SetStateAction<boolean>>;
 }) {
 	const [tracking, setTracking] = useState(
 		props.profile.fitness_tracking || false

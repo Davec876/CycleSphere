@@ -2,7 +2,7 @@ import BaseTabPanel from './BaseTabPanel';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import { BarChart } from '@mui/x-charts';
-import { IProfile } from '@/models/Profile';
+import type { IProfile } from '@/models/Profile';
 
 export default function StatsTab(props: {
 	index: number;

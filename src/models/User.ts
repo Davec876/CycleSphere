@@ -32,7 +32,7 @@ const userSchema = new Schema<IUser>(
 		fitness_tracking: {
 			type: Boolean,
 			required: true,
-		}
+		},
 	},
 	{ timestamps: true }
 );

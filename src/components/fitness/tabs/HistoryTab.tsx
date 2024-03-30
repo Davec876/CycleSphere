@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { IProfile } from '@/models/Profile';
+import type { IProfile } from '@/models/Profile';
 import { getRoutesByAuthorId } from '@/service/Route';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
