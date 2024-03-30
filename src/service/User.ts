@@ -37,7 +37,7 @@ export async function getRouteHistory() {
 	return user.routeHistory;
 }
 
-export async function visitRoute(routeId: string, datetimeISO?: string) {
+export async function visitRoute(routeId: string, datetimeISO?: string | null) {
 	const session = await auth();
 	if (!session?.user?.id) {
 		throw new APIError('User is not logged in!', 401);

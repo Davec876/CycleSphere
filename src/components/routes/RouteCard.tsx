@@ -112,7 +112,7 @@ export default function RouteCard({
 						<FavoriteIcon />
 					</IconButton>
 				</Box>
-				<VisitRouteButton route={route} />
+				<VisitRouteButton routeId={route.id} />
 				<IconButton
 					href={`/routes/${route.id}?liked=${isLiked}`}
 					LinkComponent={Link}
