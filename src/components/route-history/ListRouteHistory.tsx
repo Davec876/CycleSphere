@@ -1,12 +1,12 @@
-import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { DateTime } from 'luxon';
 import RHECard from './RHECard';
+import type { CompleteRHE } from './RouteHistoryArea';
 
 export default function ListRouteHistory({
 	routeHistory,
 }: {
-	routeHistory: IRouteHistoryEntry[];
+	routeHistory: CompleteRHE[];
 }) {
 	// grouping inspired by https://stackoverflow.com/a/48084188 27-Mar-2024
 	const groupedRHEs = routeHistory.reduce((groupedRHEs, RHE) => {
@@ -24,7 +24,7 @@ export default function ListRouteHistory({
 		groupedRHEs.get(yearWeek)?.push(RHE);
 
 		return groupedRHEs;
-	}, new Map<string, IRouteHistoryEntry[]>());
+	}, new Map<string, CompleteRHE[]>());
 
 	const rhGroups: RHGroup[] = [];
 	groupedRHEs.forEach((rhGroup, yearWeek) => {
@@ -39,7 +39,7 @@ export default function ListRouteHistory({
 
 interface RHGroup {
 	yearWeekDatetime: DateTime;
-	routes: IRouteHistoryEntry[];
+	routes: CompleteRHE[];
 }
 
 function ListRHGroups({ rhGroups }: { rhGroups: RHGroup[] }) {

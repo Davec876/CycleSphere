@@ -1,7 +1,7 @@
-import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { Button, Dialog } from '@mui/material';
 import type { DateTime } from 'luxon';
 import { useState, type Dispatch, type SetStateAction } from 'react';
+import type { CompleteRHE } from './RouteHistoryArea';
 
 interface Filters {
 	name: string;
@@ -19,8 +19,8 @@ export default function FilterBtn({
 	routeHistory,
 	setFilteredRouteHistory,
 }: {
-	routeHistory: IRouteHistoryEntry[];
-	setFilteredRouteHistory: Dispatch<SetStateAction<IRouteHistoryEntry[]>>;
+	routeHistory: CompleteRHE[];
+	setFilteredRouteHistory: Dispatch<SetStateAction<CompleteRHE[]>>;
 }) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [filters, setFilters] = useState<Filters>(INITIAL_FILTER);

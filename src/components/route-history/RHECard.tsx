@@ -1,26 +1,12 @@
-import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
-import { getRoute } from '@/service/Route';
-import { Box, Typography, Skeleton, Link } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import NextLink from 'next/link';
-import { useState, useEffect, cache } from 'react';
+import type { CompleteRHE } from './RouteHistoryArea';
 
-export default function RHECard({ RHE }: { RHE: IRouteHistoryEntry }) {
-	const [routeName, setRouteName] = useState<string | null>(null);
-	const [invalidRoute, setInvalidRoute] = useState(true);
+export default function RHECard({ RHE }: { RHE: CompleteRHE }) {
+	const routeName = RHE.route?.title ?? 'Unknown Route';
 	const datetime = DateTime.fromISO(RHE.datetimeISO);
-
-	useEffect(() => {
-		const getRouteCached = cache(getRoute);
-		getRouteCached(RHE.routeId).then((route) => {
-			if (!route) {
-				setRouteName('Unknown Route');
-			} else {
-				setInvalidRoute(false);
-				setRouteName(route.title);
-			}
-		});
-	}, [RHE]);
+	const invalidRoute = !RHE.route;
 
 	const RHECardContent = (
 		<Box
@@ -42,7 +28,7 @@ export default function RHECard({ RHE }: { RHE: IRouteHistoryEntry }) {
 				component="h4"
 				color={invalidRoute ? 'red' : undefined}
 			>
-				{routeName ?? <Skeleton width={200} animation="wave" />}
+				{routeName}
 			</Typography>
 			<Typography textAlign="end" suppressHydrationWarning>
 				{datetime.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)}

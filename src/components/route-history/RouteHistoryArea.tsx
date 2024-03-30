@@ -1,15 +1,20 @@
 'use client';
 
+import type { IRoute } from '@/models/Route';
 import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { Box, Container, Typography } from '@mui/material';
 import { useState } from 'react';
-import ListRouteHistory from './ListRouteHistory';
 import FilterBtn from './FilterBtn';
+import ListRouteHistory from './ListRouteHistory';
+
+export interface CompleteRHE extends IRouteHistoryEntry {
+	route: IRoute | null;
+}
 
 export default function RouteHistoryArea({
 	routeHistory,
 }: {
-	routeHistory: IRouteHistoryEntry[];
+	routeHistory: CompleteRHE[];
 }) {
 	const [filteredRouteHistory, setFilteredRouteHistory] =
 		useState(routeHistory);

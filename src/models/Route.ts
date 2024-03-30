@@ -6,7 +6,7 @@ import authorSchema from './schemas/Author';
 mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
 
-interface IRoute {
+export interface IRoute {
 	id: string;
 	author: IAuthor;
 	title: string;
