@@ -11,14 +11,17 @@ export default function FitnessPage() {
 	const { data: session } = useSession();
 	if (session === undefined || session === null) redirect('/login');
 
-	return(
-	<>
-		<AppBar />
-		<main>
-			<Container maxWidth='md' sx={{ display: 'flex', justifyContent: 'center', paddingY: '4em' }}>
-				<FitnessCard profile={session.user as IProfile} />
-			</Container>
-		</main>
-	</>
+	return (
+		<>
+			<AppBar />
+			<main>
+				<Container
+					maxWidth="md"
+					sx={{ display: 'flex', justifyContent: 'center', paddingY: '4em' }}
+				>
+					<FitnessCard profile={session.user as IProfile} />
+				</Container>
+			</main>
+		</>
 	);
 }
