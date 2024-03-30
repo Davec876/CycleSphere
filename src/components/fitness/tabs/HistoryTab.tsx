@@ -18,9 +18,9 @@ export default function HistoryTab(props: {
 	profile: IProfile;
 }) {
 	const [filtered_list, setList] = useState([] as IRouteFlat[]);
-	const [routes, setRoutes] = useState([] as IRouteFlat[]);
+	const [routes, setRoutes] = useState(undefined as unknown as IRouteFlat[]);
 
-	if (routes?.length === 0)
+	if (!routes)
 		getRoutesByAuthorId(props.profile.id).then((data) => {
 			setRoutes(data);
 			setList(data);
@@ -30,7 +30,7 @@ export default function HistoryTab(props: {
 		<BaseTabPanel index={props.index} value={props.value}>
 			<Grid container sx={{ justifyContent: 'space-around' }}>
 				<Grid lg={8}>
-					<Typography variant="h5">{`${props.profile.name}'s Fitness History`}</Typography>
+					<Typography variant="h5">{`${props.profile.name}'s Activity History`}</Typography>
 				</Grid>
 
 				<Grid sm={4}>
