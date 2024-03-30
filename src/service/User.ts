@@ -2,7 +2,10 @@
 
 import { auth } from '@/components/auth/auth';
 import User from '@/models/User';
+import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { APIError } from '@/util/errors/APIError';
+import { randomUUID } from 'crypto';
+import { DateTime } from 'luxon';
 
 // This method currently only projects the name, if additonal field are required add them to the projection list.
 // it is best however, if we don't expose the hashed password here, as that is a property of the user model
@@ -32,4 +35,25 @@ export async function getRouteHistory() {
 		User.replaceOne({ id: session.user.id }, user);
 	}
 	return user.routeHistory;
+}
+
+export async function visitRoute(routeId: string, datetimeISO?: string) {
+	const session = await auth();
+	if (!session?.user?.id) {
+		throw new APIError('User is not logged in!', 401);
+	}
+
+	const newRHE: IRouteHistoryEntry = {
+		id: randomUUID(),
+		routeId,
+		datetimeISO: datetimeISO ?? DateTime.now().toISO(),
+	};
+
+	const updateRes = await User.updateOne(
+		{ id: session.user.id },
+		{ $push: { routeHistory: newRHE } }
+	);
+	if (updateRes.matchedCount < 1) {
+		throw new APIError('Route does not exist', 404);
+	}
 }
