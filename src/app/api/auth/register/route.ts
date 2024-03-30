@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 		const hashPassword = await bcrypt.hash(userData.password, 10);
 		userData.password = hashPassword;
 
-		const newUser = { ...userData, id: randomUUID() };
+		const newUser = { ...userData, id: randomUUID(), fitness_tracking: false };
 		await User.create(newUser);
 		return NextResponse.json({ message: 'User Created.' }, { status: 201 });
 	} catch (err) {
