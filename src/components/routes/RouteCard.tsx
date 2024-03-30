@@ -25,6 +25,7 @@ import {
 	unlikeRoute,
 } from '@/service/Route';
 import { getImageUrl } from '@/util/imageUploadUrl';
+import VisitRouteButton from './VisitRouteButton';
 
 export default function RouteCard({
 	route,
@@ -111,6 +112,7 @@ export default function RouteCard({
 						<FavoriteIcon />
 					</IconButton>
 				</Box>
+				<VisitRouteButton route={route} />
 				<IconButton
 					href={`/routes/${route.id}?liked=${isLiked}`}
 					LinkComponent={Link}
