@@ -12,20 +12,19 @@ import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
 import type { SyntheticEvent } from 'react';
 import type { IProfile } from '@/models/Profile';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getUser } from '@/service/User';
+import ActivitiesTab from './tabs/ActivitiesTab';
 
 export default function FitnessCard(props: { profile: IProfile }) {
 	const [tab, setTab] = useState(0);
-	const [tracking, setTracking] = useState(false);
+	const [tracking, setTracking] = useState(undefined as unknown as boolean);
 
-	useEffect(() => {
-		setTracking(props.profile.fitness_tracking);
-	}, [props.profile.fitness_tracking]);
-
-	getUser(props.profile.id).then((user) => {
-		props.profile.fitness_tracking = user?.fitness_tracking || false;
-	});
+	if (!tracking)
+		getUser(props.profile.id).then((user) => {
+			props.profile.fitness_tracking = user?.fitness_tracking || false;
+			setTracking(user?.fitness_tracking || false);
+		});
 
 	const changeTab = (event: SyntheticEvent, value: number) => {
 		event.preventDefault();
@@ -39,28 +38,19 @@ export default function FitnessCard(props: { profile: IProfile }) {
 				<Tabs value={tab} onChange={changeTab}>
 					<Tab label="Profile" id="tab-header-0" aria-controls="tabpanel-0" />
 					<Tab
-						label="Stats"
+						label="Activities"
 						id="tab-header-1"
 						aria-controls="tabpanel-1"
-						disabled={!tracking}
 					/>
-					<Tab
-						label="History"
-						id="tab-header-2"
-						aria-controls="tabpanel-2"
-						disabled={!tracking}
-					/>
+					<Tab label="Stats" id="tab-header-2" aria-controls="tabpanel-2" />
+					<Tab label="History" id="tab-header-3" aria-controls="tabpanel-3" />
 				</Tabs>
 			</Box>
 			<CardContent>
-				<ProfileTab
-					profile={props.profile}
-					value={tab}
-					index={0}
-					handler={setTracking}
-				/>
-				<StatsTab profile={props.profile} value={tab} index={1} />
-				<HistoryTab profile={props.profile} value={tab} index={2} />
+				<ProfileTab profile={props.profile} value={tab} index={0} />
+				<ActivitiesTab profile={props.profile} value={tab} index={1} />
+				<StatsTab profile={props.profile} value={tab} index={2} />
+				<HistoryTab profile={props.profile} value={tab} index={3} />
 			</CardContent>
 		</Card>
 	);

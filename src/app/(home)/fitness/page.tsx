@@ -11,7 +11,8 @@ import { useSession } from 'next-auth/react';
 
 export default function FitnessPage() {
 	const { data: session } = useSession();
-	if (session === undefined || session === null) redirect('/login');
+	if (session === undefined || session === null || !session.user)
+		redirect('/login');
 
 	return (
 		<>

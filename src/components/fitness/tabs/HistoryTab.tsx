@@ -30,17 +30,19 @@ export default function HistoryTab(props: {
 
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>
-			<Grid container sx={{ justifyContent: 'space-around' }}>
-				<Grid lg={8}>
-					<Typography variant="h5">{`${props.profile.name}'s Activity History`}</Typography>
+			<Grid container sx={{ justifyContent: 'space-between' }}>
+				<Grid lg={'auto'}>
+					<Typography variant="h5">Activity History</Typography>
 				</Grid>
 
-				<Grid sm={4}>
+				<Grid lg={5}>
 					{/* https://mui.com/material-ui/react-autocomplete/ */}
 					<Autocomplete
-						id="search-box"
+						id="history-search-box"
 						freeSolo
-						options={routes?.map((list: { title: string }) => list.title)}
+						disableClearable
+						sx={{ minWidth: '250px' }}
+						options={routes?.map((list: { title: string }) => list.title) || []}
 						renderInput={(params) => (
 							<TextField
 								{...params}
@@ -60,18 +62,29 @@ export default function HistoryTab(props: {
 				</Grid>
 			</Grid>
 
-			<List>
-				{filtered_list.map(
-					(route: { title: string; updatedAt: Date }, index) => (
-						<ListItem key={`item-${index}`}>
-							<ListItemText
-								primary={route.title}
-								secondary={formatDate(route.updatedAt)}
-							/>
-						</ListItem>
-					)
-				)}
-			</List>
+			{filtered_list.length > 0 ? (
+				<List>
+					{filtered_list.map(
+						(route: { title: string; updatedAt: Date }, index) => (
+							<ListItem key={`item-${index}`}>
+								<ListItemText
+									primary={route.title}
+									secondary={formatDate(route.updatedAt)}
+								/>
+							</ListItem>
+						)
+					)}
+				</List>
+			) : (
+				<Typography
+					variant="overline"
+					display={'block'}
+					textAlign={'center'}
+					marginTop={'2.5em'}
+				>
+					There are no activities in your history
+				</Typography>
+			)}
 		</BaseTabPanel>
 	);
 }

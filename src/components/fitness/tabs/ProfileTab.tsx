@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import type { Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { IProfile } from '@/models/Profile';
 import { updateFitnessTracking } from '@/service/User';
 
@@ -14,7 +14,6 @@ export default function ProfileTab(props: {
 	index: number;
 	value: number;
 	profile: IProfile;
-	handler: Dispatch<SetStateAction<boolean>>;
 }) {
 	const [tracking, setTracking] = useState(
 		props.profile.fitness_tracking || false
@@ -23,7 +22,6 @@ export default function ProfileTab(props: {
 	function changeTracking(e: SyntheticEvent) {
 		e.preventDefault();
 		updateFitnessTracking(props.profile.id, !tracking);
-		props.handler(!tracking);
 		setTracking(!tracking);
 	}
 

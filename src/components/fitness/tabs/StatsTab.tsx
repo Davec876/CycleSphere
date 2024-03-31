@@ -13,7 +13,7 @@ export default function StatsTab(props: {
 }) {
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>
-			<Typography variant="h5">{`${props.profile.name}'s Activity Statistics`}</Typography>
+			<Typography variant="h5">Activity Statistics</Typography>
 
 			<Grid
 				container
