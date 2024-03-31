@@ -1,3 +1,5 @@
+// Author: Kevin Orenday
+
 'use client';
 
 import AppBar from '@/components/AppBar';
