@@ -18,7 +18,7 @@ import ActivitiesTab from './tabs/ActivitiesTab';
 
 export default function FitnessCard(props: { profile: IProfile }) {
 	const [tab, setTab] = useState(0);
-	const [tracking, setTracking] = useState(undefined as unknown as boolean);
+	const [tracking, setTracking] = useState(null as unknown as boolean);
 
 	useEffect(() => {
 		if (!tracking)

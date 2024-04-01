@@ -20,7 +20,7 @@ export default function HistoryTab(props: {
 	profile: IProfile;
 }) {
 	const [filtered_list, setList] = useState([] as IRouteFlat[]);
-	const [routes, setRoutes] = useState(undefined as unknown as IRouteFlat[]);
+	const [routes, setRoutes] = useState(null as unknown as IRouteFlat[]);
 
 	// useEffect(() => {
 	// 	if (!routes)

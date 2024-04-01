@@ -24,9 +24,7 @@ export default function ActivitiesTab(props: {
 	profile: IProfile;
 }) {
 	const [filtered_list, setList] = useState([] as IActivity[]);
-	const [activities, setActivities] = useState(
-		undefined as unknown as IActivity[]
-	);
+	const [activities, setActivities] = useState(null as unknown as IActivity[]);
 
 	useEffect(() => {
 		if (!activities) {
