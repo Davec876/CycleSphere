@@ -5,19 +5,25 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import type { IProfile } from '@/models/Profile';
-import { updateFitnessTracking } from '@/service/User';
+import { getUser, updateFitnessTracking } from '@/service/User';
 
 export default function ProfileTab(props: {
 	index: number;
 	value: number;
 	profile: IProfile;
 }) {
-	const [tracking, setTracking] = useState(
-		props.profile.fitness_tracking || false
-	);
+	const [tracking, setTracking] = useState(null as unknown as boolean);
+
+	useEffect(() => {
+		if (!tracking)
+			getUser(props.profile.id).then((user) => {
+				setTracking(user?.fitness_tracking || false);
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function changeTracking(e: SyntheticEvent) {
 		e.preventDefault();
