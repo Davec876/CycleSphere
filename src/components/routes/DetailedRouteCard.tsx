@@ -69,7 +69,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				route: route,
 			})
 				.then(() => setIsAdded(true))
-				.catch(console.error);
+				.catch((error) => console.log(error));
 		} else redirect('/login');
 
 		handleSettingsMenuClose();
