@@ -15,6 +15,17 @@ export async function getActivity(id: string) {
 	return await Activity.findOne({ id }, { _id: 0, __v: 0 }).lean().exec();
 }
 
+export async function getActivityByRouteId(route_id: string) {
+	if (!route_id)
+		throw new APIError(
+			'Cannot retrieve activity with undefined route id.',
+			400
+		);
+	return await Activity.findOne({ 'route.id': route_id }, { _id: 0, __v: 0 })
+		.lean()
+		.exec();
+}
+
 export async function getActivitiesByUserId(id: string) {
 	if (!id)
 		throw new APIError('Cannot retrieve activity with undefined id.', 400);
@@ -31,14 +42,14 @@ export async function addActivity({
 }: {
 	name: string;
 	route: IRouteFlat;
-	mode: string;
-	duration: {
+	mode?: string;
+	duration?: {
 		hours: number;
 		minutes: number;
 		seconds: number;
 	};
-	completedOn: Date;
-	status: string;
+	completedOn?: Date;
+	status?: string;
 }) {
 	const session = await auth();
 
