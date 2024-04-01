@@ -16,7 +16,6 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { MoreVertSharp } from '@mui/icons-material';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import type { IRouteFlat } from '@/models/Route';
@@ -25,13 +24,9 @@ import { likeRoute, unlikeRoute } from '@/service/Route';
 import { getImageUrl } from '@/util/imageUploadUrl';
 import Map from './map/Map';
 import CommentSection from './comment/CommentSection';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import AddIcon from '@mui/icons-material/AddSharp';
-import ReportIcon from '@mui/icons-material/ReportSharp';
 import CheckIcon from '@mui/icons-material/CheckSharp';
+import Button from '@mui/material/Button';
 import { addActivity, getActivityByRouteId } from '@/service/Activity';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
@@ -39,7 +34,6 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
-	const [anchorEl, setAnchor] = useState(undefined as unknown as Element);
 	const [isAdded, setIsAdded] = useState(false);
 
 	useEffect(() => {
@@ -58,13 +52,6 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 		}
 	};
 
-	const handleSettingsClick = (event: SyntheticEvent) => {
-		event.preventDefault();
-		setAnchor(event.currentTarget);
-	};
-
-	const handleSettingsMenuClose = () => setAnchor(undefined!);
-
 	const handleAddToActivity = async (event: SyntheticEvent) => {
 		event.preventDefault();
 
@@ -76,8 +63,6 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 				.then(() => setIsAdded(true))
 				.catch((error) => console.log(error));
 		} else redirect('/login');
-
-		handleSettingsMenuClose();
 	};
 
 	return (
@@ -101,42 +86,23 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 						</IconButton>
 					}
 					action={
-						<IconButton onClick={handleSettingsClick} aria-label="settings">
-							<MoreVertSharp />
-						</IconButton>
+						session ? (
+							<Button
+								variant="outlined"
+								disabled={isAdded}
+								onClick={handleAddToActivity}
+								endIcon={isAdded ? <CheckIcon /> : <AddIcon />}
+								sx={{ marginTop: '1em', marginRight: '1em' }}
+							>
+								{isAdded ? 'Added' : 'Add to Activity List'}
+							</Button>
+						) : (
+							<Box></Box>
+						)
 					}
 					title={route.title}
 					subheader={formatDate(route.createdAt)}
 				/>
-				<Menu
-					id="settings-menu"
-					anchorEl={anchorEl}
-					open={Boolean(anchorEl)}
-					onClose={handleSettingsMenuClose}
-				>
-					{session ? (
-						<MenuItem onClick={handleAddToActivity} disabled={isAdded}>
-							<ListItemIcon>
-								{isAdded ? (
-									<CheckIcon fontSize="medium" />
-								) : (
-									<AddIcon fontSize="medium" />
-								)}
-							</ListItemIcon>
-							<ListItemText>
-								{isAdded ? 'Added to Activity List' : 'Add to Activity List'}
-							</ListItemText>
-						</MenuItem>
-					) : (
-						<Box></Box>
-					)}
-					<MenuItem onClick={handleSettingsMenuClose}>
-						<ListItemIcon>
-							<ReportIcon fontSize="medium" />
-						</ListItemIcon>
-						<ListItemText>Report Post</ListItemText>
-					</MenuItem>
-				</Menu>
 				<CardContent>
 					<Typography sx={{ mb: 2 }} variant="body1">
 						{route.body}
