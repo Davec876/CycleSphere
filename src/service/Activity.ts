@@ -7,7 +7,6 @@ import Activity from '@/models/Activity';
 import { APIError } from '@/util/errors/APIError';
 import { randomUUID } from 'crypto';
 import type { IActivityCreation } from '@/models/Activity';
-import type { IRouteFlat } from '@/models/Route';
 
 export async function getActivity(id: string) {
 	if (!id)
@@ -21,7 +20,7 @@ export async function getActivityByRouteId(route_id: string) {
 			'Cannot retrieve activity with undefined route id.',
 			400
 		);
-	return await Activity.findOne({ 'route.id': route_id }, { _id: 0, __v: 0 })
+	return await Activity.findOne({ routeId: route_id }, { _id: 0, __v: 0 })
 		.lean()
 		.exec();
 }
@@ -34,14 +33,14 @@ export async function getActivitiesByUserId(id: string) {
 
 export async function addActivity({
 	name,
-	route,
+	routeId,
 	mode,
 	duration,
 	completedOn,
 	status,
 }: {
 	name: string;
-	route: IRouteFlat;
+	routeId: string;
 	mode?: string;
 	duration?: {
 		hours: number;
@@ -57,13 +56,13 @@ export async function addActivity({
 		throw new APIError('User is not logged in!', 401);
 	}
 	if (!name) throw new APIError('Activity name does not exist!', 400);
-	if (!route) throw new APIError('Route does not exist!', 400);
+	if (!routeId) throw new APIError('Route ID does not exist!', 400);
 
 	await Activity.create({
 		id: randomUUID(),
 		userId: session.user.id,
+		routeId: routeId,
 		name: name,
-		route: route,
 		mode: mode || 'cycling',
 		duration: duration || { hours: 0, minutes: 0, seconds: 0 },
 		completedOn: completedOn || undefined,

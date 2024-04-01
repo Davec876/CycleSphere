@@ -1,8 +1,6 @@
 // Author: Kevin Orenday
 
 import mongoose, { Schema } from 'mongoose';
-import routeSchema from './schemas/Route';
-import type { IRoute } from './schemas/Route';
 
 mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
@@ -10,8 +8,8 @@ mongoose.Promise = global.Promise;
 export interface IActivity {
 	id: string;
 	userId: string;
+	routeId: string;
 	name: string;
-	route: IRoute;
 	mode?: string;
 	duration?: {
 		hours: number;
@@ -20,6 +18,8 @@ export interface IActivity {
 	};
 	completedOn?: Date;
 	status?: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 export interface IActivityCreation
@@ -35,12 +35,12 @@ const activitySchema = new Schema<IActivity>(
 			type: String,
 			required: true,
 		},
-		name: {
+		routeId: {
 			type: String,
 			required: true,
 		},
-		route: {
-			type: routeSchema,
+		name: {
+			type: String,
 			required: true,
 		},
 		mode: {
