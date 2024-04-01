@@ -66,7 +66,7 @@ export default function HistoryTab(props: {
 				<List>
 					{filtered_list.map(
 						(route: { title: string; updatedAt: Date }, index) => (
-							<ListItem key={`item-${index}`}>
+							<ListItem key={`history-item-${index}`}>
 								<ListItemText
 									primary={route.title}
 									secondary={formatDate(route.updatedAt)}

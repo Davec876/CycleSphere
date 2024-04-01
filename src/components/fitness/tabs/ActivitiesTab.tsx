@@ -1,10 +1,11 @@
 // Author: Kevin Orenday
 
 import { useState } from 'react';
-import type { IProfile } from '@/models/Profile';
-import BaseTabPanel from './BaseTabPanel';
-import type { IActivity } from '@/models/Activity';
+import { getActivitiesByUserId } from '@/service/Activity';
 import { formatDate } from '@/util/formatDate';
+import type { IProfile } from '@/models/Profile';
+import type { IActivity } from '@/models/Activity';
+import BaseTabPanel from './BaseTabPanel';
 import Grid from '@mui/material/Unstable_Grid2';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -12,7 +13,10 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { getActivitiesByUserId } from '@/service/Activity';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function ActivitiesTab(props: {
 	index: number;
@@ -79,7 +83,27 @@ export default function ActivitiesTab(props: {
 							activity: { route: { title: string; updatedAt: Date } },
 							index
 						) => (
-							<ListItem key={`item-${index}`}>
+							<ListItem
+								key={`activity-item-${index}`}
+								secondaryAction={
+									<ButtonGroup variant="outlined">
+										<Button
+											variant="outlined"
+											color="success"
+											startIcon={<CheckIcon />}
+										>
+											Complete
+										</Button>
+										<Button
+											variant="outlined"
+											color="error"
+											startIcon={<DeleteIcon />}
+										>
+											Delete
+										</Button>
+									</ButtonGroup>
+								}
+							>
 								<ListItemText
 									primary={activity.route.title}
 									secondary={formatDate(activity.route.updatedAt)}
