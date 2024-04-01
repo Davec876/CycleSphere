@@ -26,7 +26,10 @@ export default function ActivitiesTab(props: {
 
 	if (!activities) {
 		getActivitiesByUserId(props.profile.id)
-			.then((activities: IActivity[]) => setActivities(activities))
+			.then((activities: IActivity[]) => {
+				setList(activities);
+				setActivities(activities);
+			})
 			.catch(console.error);
 	}
 
