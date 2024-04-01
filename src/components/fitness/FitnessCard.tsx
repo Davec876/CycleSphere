@@ -12,7 +12,7 @@ import StatsTab from './tabs/StatsTab';
 import HistoryTab from './tabs/HistoryTab';
 import type { SyntheticEvent } from 'react';
 import type { IProfile } from '@/models/Profile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUser } from '@/service/User';
 import ActivitiesTab from './tabs/ActivitiesTab';
 
@@ -20,11 +20,14 @@ export default function FitnessCard(props: { profile: IProfile }) {
 	const [tab, setTab] = useState(0);
 	const [tracking, setTracking] = useState(undefined as unknown as boolean);
 
-	if (!tracking)
-		getUser(props.profile.id).then((user) => {
-			props.profile.fitness_tracking = user?.fitness_tracking || false;
-			setTracking(user?.fitness_tracking || false);
-		});
+	useEffect(() => {
+		if (!tracking)
+			getUser(props.profile.id).then((user) => {
+				props.profile.fitness_tracking = user?.fitness_tracking || false;
+				setTracking(user?.fitness_tracking || false);
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const changeTab = (event: SyntheticEvent, value: number) => {
 		event.preventDefault();

@@ -1,6 +1,6 @@
 // Author: Kevin Orenday
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BaseTabPanel from './BaseTabPanel';
 import Grid from '@mui/material/Unstable_Grid2';
 import List from '@mui/material/List';
@@ -22,11 +22,14 @@ export default function HistoryTab(props: {
 	const [filtered_list, setList] = useState([] as IRouteFlat[]);
 	const [routes, setRoutes] = useState(undefined as unknown as IRouteFlat[]);
 
-	if (!routes)
-		getRoutesByAuthorId(props.profile.id).then((data) => {
-			setRoutes(data);
-			setList(data);
-		});
+	// useEffect(() => {
+	// 	if (!routes)
+	// 		getRoutesByAuthorId(props.profile.id).then((data) => {
+	// 			setRoutes(data);
+	// 			setList(data);
+	// 		});
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
 
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>

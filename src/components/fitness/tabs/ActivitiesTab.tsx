@@ -1,6 +1,6 @@
 // Author: Kevin Orenday
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getActivitiesByUserId } from '@/service/Activity';
 import { formatDate } from '@/util/formatDate';
 import type { IProfile } from '@/models/Profile';
@@ -28,14 +28,17 @@ export default function ActivitiesTab(props: {
 		undefined as unknown as IActivity[]
 	);
 
-	if (!activities) {
-		getActivitiesByUserId(props.profile.id)
-			.then((activities: IActivity[]) => {
-				setList(activities);
-				setActivities(activities);
-			})
-			.catch(console.error);
-	}
+	useEffect(() => {
+		if (!activities) {
+			getActivitiesByUserId(props.profile.id)
+				.then((activities: IActivity[]) => {
+					setList(activities);
+					setActivities(activities);
+				})
+				.catch((error) => console.log(error));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>
@@ -51,11 +54,7 @@ export default function ActivitiesTab(props: {
 						freeSolo
 						disableClearable
 						sx={{ minWidth: '250px' }}
-						options={
-							activities?.map(
-								(activity: { route: { title: string } }) => activity.route.title
-							) || []
-						}
+						options={activities?.map((activity) => activity.name) || []}
 						renderInput={(params) => (
 							<TextField
 								{...params}
@@ -66,9 +65,9 @@ export default function ActivitiesTab(props: {
 						onInputChange={(event, value) => {
 							event.preventDefault();
 							const temp =
-								activities?.filter((activity: { route: { title: string } }) => {
+								activities?.filter((activity) => {
 									const regex = new RegExp(`.*${value}.*`, 'ig');
-									return activity?.route?.title?.match(regex)?.length;
+									return activity?.name?.match(regex)?.length;
 								}) || [];
 							setList(temp);
 						}}
@@ -78,39 +77,34 @@ export default function ActivitiesTab(props: {
 
 			{filtered_list.length > 0 ? (
 				<List>
-					{filtered_list.map(
-						(
-							activity: { route: { title: string; updatedAt: Date } },
-							index
-						) => (
-							<ListItem
-								key={`activity-item-${index}`}
-								secondaryAction={
-									<ButtonGroup variant="outlined">
-										<Button
-											variant="outlined"
-											color="success"
-											startIcon={<CheckIcon />}
-										>
-											Complete
-										</Button>
-										<Button
-											variant="outlined"
-											color="error"
-											startIcon={<DeleteIcon />}
-										>
-											Delete
-										</Button>
-									</ButtonGroup>
-								}
-							>
-								<ListItemText
-									primary={activity.route.title}
-									secondary={formatDate(activity.route.updatedAt)}
-								/>
-							</ListItem>
-						)
-					)}
+					{filtered_list.map((activity, index) => (
+						<ListItem
+							key={`activity-item-${index}`}
+							secondaryAction={
+								<ButtonGroup variant="outlined">
+									<Button
+										variant="outlined"
+										color="success"
+										startIcon={<CheckIcon />}
+									>
+										Complete
+									</Button>
+									<Button
+										variant="outlined"
+										color="error"
+										startIcon={<DeleteIcon />}
+									>
+										Delete
+									</Button>
+								</ButtonGroup>
+							}
+						>
+							<ListItemText
+								primary={activity.name}
+								secondary={formatDate(activity.createdAt)}
+							/>
+						</ListItem>
+					))}
 				</List>
 			) : (
 				<Typography

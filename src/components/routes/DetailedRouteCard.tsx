@@ -1,7 +1,7 @@
 'use client';
 
 import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -42,6 +42,11 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const [anchorEl, setAnchor] = useState(undefined as unknown as Element);
 	const [isAdded, setIsAdded] = useState(false);
 
+	useEffect(() => {
+		getActivityByRouteId(route.id).then((exist) => setIsAdded(Boolean(exist)));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
 			setIsLiked((prev) => !prev);
@@ -66,7 +71,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 		if (session && session.user) {
 			await addActivity({
 				name: route.title,
-				route: route,
+				routeId: route.id,
 			})
 				.then(() => setIsAdded(true))
 				.catch((error) => console.log(error));
@@ -74,8 +79,6 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 
 		handleSettingsMenuClose();
 	};
-
-	getActivityByRouteId(route.id).then((exist) => setIsAdded(Boolean(exist)));
 
 	return (
 		<Box
