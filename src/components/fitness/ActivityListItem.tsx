@@ -17,6 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
 import CheckIcon from '@mui/icons-material/CheckSharp';
 import DeleteIcon from '@mui/icons-material/DeleteSharp';
 import BikeIcon from '@mui/icons-material/DirectionsBike';
@@ -81,128 +82,130 @@ export default function ActivityListItem(props: {
 	};
 
 	return (
-		<ListItem
-			secondaryAction={
-				<ButtonGroup variant="outlined">
-					<Button
-						variant="outlined"
-						color="success"
-						startIcon={<CheckIcon />}
-						onClick={openFinishModal}
-						disabled={props.activity.status === 'finished'}
-					>
-						{props.activity.status === 'finished' ? 'Finished' : 'Finish'}
-					</Button>
-					<Button
-						variant="outlined"
-						color="error"
-						startIcon={<DeleteIcon />}
-						onClick={openDeleteModal}
-					>
-						Delete
-					</Button>
-				</ButtonGroup>
-			}
-		>
-			<ListItemAvatar>
-				<Avatar>
-					<BikeIcon />
-				</Avatar>
-			</ListItemAvatar>
-			<ListItemText
-				primary={props.activity.name}
-				secondary={formatDate(props.activity.createdAt)}
-			/>
-			<Dialog
-				open={openFinish}
-				onClose={handleFinishCancel}
-				PaperProps={{
-					component: 'form',
-					onSubmit: handleFinishSubmit,
-				}}
+		<Card variant="outlined" sx={{ marginY: '0.5em' }}>
+			<ListItem
+				secondaryAction={
+					<ButtonGroup variant="outlined">
+						<Button
+							variant="outlined"
+							color="success"
+							startIcon={<CheckIcon />}
+							onClick={openFinishModal}
+							disabled={props.activity.status === 'finished'}
+						>
+							{props.activity.status === 'finished' ? 'Finished' : 'Finish'}
+						</Button>
+						<Button
+							variant="outlined"
+							color="error"
+							startIcon={<DeleteIcon />}
+							onClick={openDeleteModal}
+						>
+							Delete
+						</Button>
+					</ButtonGroup>
+				}
 			>
-				<DialogTitle>Mark as Finished?</DialogTitle>
-				<DialogContent>
-					<Grid
-						container
-						spacing={1}
-						justifyContent={'space-between'}
-						alignItems={'center'}
-						paddingY={'2em'}
-					>
-						<Grid lg={5}>
-							<DialogContentText>Enter Activity Duration</DialogContentText>
-						</Grid>
+				<ListItemAvatar>
+					<Avatar>
+						<BikeIcon />
+					</Avatar>
+				</ListItemAvatar>
+				<ListItemText
+					primary={props.activity.name}
+					secondary={formatDate(props.activity.createdAt)}
+				/>
+				<Dialog
+					open={openFinish}
+					onClose={handleFinishCancel}
+					PaperProps={{
+						component: 'form',
+						onSubmit: handleFinishSubmit,
+					}}
+				>
+					<DialogTitle>Mark as Finished?</DialogTitle>
+					<DialogContent>
+						<Grid
+							container
+							spacing={1}
+							justifyContent={'space-between'}
+							alignItems={'center'}
+							paddingY={'2em'}
+						>
+							<Grid lg={5}>
+								<DialogContentText>Enter Activity Duration</DialogContentText>
+							</Grid>
 
-						<Grid container lg={7}>
-							<Grid lg={4}>
-								<TextField
-									required
-									name="hours"
-									label="hh"
-									type="number"
-									size="small"
-									InputProps={{
-										inputProps: { min: 0, max: 99, step: 1 },
-									}}
-								/>
-							</Grid>
-							<Grid lg={4}>
-								<TextField
-									required
-									name="minutes"
-									label="mm"
-									type="number"
-									size="small"
-									InputProps={{ inputProps: { min: 0, max: 59, step: 1 } }}
-								/>
-							</Grid>
-							<Grid lg={4}>
-								<TextField
-									required
-									name="seconds"
-									label="ss"
-									type="number"
-									size="small"
-									InputProps={{ inputProps: { min: 0, max: 59, step: 1 } }}
-								/>
+							<Grid container lg={7}>
+								<Grid lg={4}>
+									<TextField
+										required
+										name="hours"
+										label="hh"
+										type="number"
+										size="small"
+										InputProps={{
+											inputProps: { min: 0, max: 99, step: 1 },
+										}}
+									/>
+								</Grid>
+								<Grid lg={4}>
+									<TextField
+										required
+										name="minutes"
+										label="mm"
+										type="number"
+										size="small"
+										InputProps={{ inputProps: { min: 0, max: 59, step: 1 } }}
+									/>
+								</Grid>
+								<Grid lg={4}>
+									<TextField
+										required
+										name="seconds"
+										label="ss"
+										type="number"
+										size="small"
+										InputProps={{ inputProps: { min: 0, max: 59, step: 1 } }}
+									/>
+								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
-				</DialogContent>
-				<DialogActions>
-					<Button color={'error'} onClick={handleFinishCancel}>
-						Cancel
-					</Button>
-					<Button color="primary" type="submit">
-						Submit
-					</Button>
-				</DialogActions>
-			</Dialog>
+					</DialogContent>
+					<DialogActions>
+						<Button color={'error'} onClick={handleFinishCancel}>
+							Cancel
+						</Button>
+						<Button color="primary" type="submit">
+							Submit
+						</Button>
+					</DialogActions>
+				</Dialog>
 
-			<Dialog
-				open={openDelete}
-				onClose={handleDeleteCancel}
-				PaperProps={{
-					component: 'form',
-					onSubmit: handleDeleteSubmit,
-				}}
-			>
-				<DialogTitle>Delete Activity?</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						Are you sure you want to delete {props.activity.name}?
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button color="primary" onClick={handleDeleteCancel}>
-						Cancel
-					</Button>
-					<Button color="error" type="submit">
-						Delete
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</ListItem>
+				<Dialog
+					open={openDelete}
+					onClose={handleDeleteCancel}
+					PaperProps={{
+						component: 'form',
+						onSubmit: handleDeleteSubmit,
+					}}
+				>
+					<DialogTitle>Delete Activity?</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							Are you sure you want to delete {props.activity.name}?
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button color="primary" onClick={handleDeleteCancel}>
+							Cancel
+						</Button>
+						<Button color="error" type="submit">
+							Delete
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</ListItem>
+		</Card>
 	);
 }

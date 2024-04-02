@@ -11,6 +11,9 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ActivityListItem from '../ActivityListItem';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 
 export default function ActivitiesTab(props: {
 	index: number;
@@ -52,7 +55,17 @@ export default function ActivitiesTab(props: {
 							<TextField
 								{...params}
 								label="Search activity"
-								InputProps={{ ...params.InputProps, type: 'search' }}
+								InputProps={{
+									...params.InputProps,
+									type: 'search',
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton>
+												<SearchIcon />
+											</IconButton>
+										</InputAdornment>
+									),
+								}}
 							/>
 						)}
 						onInputChange={(event, value) => {

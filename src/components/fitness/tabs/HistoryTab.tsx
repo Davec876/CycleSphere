@@ -1,6 +1,6 @@
 // Author: Kevin Orenday
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BaseTabPanel from './BaseTabPanel';
 import Grid from '@mui/material/Unstable_Grid2';
 import List from '@mui/material/List';
@@ -10,9 +10,11 @@ import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import type { IProfile } from '@/models/Profile';
-import { getRoutesByAuthorId } from '@/service/Route';
 import type { IRouteFlat } from '@/models/Route';
 import { formatDate } from '@/util/formatDate';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 
 export default function HistoryTab(props: {
 	index: number;
@@ -50,7 +52,17 @@ export default function HistoryTab(props: {
 							<TextField
 								{...params}
 								label="Search history"
-								InputProps={{ ...params.InputProps, type: 'search' }}
+								InputProps={{
+									...params.InputProps,
+									type: 'search',
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton>
+												<SearchIcon />
+											</IconButton>
+										</InputAdornment>
+									),
+								}}
 							/>
 						)}
 						onInputChange={(event, value) => {
