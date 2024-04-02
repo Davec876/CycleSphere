@@ -16,7 +16,7 @@ export default function HistoryListItem(props: {
 }) {
 	return (
 		<ListItem>
-			<Accordion sx={{ width: '100%' }}>
+			<Accordion sx={{ width: '100%' }} defaultExpanded>
 				<AccordionSummary expandIcon={<ExpandMore />}>
 					{props.activity.name}
 				</AccordionSummary>
