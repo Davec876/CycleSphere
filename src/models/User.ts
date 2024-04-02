@@ -8,6 +8,7 @@ interface IUser {
 	name: string;
 	email: string;
 	password?: string;
+	fitness_tracking: boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -26,6 +27,10 @@ const userSchema = new Schema<IUser>(
 		},
 		password: {
 			type: String,
+			required: true,
+		},
+		fitness_tracking: {
+			type: Boolean,
 			required: true,
 		},
 	},

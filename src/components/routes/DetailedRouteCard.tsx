@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import type { SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Card from '@mui/material/Card';
@@ -23,6 +24,10 @@ import { likeRoute, unlikeRoute } from '@/service/Route';
 import { getImageUrl } from '@/util/imageUploadUrl';
 import Map from './map/Map';
 import CommentSection from './comment/CommentSection';
+import AddIcon from '@mui/icons-material/AddSharp';
+import CheckIcon from '@mui/icons-material/CheckSharp';
+import Button from '@mui/material/Button';
+import { addActivity, getActivityByRouteId } from '@/service/Activity';
 import type { ICommentFlat } from '@/models/schemas/Comment';
 import { PinProvider } from '../context/PinProvider';
 
@@ -31,7 +36,13 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
+	const [isAdded, setIsAdded] = useState(false);
 	const [comments, setComments] = useState<ICommentFlat[]>(route.comments);
+
+	useEffect(() => {
+		getActivityByRouteId(route.id).then((exist) => setIsAdded(Boolean(exist)));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const handleFavoriteClick = async () => {
 		if (session && session.user) {
@@ -42,6 +53,19 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 			}
 			await likeRoute(route.id);
 		}
+	};
+
+	const handleAddToActivity = async (event: SyntheticEvent) => {
+		event.preventDefault();
+
+		if (session && session.user) {
+			await addActivity({
+				name: route.title,
+				routeId: route.id,
+			})
+				.then(() => setIsAdded(true))
+				.catch((error) => console.log(error));
+		} else redirect('/login');
 	};
 
 	return (
@@ -64,6 +88,21 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 							>
 								<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
 							</IconButton>
+						}
+						action={
+							session ? (
+								<Button
+									variant="outlined"
+									disabled={isAdded}
+									onClick={handleAddToActivity}
+									endIcon={isAdded ? <CheckIcon /> : <AddIcon />}
+									sx={{ marginTop: '1em', marginRight: '1em' }}
+								>
+									{isAdded ? 'Added' : 'Add to Activity List'}
+								</Button>
+							) : (
+								<Box></Box>
+							)
 						}
 						title={route.title}
 						subheader={formatDate(route.createdAt)}

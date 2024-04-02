@@ -303,6 +303,121 @@ The code above was created by adapting the code in [VisGl-Example](https://githu
 - [VisGl-Example](https://github.com/visgl/react-google-maps/blob/main/examples/autocomplete/src/autocomplete-custom.tsx)'s code was used because we're incorportating vis.gl google maps, and therefore need this sample code boilerplate to get started
 - [VisGl-Example](https://github.com/visgl/react-google-maps/blob/main/examples/autocomplete/src/autocomplete-custom.tsx)'s code was modified by adapting it to our use case, by adapting it for routes.
 
+
+<!-- START OF KEVIN'S SOURCES -->
+
+### FitnessCard.tsx
+
+*Lines 36 - 62*
+
+```
+// https://mui.com/material-ui/react-tabs/
+<Box>
+	<Tabs value={tab} onChange={changeTab}>
+		<Tab label="Profile" id="tab-header-0" aria-controls="tabpanel-0" />
+		<Tab
+			label="Stats"
+			id="tab-header-1"
+			aria-controls="tabpanel-1"
+			disabled={!tracking}
+		/>
+		<Tab
+			label="History"
+			id="tab-header-2"
+			aria-controls="tabpanel-2"
+			disabled={!tracking}
+		/>
+	</Tabs>
+</Box>
+<CardContent>
+	<ProfileTab
+		profile={props.profile}
+		value={tab}
+		index={0}
+		handler={setTracking}
+	/>
+	<StatsTab profile={props.profile} value={tab} index={1} />
+	<HistoryTab profile={props.profile} value={tab} index={2} />
+</CardContent>
+```
+
+The code above was created by adapting the code in [React Tabs Example](https://mui.com/material-ui/react-tabs/).
+
+- The code in [React Tabs Example](https://mui.com/material-ui/react-tabs/) was implemented by copying the Introduction example code.
+- [React Tabs Example](https://mui.com/material-ui/react-tabs/)'s code was used because we're incorportating a card-based panels with navigation tabs according to the design from Assignment 2, and therefore need this sample code boilerplate to get started.
+
+### StatsTab.tsx
+
+*Lines 26 - 47*
+
+```
+// https://mui.com/x/react-charts/bars/
+<BarChart
+	height={350}
+	yAxis={[
+		{
+			label: 'Distance Cycled (km)',
+		},
+	]}
+	xAxis={[
+		{
+			label: 'Day of the Week',
+			dataKey: 'day',
+			scaleType: 'band',
+		},
+	]}
+	dataset={sample_data}
+	series={[
+		{
+			dataKey: 'distance',
+			valueFormatter: chartOneFormatter,
+		},
+	]}
+></BarChart>
+```
+
+The code above was created by adapting the code in [React Bar Charts (Tick placement example)](https://mui.com/x/react-charts/bars/).
+
+- The code in [React Bar Charts (Tick placement example)](https://mui.com/x/react-charts/bars/) was implemented by copying the Tick placement example code.
+- [React Bar Charts (Tick placement example)](https://mui.com/x/react-charts/bars/)'s code was used because we're incorportating a chart, which utilizes Material UI X's chart API, that will display user's data on the panel, and therefore need this sample code boilerplate to get started.
+
+### HistoryTab.tsx
+
+*Lines 38-57*
+
+```
+// https://mui.com/material-ui/react-autocomplete/
+<Autocomplete
+	id="search-box"
+	freeSolo
+	options={routes?.map((list: { title: string }) => list.title)}
+	renderInput={(params) => (
+		<TextField
+			{...params}
+			label="Search history"
+			InputProps={{ ...params.InputProps, type: 'search' }}
+		/>
+	)}
+	onInputChange={(event, value) => {
+		event.preventDefault();
+		const temp = routes.filter((route: { title: string }) => {
+			const regex = new RegExp(`.*${value}.*`, 'ig');
+			return route?.title?.match(regex)?.length;
+		});
+		setList(temp);
+	}}
+/>
+```
+
+The code above was created by adapting the code in [React Autocomplete Component Example](https://mui.com/material-ui/react-autocomplete/).
+
+- The code in [React Autocomplete Component Example](https://mui.com/material-ui/react-autocomplete/) was implemented by copying the Free solo (search input) example code.
+- [React Autocomplete Component Example](https://mui.com/material-ui/react-autocomplete/)'s code was used because we're incorportating a search box that has suggestions based on what the input is and what the available items are, and therefore need this sample code boilerplate to get started.
+
+<!-- END OF KEVIN'S SOURCES -->
+
+
+
 <!-- Uncomment this section (parts of it or the entire thing) if we need to cite anything
 
 ## Artificial Intelligence Tools Used
