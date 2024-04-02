@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { formatDuration } from './formatDuration';
 
 // utility function to get ordinal suffix
 function getOrdinal(day: number) {
@@ -22,4 +23,11 @@ export function formatDate(date: Date) {
 	const parsedYear = dateTime.toFormat('yyyy');
 
 	return `${parsedMonth} ${parsedDay}, ${parsedYear}`;
+}
+
+export function formatTime(date: Date) {
+	const dateTime = DateTime.fromJSDate(date);
+	const { hour, minute, second } = dateTime;
+
+	return formatDuration({ hours: hour, minutes: minute, seconds: second });
 }
