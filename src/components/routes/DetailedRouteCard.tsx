@@ -28,6 +28,8 @@ import AddIcon from '@mui/icons-material/AddSharp';
 import CheckIcon from '@mui/icons-material/CheckSharp';
 import Button from '@mui/material/Button';
 import { addActivity, getActivityByRouteId } from '@/service/Activity';
+import type { ICommentFlat } from '@/models/schemas/Comment';
+import { PinProvider } from '../context/PinProvider';
 
 export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const { data: session } = useSession();
@@ -35,6 +37,7 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	const searchParams = useSearchParams();
 	const [isLiked, setIsLiked] = useState(searchParams.get('liked') === 'true');
 	const [isAdded, setIsAdded] = useState(false);
+	const [comments, setComments] = useState<ICommentFlat[]>(route.comments);
 
 	useEffect(() => {
 		getActivityByRouteId(route.id).then((exist) => setIsAdded(Boolean(exist)));
@@ -66,95 +69,97 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 	};
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				width: ['100%', '75%', '50%'],
-				gap: 1,
-			}}
-		>
-			<Card>
-				<CardHeader
-					avatar={
-						<IconButton
-							href={`/profile/${route.author.id}`}
-							LinkComponent={Link}
-							aria-label="go to author's profile"
-						>
-							<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
-						</IconButton>
-					}
-					action={
-						session ? (
-							<Button
-								variant="outlined"
-								disabled={isAdded}
-								onClick={handleAddToActivity}
-								endIcon={isAdded ? <CheckIcon /> : <AddIcon />}
-								sx={{ marginTop: '1em', marginRight: '1em' }}
+		<PinProvider>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					width: ['100%', '75%', '50%'],
+					gap: 1,
+				}}
+			>
+				<Card>
+					<CardHeader
+						avatar={
+							<IconButton
+								href={`/profile/${route.author.id}`}
+								LinkComponent={Link}
+								aria-label="go to author's profile"
 							>
-								{isAdded ? 'Added' : 'Add to Activity List'}
-							</Button>
-						) : (
-							<Box></Box>
-						)
-					}
-					title={route.title}
-					subheader={formatDate(route.createdAt)}
-				/>
-				<CardContent>
-					<Typography sx={{ mb: 2 }} variant="body1">
-						{route.body}
-					</Typography>
-					{route.imageId && (
-						<CardMedia
-							component="img"
-							image={getImageUrl(route.imageId)}
-							alt={`Image of ${route.title}`}
-						/>
-					)}
-					<Map
-						location={route.location}
-						selectedPoints={route.selectedPoints}
-						distance={route.distance}
+								<Avatar sx={{ bgcolor: red[500], color: 'white' }} />
+							</IconButton>
+						}
+						action={
+							session ? (
+								<Button
+									variant="outlined"
+									disabled={isAdded}
+									onClick={handleAddToActivity}
+									endIcon={isAdded ? <CheckIcon /> : <AddIcon />}
+									sx={{ marginTop: '1em', marginRight: '1em' }}
+								>
+									{isAdded ? 'Added' : 'Add to Activity List'}
+								</Button>
+							) : (
+								<Box></Box>
+							)
+						}
+						title={route.title}
+						subheader={formatDate(route.createdAt)}
 					/>
-					<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-						<Typography variant="subtitle2" sx={{ mr: 1 }}>
-							Difficulty:
+					<CardContent>
+						<Typography sx={{ mb: 2 }} variant="body1">
+							{route.body}
 						</Typography>
-						<Rating
-							name="difficulty-rating"
-							value={route.difficulty}
-							precision={0.5}
-							readOnly
-						/>
-					</Box>
-				</CardContent>
-				<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
-					<IconButton
-						aria-label="go back to home"
-						onClick={() => router.back()}
-					>
-						<ArrowBackIcon />
-					</IconButton>
-					<Box sx={{ display: 'flex', alignItems: 'center' }}>
-						{route.likedByUserIds.length > 0 && (
-							<Typography variant="body1">
-								{route.likedByUserIds.length}
-							</Typography>
+						{route.imageId && (
+							<CardMedia
+								component="img"
+								image={getImageUrl(route.imageId)}
+								alt={`Image of ${route.title}`}
+							/>
 						)}
+						<Map
+							location={route.location}
+							selectedPoints={route.selectedPoints}
+							distance={route.distance}
+						/>
+						<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+							<Typography variant="subtitle2" sx={{ mr: 1 }}>
+								Difficulty:
+							</Typography>
+							<Rating
+								name="difficulty-rating"
+								value={route.difficulty}
+								precision={0.5}
+								readOnly
+							/>
+						</Box>
+					</CardContent>
+					<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
 						<IconButton
-							aria-label="add to favorites"
-							onClick={handleFavoriteClick}
-							sx={{ color: isLiked ? red[500] : 'inherit' }}
+							aria-label="go back to home"
+							onClick={() => router.back()}
 						>
-							<FavoriteIcon />
+							<ArrowBackIcon />
 						</IconButton>
-					</Box>
-				</CardActions>
-			</Card>
-			<CommentSection routeId={route.id} initialComments={route.comments} />
-		</Box>
+						<Box sx={{ display: 'flex', alignItems: 'center' }}>
+							{route.likedByUserIds.length > 0 && (
+								<Typography variant="body1">
+									{route.likedByUserIds.length}
+								</Typography>
+							)}
+							<IconButton
+								aria-label="add to favorites"
+								onClick={handleFavoriteClick}
+								sx={{ color: isLiked ? red[500] : 'inherit' }}
+							>
+								<FavoriteIcon />
+							</IconButton>
+						</Box>
+					</CardActions>
+				</Card>
+				<CommentSection routeId={route.id} initialComments={route.comments} />
+			</Box>
+		</PinProvider>
 	);
 }
