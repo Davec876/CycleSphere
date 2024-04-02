@@ -119,9 +119,10 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 							/>
 						)}
 						<Map
-							location={route.location}
+							routeLocation={route.location}
 							selectedPoints={route.selectedPoints}
 							distance={route.distance}
+							comments={comments}
 						/>
 						<Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
 							<Typography variant="subtitle2" sx={{ mr: 1 }}>
@@ -134,31 +135,38 @@ export default function DetailedRouteCard({ route }: { route: IRouteFlat }) {
 								readOnly
 							/>
 						</Box>
-					</CardContent>
-					<CardActions disableSpacing sx={{ justifyContent: 'space-between' }}>
-						<IconButton
-							aria-label="go back to home"
-							onClick={() => router.back()}
+						<CardActions
+							disableSpacing
+							sx={{ justifyContent: 'space-between' }}
 						>
-							<ArrowBackIcon />
-						</IconButton>
-						<Box sx={{ display: 'flex', alignItems: 'center' }}>
-							{route.likedByUserIds.length > 0 && (
-								<Typography variant="body1">
-									{route.likedByUserIds.length}
-								</Typography>
-							)}
 							<IconButton
-								aria-label="add to favorites"
-								onClick={handleFavoriteClick}
-								sx={{ color: isLiked ? red[500] : 'inherit' }}
+								aria-label="go back to home"
+								onClick={() => router.back()}
 							>
-								<FavoriteIcon />
+								<ArrowBackIcon />
 							</IconButton>
-						</Box>
-					</CardActions>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								{route.likedByUserIds.length > 0 && (
+									<Typography variant="body1">
+										{route.likedByUserIds.length}
+									</Typography>
+								)}
+								<IconButton
+									aria-label="add to favorites"
+									onClick={handleFavoriteClick}
+									sx={{ color: isLiked ? red[500] : 'inherit' }}
+								>
+									<FavoriteIcon />
+								</IconButton>
+							</Box>
+						</CardActions>
+					</CardContent>
 				</Card>
-				<CommentSection routeId={route.id} initialComments={route.comments} />
+				<CommentSection
+					routeId={route.id}
+					comments={comments}
+					setComments={setComments}
+				/>
 			</Box>
 		</PinProvider>
 	);

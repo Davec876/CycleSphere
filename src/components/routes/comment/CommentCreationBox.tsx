@@ -1,10 +1,14 @@
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { usePin } from '@/components/context/PinProvider';
 import { type Dispatch, type SetStateAction, useState } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
+import Alert from '@mui/material/Alert';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import FormControl from '@mui/material/FormControl';
+import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -26,6 +30,10 @@ export default function CommentCreationBox({
 		body: string;
 	}
 
+	const router = useRouter();
+	const { isPinAttached, setIsPinAttached, pinLocation, setPinLocation } =
+		usePin();
+
 	const { data: session, status: sessionStatus } = useSession();
 	const [formData, setFormData] = useState({} as CommentForm);
 	const [uploadedImageId, setUploadedImageId] = useState('');
@@ -44,9 +52,21 @@ export default function CommentCreationBox({
 		}));
 	};
 
-	const clearFormData = () => {
+	const clearData = () => {
 		formData.body = '';
 		setUploadedImageId('');
+		setPinLocation(null);
+		setIsPinAttached(false);
+	};
+
+	const handlePinAttach = () => {
+		setIsPinAttached(true);
+		router.replace('#map');
+	};
+
+	const handlePinDetach = () => {
+		setIsPinAttached(false);
+		setPinLocation(null);
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,11 +75,10 @@ export default function CommentCreationBox({
 			id: routeId,
 			body: formData.body,
 			imageId: uploadedImageId,
-			// TODO: Pipe in the selectedPinLocation from a dropped pin on detailed route map
-			// selectedPinLocation: selectedPinLocation,
+			selectedPinLocation: pinLocation?.location,
 		});
 		await refreshComments();
-		clearFormData();
+		clearData();
 	};
 
 	return (
@@ -73,7 +92,7 @@ export default function CommentCreationBox({
 						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 							<Button
 								href="/login"
-								LinkComponent={Link}
+								LinkComponent={NextLink}
 								color="primary"
 								variant="outlined"
 								sx={{ width: '20%' }}
@@ -131,13 +150,28 @@ export default function CommentCreationBox({
 												justifyContent: 'space-between',
 											}}
 										>
-											<Button variant="contained" startIcon={<PinDropIcon />}>
+											<Button
+												variant="contained"
+												startIcon={<PinDropIcon />}
+												disabled={isPinAttached}
+												onClick={handlePinAttach}
+											>
 												Attach pin
 											</Button>
 											<Button variant="contained" type="submit">
 												Submit
 											</Button>
 										</Box>
+										{isPinAttached && (
+											<Alert severity="success">
+												Pin attached. Drag it on the map above to change its
+												location. Or{' '}
+												<Link component="button" onClick={handlePinDetach}>
+													remove the pin
+												</Link>
+												.
+											</Alert>
+										)}
 									</Box>
 								</CardActions>
 							</Box>

@@ -2,6 +2,13 @@ import { type FlattenMaps, Schema } from 'mongoose';
 import authorSchema, { type IAuthor } from './Author';
 import commentReplySchema, { type ICommentReply } from './CommentReply';
 
+export interface IPin {
+	location: {
+		lat: number;
+		lng: number;
+	};
+}
+
 export interface IComment {
 	id: string;
 	author: IAuthor;
@@ -9,12 +16,7 @@ export interface IComment {
 	likedByUserIds: string[];
 	replies: ICommentReply[];
 	imageId?: string;
-	pin?: {
-		location: {
-			lat: number;
-			lng: number;
-		};
-	};
+	pin?: IPin;
 	createdAt: Date;
 	updatedAt: Date;
 }
