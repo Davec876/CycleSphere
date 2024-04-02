@@ -16,14 +16,22 @@ export interface IActivity {
 		minutes: number;
 		seconds: number;
 	};
+	historyLogs?: {
+		log: string;
+		createdAt: Date;
+		updatedAt: Date;
+	}[];
 	completedOn?: Date;
 	status?: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
+interface IActivityHistoryLogCreation
+	extends Omit<IActivity['historyLogs'], 'createdAt' | 'updatedAt'> {}
+
 export interface IActivityCreation
-	extends Omit<IActivity, 'createdAt' | 'updatedAt'> {}
+	extends Omit<IActivityHistoryLogCreation, 'createdAt' | 'updatedAt'> {}
 
 const activitySchema = new Schema<IActivity>(
 	{
@@ -60,6 +68,17 @@ const activitySchema = new Schema<IActivity>(
 				required: true,
 			},
 		},
+		historyLogs: [
+			new Schema(
+				{
+					log: {
+						type: String,
+						required: true,
+					},
+				},
+				{ _id: false, timestamps: true }
+			),
+		],
 		completedOn: {
 			type: Date,
 		},

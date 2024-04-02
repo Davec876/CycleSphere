@@ -7,6 +7,7 @@ import Activity from '@/models/Activity';
 import { APIError } from '@/util/errors/APIError';
 import { randomUUID } from 'crypto';
 import type { IActivityCreation } from '@/models/Activity';
+import { formatDuration } from '@/util/formatDuration';
 
 export async function getActivity(id: string) {
 	if (!id)
@@ -65,6 +66,7 @@ export async function addActivity({
 		name: name,
 		mode: mode || 'cycling',
 		duration: duration || { hours: 0, minutes: 0, seconds: 0 },
+		historyLogs: [{ log: 'Activity added to profile' }],
 		completedOn: completedOn || undefined,
 		status: status || 'unfinished',
 	} satisfies IActivityCreation);
@@ -85,7 +87,14 @@ export async function updateActivityDuration({
 	if (!duration) throw new APIError('Duration does not exist!', 400);
 	await Activity.findOneAndUpdate({ id: id }, { duration: duration })
 		.lean()
-		.exec();
+		.exec()
+		.then(
+			async () =>
+				await addHistoryLog(
+					id,
+					`Activity duration updated to ${formatDuration(duration)}`
+				)
+		);
 }
 
 export async function finishActivity(id: string) {
@@ -95,7 +104,8 @@ export async function finishActivity(id: string) {
 		{ status: 'finished', completedOn: new Date() }
 	)
 		.lean()
-		.exec();
+		.exec()
+		.then(async () => await addHistoryLog(id, 'Activity has been finished'));
 }
 
 export async function updateActivityStatus({
@@ -107,10 +117,36 @@ export async function updateActivityStatus({
 }) {
 	if (!id) throw new APIError('Cannot update activity with undefined id.', 400);
 	if (!status) throw new APIError('Status does not exist!', 400);
-	await Activity.findOneAndUpdate({ id: id }, { status: status }).lean().exec();
+	await Activity.findOneAndUpdate({ id: id }, { status: status })
+		.lean()
+		.exec()
+		.then(
+			async () =>
+				await addHistoryLog(
+					id,
+					`Activity status updated to ${status.toLocaleLowerCase()}`
+				)
+		);
 }
 
 export async function deleteActivity(id: string) {
 	if (!id) throw new APIError('Cannot delete activity with undefined id.', 400);
 	await Activity.deleteOne({ id: id }).lean().exec();
+}
+
+async function addHistoryLog(id: string, log: string) {
+	if (!id)
+		throw new APIError(
+			'Cannot add history log of activity with undefined id.',
+			400
+		);
+	if (!log)
+		throw new APIError(
+			'Cannot add history log of activity with undefined log.',
+			400
+		);
+
+	await Activity.updateOne({ id: id }, { $push: { historyLogs: { log: log } } })
+		.lean()
+		.exec();
 }
