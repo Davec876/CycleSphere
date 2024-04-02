@@ -66,7 +66,7 @@ export async function addActivity({
 		mode: mode || 'cycling',
 		duration: duration || { hours: 0, minutes: 0, seconds: 0 },
 		completedOn: completedOn || undefined,
-		status: status || 'incomplete',
+		status: status || 'unfinished',
 	} satisfies IActivityCreation);
 }
 
@@ -88,10 +88,12 @@ export async function updateActivityDuration({
 		.exec();
 }
 
-export async function completeActivity(id: string) {
-	if (!id)
-		throw new APIError('Cannot complete activity with undefined id', 400);
-	await Activity.findOneAndUpdate({ id: id }, { completedOn: new Date() })
+export async function finishActivity(id: string) {
+	if (!id) throw new APIError('Cannot finish activity with undefined id', 400);
+	await Activity.findOneAndUpdate(
+		{ id: id },
+		{ status: 'finished', completedOn: new Date() }
+	)
 		.lean()
 		.exec();
 }
@@ -106,4 +108,9 @@ export async function updateActivityStatus({
 	if (!id) throw new APIError('Cannot update activity with undefined id.', 400);
 	if (!status) throw new APIError('Status does not exist!', 400);
 	await Activity.findOneAndUpdate({ id: id }, { status: status }).lean().exec();
+}
+
+export async function deleteActivity(id: string) {
+	if (!id) throw new APIError('Cannot delete activity with undefined id.', 400);
+	await Activity.deleteOne({ id: id }).lean().exec();
 }
