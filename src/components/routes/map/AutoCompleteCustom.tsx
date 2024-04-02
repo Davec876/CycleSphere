@@ -6,9 +6,13 @@ import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
+import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/material/Box';
 
 interface Props {
 	onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
@@ -97,32 +101,63 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 		[onPlaceSelect, places, placesService, sessionToken]
 	);
 
+	const clearInput = () => {
+		setInputValue('');
+		setPredictionResults([]);
+	};
+
 	return (
-		<Card
-			variant="outlined"
+		<Box
 			sx={{
-				maxWidth: 230,
-				// Black background, 50% opacity
-				bgcolor: 'rgba(0, 0, 0, 0.5)',
+				width: '100%',
+				display: 'flex',
+				justifyContent: 'flex-start',
+				padding: 1,
 			}}
 		>
-			<CardContent
+			<Box
 				sx={{
-					maxHeight: predictionResults.length === 0 ? 56 : 'none',
-					padding: predictionResults.length === 0 ? 0 : 1,
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'flex-start',
+					padding: 1,
+					boxSizing: 'border-box',
+					position: 'relative',
 				}}
 			>
 				<TextField
-					sx={{ maxHeight: predictionResults.length === 0 ? 'none' : 56 }}
+					fullWidth
+					variant="outlined"
 					placeholder="Halifax, NS, Canada"
 					value={inputValue}
 					onChange={onInputChange}
+					InputProps={{
+						endAdornment: inputValue ? (
+							<IconButton onClick={clearInput} edge="end">
+								<ClearIcon />
+							</IconButton>
+						) : undefined,
+					}}
+					sx={{ width: 930 }}
 				/>
 				{predictionResults.length > 0 && (
-					<List>
+					<List
+						sx={{
+							position: 'absolute',
+							top: '100%',
+							zIndex: 1,
+							width: '100%',
+							maxHeight: 150,
+							overflow: 'auto',
+							mt: 0.5,
+							border: '1px solid',
+							borderRadius: '4px',
+							bgcolor: 'background.paper',
+							boxShadow: '0 4px 6px',
+						}}
+					>
 						{predictionResults.map(({ place_id, description }) => (
 							<ListItemButton
-								sx={{ px: 0 }}
 								key={place_id}
 								onClick={() => handleSuggestionClick(place_id)}
 							>
@@ -131,7 +166,7 @@ export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
 						))}
 					</List>
 				)}
-			</CardContent>
-		</Card>
+			</Box>
+		</Box>
 	);
 };

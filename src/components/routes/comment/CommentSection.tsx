@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -9,13 +9,13 @@ import CommentCreationBox from './CommentCreationBox';
 
 export default function CommentSection({
 	routeId,
-	initialComments,
+	comments,
+	setComments,
 }: {
 	routeId: string;
-	initialComments: ICommentFlat[];
+	comments: ICommentFlat[];
+	setComments: Dispatch<SetStateAction<ICommentFlat[]>>;
 }) {
-	const [comments, setComments] = useState(initialComments);
-
 	return (
 		<Card>
 			<CardContent>
@@ -23,6 +23,7 @@ export default function CommentSection({
 					Comment section
 				</Typography>
 				<CommentCreationBox routeId={routeId} setComments={setComments} />
+
 				{comments?.length > 0 && (
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 						{comments.map((comment) => {
