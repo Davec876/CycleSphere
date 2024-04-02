@@ -1,37 +1,41 @@
 // Author: Kevin Orenday
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getActivitiesByUserId } from '@/service/Activity';
+import type { IProfile } from '@/models/Profile';
+import type { IActivity } from '@/models/Activity';
 import BaseTabPanel from './BaseTabPanel';
 import Grid from '@mui/material/Unstable_Grid2';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import type { IProfile } from '@/models/Profile';
-import type { IRouteFlat } from '@/models/Route';
-import { formatDate } from '@/util/formatDate';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/SearchSharp';
+import Card from '@mui/material/Card';
+import HistoryListItem from '../HistoryListItem';
 
 export default function HistoryTab(props: {
 	index: number;
 	value: number;
 	profile: IProfile;
 }) {
-	const [filtered_list, setList] = useState([] as IRouteFlat[]);
-	const [routes, setRoutes] = useState(null as unknown as IRouteFlat[]);
+	const [filtered_list, setList] = useState([] as IActivity[]);
+	const [activities, setActivities] = useState(null as unknown as IActivity[]);
+	const [reload, setReload] = useState(false);
 
-	// useEffect(() => {
-	// 	if (!routes)
-	// 		getRoutesByAuthorId(props.profile.id).then((data) => {
-	// 			setRoutes(data);
-	// 			setList(data);
-	// 		});
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, []);
+	useEffect(() => {
+		getActivitiesByUserId(props.profile.id)
+			.then((activities: IActivity[]) => {
+				setList(activities);
+				setActivities(activities);
+			})
+			.catch((error) => console.log(error));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [reload]);
+
+	const forceReload = () => setReload(!reload);
 
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>
@@ -43,11 +47,11 @@ export default function HistoryTab(props: {
 				<Grid lg={5}>
 					{/* https://mui.com/material-ui/react-autocomplete/ */}
 					<Autocomplete
-						id="history-search-box"
+						id="activities-search-box"
 						freeSolo
 						disableClearable
 						sx={{ minWidth: '250px' }}
-						options={routes?.map((list: { title: string }) => list.title) || []}
+						options={activities?.map((activity) => activity.name) || []}
 						renderInput={(params) => (
 							<TextField
 								{...params}
@@ -67,10 +71,11 @@ export default function HistoryTab(props: {
 						)}
 						onInputChange={(event, value) => {
 							event.preventDefault();
-							const temp = routes.filter((route: { title: string }) => {
-								const regex = new RegExp(`.*${value}.*`, 'ig');
-								return route?.title?.match(regex)?.length;
-							});
+							const temp =
+								activities?.filter((activity) => {
+									const regex = new RegExp(`.*${value}.*`, 'ig');
+									return activity?.name?.match(regex)?.length;
+								}) || [];
 							setList(temp);
 						}}
 					/>
@@ -78,18 +83,16 @@ export default function HistoryTab(props: {
 			</Grid>
 
 			{filtered_list.length > 0 ? (
-				<List>
-					{filtered_list.map(
-						(route: { title: string; updatedAt: Date }, index) => (
-							<ListItem key={`history-item-${index}`}>
-								<ListItemText
-									primary={route.title}
-									secondary={formatDate(route.updatedAt)}
-								/>
-							</ListItem>
-						)
-					)}
-				</List>
+				<Card variant="outlined" sx={{ marginTop: '1.5em' }}>
+					<List>
+						{filtered_list.map((activity, index) => (
+							<HistoryListItem
+								activity={activity}
+								key={`history-item-${index}`}
+							/>
+						))}
+					</List>
+				</Card>
 			) : (
 				<Typography
 					variant="overline"
@@ -97,7 +100,7 @@ export default function HistoryTab(props: {
 					textAlign={'center'}
 					marginTop={'2.5em'}
 				>
-					There are no activities in your history
+					You currently have no history of activities
 				</Typography>
 			)}
 		</BaseTabPanel>
