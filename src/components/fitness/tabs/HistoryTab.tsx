@@ -23,7 +23,6 @@ export default function HistoryTab(props: {
 }) {
 	const [filtered_list, setList] = useState([] as IActivity[]);
 	const [activities, setActivities] = useState(null as unknown as IActivity[]);
-	const [reload, setReload] = useState(false);
 
 	useEffect(() => {
 		getActivitiesByUserId(props.profile.id)
@@ -33,9 +32,7 @@ export default function HistoryTab(props: {
 			})
 			.catch((error) => console.log(error));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [reload]);
-
-	const forceReload = () => setReload(!reload);
+	}, []);
 
 	return (
 		<BaseTabPanel index={props.index} value={props.value}>
