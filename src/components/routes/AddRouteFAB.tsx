@@ -18,6 +18,7 @@ import AutoCompleteMap from './map/AutoCompleteMap';
 import type { IRouteFlat } from '@/models/Route';
 import { addRoute, getRoutes } from '@/service/Route';
 import FileUploadButton from './FileUploadButton';
+import Grid from '@mui/material/Grid';
 
 export type MapDetails = {
 	selectedLocation?: {
@@ -92,6 +93,10 @@ export default function AddRouteFAB({
 					position: 'fixed',
 					right: 20,
 					bottom: 20,
+					sm: {
+						right: '10px',
+						bottom: '10px',
+					},
 				}}
 				onClick={handleClickOpen}
 			>
@@ -103,74 +108,121 @@ export default function AddRouteFAB({
 				PaperProps={{
 					component: 'form',
 					onSubmit: handleSubmit,
+					sx: {
+						maxWidth: '90%',
+						width: 'auto',
+						maxHeight: '95vh',
+						height: 'auto',
+						margin: 'auto',
+						display: 'flex',
+						flexDirection: 'column',
+						sm: {
+							width: '100%',
+							maxWidth: '100%',
+							margin: '10px',
+						},
+					},
 				}}
+				maxWidth="xl"
 			>
 				<DialogTitle>Add Route</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						Please enter your route details below in order to add your route to
-						the website.
-					</DialogContentText>
-					<TextField
-						autoFocus
-						required
-						name="trailTitle"
-						label="Trail title"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<TextField
-						autoFocus
-						required
-						name="trailBody"
-						label="Trail description"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<Typography id="difficulty-slider" marginY={2}>
-						Difficulty Level
-					</Typography>
-					<Slider
-						aria-labelledby="difficulty-slider"
-						value={difficulty}
-						onChange={handleSliderChange}
-						valueLabelDisplay="auto"
-						step={0.5}
-						marks
-						min={0}
-						max={5}
-					/>
-					<FileUploadButton
-						sx={{ my: 1 }}
-						label="Upload route photo"
-						imageId={uploadedImageId}
-						setImageId={setUploadedImageId}
-					/>
-					<AutoCompleteMap
-						setMapDetails={setMapDetails}
-						distance={mapDetails?.totalDistance}
-					/>
+				<DialogContent dividers>
+					<Grid container spacing={2}>
+						<Grid item xs={12} md={4}>
+							<DialogContentText>
+								Please enter your route details below.
+							</DialogContentText>
+							<TextField
+								autoFocus
+								required
+								name="trailTitle"
+								label="Trail title"
+								fullWidth
+								margin="dense"
+							/>
+							<TextField
+								required
+								name="trailBody"
+								label="Trail description"
+								fullWidth
+								multiline
+								rows={4}
+								margin="dense"
+							/>
+							<Typography gutterBottom>Difficulty Level</Typography>
+							<Slider
+								aria-labelledby="difficulty-slider"
+								value={difficulty}
+								onChange={handleSliderChange}
+								valueLabelDisplay="auto"
+								step={0.5}
+								marks
+								min={0}
+								max={5}
+							/>
+							<FileUploadButton
+								label="Upload route photo"
+								imageId={uploadedImageId}
+								setImageId={setUploadedImageId}
+							/>
+						</Grid>
+						<Grid item xs={12} md={8}>
+							<AutoCompleteMap
+								setMapDetails={setMapDetails}
+								distance={mapDetails?.totalDistance}
+							/>
+						</Grid>
+					</Grid>
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button type="submit">Submit</Button>
-				</DialogActions>
-			</Dialog>
-			<Snackbar
-				open={alertOpen}
-				autoHideDuration={6000}
-				onClose={() => setAlertOpen(false)}
-			>
-				<Alert
-					onClose={() => setAlertOpen(false)}
-					severity="error"
-					sx={{ width: '100%' }}
+				<DialogActions
+					sx={{
+						flexShrink: 0,
+						padding: 2,
+						sm: {
+							flexDirection: 'column',
+							alignItems: 'flex-start',
+						},
+					}}
 				>
-					{alertMessage}
-				</Alert>
-			</Snackbar>
+					<Button
+						onClick={handleClose}
+						variant="contained"
+						color="primary"
+						sx={{
+							width: '100%',
+							margin: '8px',
+							fontSize: '1rem',
+						}}
+					>
+						Cancel
+					</Button>
+					<Button
+						type="submit"
+						variant="contained"
+						color="primary"
+						sx={{
+							width: '100%',
+							margin: '8px',
+							fontSize: '1rem',
+						}}
+					>
+						Submit
+					</Button>
+				</DialogActions>
+				<Snackbar
+					open={alertOpen}
+					autoHideDuration={6000}
+					onClose={() => setAlertOpen(false)}
+				>
+					<Alert
+						onClose={() => setAlertOpen(false)}
+						severity="error"
+						sx={{ width: '100%' }}
+					>
+						{alertMessage}
+					</Alert>
+				</Snackbar>
+			</Dialog>
 		</>
 	);
 }

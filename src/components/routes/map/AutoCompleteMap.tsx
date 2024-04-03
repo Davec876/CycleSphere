@@ -3,9 +3,7 @@
 import { useState, type Dispatch, type SetStateAction, useEffect } from 'react';
 import {
 	APIProvider,
-	ControlPosition,
 	Map,
-	MapControl,
 	type MapMouseEvent,
 } from '@vis.gl/react-google-maps';
 import { AutocompleteCustom } from './AutoCompleteCustom';
@@ -36,9 +34,9 @@ export default function AutoCompleteMap({
 
 			if (selectedCoordinates) {
 				setMapDetails((prev) => ({
-					...prev,
 					selectedLocation: selectedCoordinates,
 					selectedPoints: prev?.selectedPoints || [],
+					totalDistance: prev?.totalDistance || 0,
 				}));
 			}
 			return;
@@ -147,12 +145,13 @@ export default function AutoCompleteMap({
 	};
 
 	return (
-		<Box sx={{ mt: 2, height: [350, 425, 500], width: '100%' }}>
+		<Box sx={{ mt: 2, height: [350, 425, 500] }}>
 			<APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+				<AutocompleteCustom onPlaceSelect={setSelectedPlace} />
 				<Map
 					onClick={handleMapClick}
 					defaultZoom={12}
-					// Default to Halifax coordinates
+					// Default to Halifax Coordinates
 					defaultCenter={{ lat: 44.64951641616885, lng: -63.58510266385201 }}
 					gestureHandling="greedy"
 					disableDefaultUI={true}
@@ -160,10 +159,6 @@ export default function AutoCompleteMap({
 					<DeckGlOverlay layers={getDeckGlLayers(geoData)} />
 					<DistanceOverlay distance={distance} />
 				</Map>
-
-				<MapControl position={ControlPosition.TOP}>
-					<AutocompleteCustom onPlaceSelect={setSelectedPlace} />
-				</MapControl>
 
 				<MapHandler place={selectedPlace} />
 			</APIProvider>

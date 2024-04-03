@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from '@/components/auth/auth';
+import { auth } from '@/components/auth/auth';
 import User from '@/models/User';
 import type { IRouteHistoryEntry } from '@/models/schemas/RouteHistoryEntry';
 import { APIError } from '@/util/errors/APIError';
