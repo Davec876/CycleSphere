@@ -3,13 +3,14 @@
 
 import { useMap } from '@vis.gl/react-google-maps';
 import { memo, useEffect } from 'react';
+import { communityMapId } from './CommunityMap';
 
 interface Props {
 	place: google.maps.places.PlaceResult | null;
 }
 
 const MapHandler = ({ place }: Props) => {
-	const map = useMap();
+	const map = useMap(communityMapId);
 
 	useEffect(() => {
 		if (!map || !place) return;
