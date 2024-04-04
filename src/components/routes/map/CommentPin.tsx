@@ -18,10 +18,11 @@ export default function CommentPin({
 	if (!comment.pin) return <></>;
 
 	const handleOnClick = () => {
-		const redirectPath = routeId
-			? `/routes/${routeId}#${comment.id}`
-			: `#${comment.id}`;
-		router.replace(redirectPath);
+		if (routeId) {
+			router.push(`/routes/${routeId}#${comment.id}`);
+		} else {
+			router.replace(`#${comment.id}`);
+		}
 	};
 
 	return (
