@@ -2,11 +2,11 @@ import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { useState, useEffect } from 'react';
 
 interface Props {
-	id: string;
+	mapId: string;
 }
 
-export const BicyclingLayer = ({ id }: Props) => {
-	const map = useMap(id);
+export const BicyclingLayer = ({ mapId }: Props) => {
+	const map = useMap(mapId);
 	const maps = useMapsLibrary('maps');
 
 	// https://developers.google.com/maps/documentation/javascript/reference/map#BicyclingLayer

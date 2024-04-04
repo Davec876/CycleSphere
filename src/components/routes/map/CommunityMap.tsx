@@ -7,7 +7,7 @@ import { AutocompleteCustom } from '@/components/routes/map/AutoCompleteCustom';
 import { BicyclingLayer } from '@/components/routes/map/BicyclingLayer';
 import MapHandler from '@/components/routes/map/MapHandler';
 
-export const communityMapId = 'community-shared-map';
+export const communityMapId = 'a413827606b02193';
 
 export default function CommunityMap() {
 	const [selectedPlace, setSelectedPlace] =
@@ -24,7 +24,7 @@ export default function CommunityMap() {
 						lng: -63.58510266385201,
 					}}
 				></Map>
-				<BicyclingLayer id={communityMapId} />
+				<BicyclingLayer mapId={communityMapId} />
 				<MapHandler place={selectedPlace} />
 			</APIProvider>
 		</Box>
