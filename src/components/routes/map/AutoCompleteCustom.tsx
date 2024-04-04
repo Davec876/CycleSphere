@@ -13,16 +13,16 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
-import { communityMapId } from './CommunityMap';
 
 interface Props {
 	onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
+	mapId?: string | null;
 }
 
 // This is a custom built autocomplete component using the "Autocomplete Service" for predictions
 // and the "Places Service" for place details
-export const AutocompleteCustom = ({ onPlaceSelect }: Props) => {
-	const map = useMap(communityMapId);
+export const AutocompleteCustom = ({ onPlaceSelect, mapId = null }: Props) => {
+	const map = useMap(mapId ?? null);
 	const places = useMapsLibrary('places');
 
 	// https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken

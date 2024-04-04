@@ -10,13 +10,12 @@ import { PinProvider } from '@/components/context/PinProvider';
 import type { IRouteFlat } from '@/models/Route';
 import CommunityContribution from '@/components/routes/CommunityContribution';
 
-export const communityMapId = '7ba75f1486610fb6';
-
 export default function CommunityMap({
 	filteredRoutes,
 }: {
 	filteredRoutes: IRouteFlat[];
 }) {
+	const communityMapId = '7ba75f1486610fb6';
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.places.PlaceResult | null>(null);
 
@@ -24,7 +23,10 @@ export default function CommunityMap({
 		<PinProvider>
 			<Box sx={{ m: 2, height: [350, 425, 500] }}>
 				<APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-					<AutocompleteCustom onPlaceSelect={setSelectedPlace} />
+					<AutocompleteCustom
+						onPlaceSelect={setSelectedPlace}
+						mapId={communityMapId}
+					/>
 					<Map
 						id={communityMapId}
 						mapId={communityMapId}
@@ -37,7 +39,7 @@ export default function CommunityMap({
 						<CommunityContribution filteredRoutes={filteredRoutes} />
 					</Map>
 					<BicyclingLayer mapId={communityMapId} />
-					<MapHandler place={selectedPlace} />
+					<MapHandler place={selectedPlace} mapId={communityMapId} />
 				</APIProvider>
 			</Box>
 		</PinProvider>
