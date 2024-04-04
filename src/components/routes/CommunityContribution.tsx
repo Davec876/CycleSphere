@@ -8,20 +8,26 @@ import CommentPin from './map/CommentPin';
 import type { IRouteFlat } from '@/models/Route';
 import { getDeckGlLayers } from '@/util/getDeckGlLayers';
 
+interface CommentPins {
+	[key: string]: IRouteFlat['comments'];
+}
+
 export default function CommunityContribution({
 	filteredRoutes,
 }: {
 	filteredRoutes: IRouteFlat[];
 }) {
 	const [geoData, setGeoData] = useState<FeatureCollection[] | null>([]);
-	const [commentPins, setCommentPins] = useState<IRouteFlat['comments'][]>([]);
+	const [commentPins, setCommentPins] = useState<CommentPins>({});
 
 	useEffect(() => {
 		const allSelectedPoints = filteredRoutes.map(
 			(route) => route.selectedPoints
 		);
-		const allCommentPins = filteredRoutes.map((route) => route.comments);
-		console.log(allCommentPins);
+		const allCommentPins: CommentPins = {};
+		filteredRoutes.forEach((route) => {
+			allCommentPins[route.id] = route.comments;
+		});
 		setGeoData(
 			allSelectedPoints.map((points) => convertToFeatureCollection(points))
 		);
@@ -33,12 +39,13 @@ export default function CommunityContribution({
 			{geoData?.map((data, index) => (
 				<DeckGlOverlay key={index} layers={getDeckGlLayers(data)} />
 			))}
-			{commentPins.flatMap((commentPin) =>
-				commentPin.map((comment) => (
+			{Object.entries(commentPins).flatMap(([routeId, comments]) =>
+				comments.map((comment) => (
 					<CommentPin
 						key={comment.id}
 						comment={comment}
 						isHighlighted={false}
+						routeId={routeId}
 					/>
 				))
 			)}
