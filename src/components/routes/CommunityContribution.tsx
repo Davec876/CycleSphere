@@ -17,7 +17,7 @@ export default function CommunityContribution({
 }: {
 	filteredRoutes: IRouteFlat[];
 }) {
-	const [geoData, setGeoData] = useState<FeatureCollection[] | null>([]);
+      const [geoData, setGeoData] = useState<FeatureCollection[]>([]);
 	const [commentPins, setCommentPins] = useState<CommentPins>({});
 
 	useEffect(() => {
