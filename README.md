@@ -14,12 +14,12 @@ CycleSphere is a social media platform for cyclists in Halifax built as part of 
 ## Authors
 
 TEAM 18
-* [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Team member)*
-* [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Team member)*
-* [Dave Chuck](dchuck@dal.ca) - *(Team Member)*
-* [Kevin Orenday](kevin.orenday@dal.ca) - *(Team Member)*
-* [Maximo Guk](maximo@dal.ca) - *(Team Member)*
-* [Ahmed Galal](a.galal@dal.ca) - *(Team Member)*
+* [Saahir Monowar](Saahir.Monowar@dal.ca) - *(Full Stack Developer)*
+* [Erxiao Tang](Erxiao.Tang@dal.ca) - *(Full Stack Developer)*
+* [Dave Chuck](dchuck@dal.ca) - *(Full Stack Developer)*
+* [Kevin Orenday](kevin.orenday@dal.ca) - *(Full Stack Developer)*
+* [Maximo Guk](maximo@dal.ca) - *(Full Stack Developer)*
+* [Ahmed Galal](a.galal@dal.ca) - *(Full Stack Developer)*
 
 
 
@@ -31,7 +31,7 @@ See deployment for notes on how to deploy the project on a live system.
 
 To have a local copy of this project up and running on your local machine, you will first need to install the following software
 
-* [Node.js](https://nodejs.org/en)
+* [Node.js](https://nodejs.org/en) (LTS v20+)
 
 You will also need the following strings
 
@@ -101,10 +101,10 @@ Visit [Next.js' deployment page](https://nextjs.org/docs/pages/building-your-app
 
 ## Built With
 
-* [Next.js](https://nextjs.org/) - The web framework used
+* [Next.js](https://nextjs.org/) (v14) - The web framework used
 * [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) - Used to bootstrap the project
 * [`next font`](https://nextjs.org/docs/basic-features/font-optimization) - Used to optimize and load font
-* [Material UI](https://mui.com/) - Frontend design library
+* [Material UI](https://mui.com/) (v5.15) - Frontend design library
 
 ## Sources Used
 
